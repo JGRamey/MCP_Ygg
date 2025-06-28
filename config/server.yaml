@@ -1,0 +1,33 @@
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  debug: false
+
+database:
+  neo4j:
+    uri: "bolt://localhost:7687"
+    user: "neo4j"
+    password: "password"
+    max_pool_size: 20
+    connection_timeout: 30
+  qdrant:
+    host: "localhost"
+    port: 6333
+    timeout: 30
+  redis:
+    url: "redis://localhost:6379"
+    max_connections: 50
+
+performance:
+  cache_type: "hybrid"
+  optimization_level: "aggressive"
+  batch_sizes:
+    document_processing: 25
+    graph_updates: 100
+    vector_updates: 250
+
+monitoring:
+  prometheus_port: 9090
+  metrics_enabled: true
+  health_check_interval: 30

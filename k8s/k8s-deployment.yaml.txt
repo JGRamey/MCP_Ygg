@@ -1,0 +1,894 @@
+# Kubernetes deployment configuration for MCP Server
+# This file contains all necessary Kubernetes resources for deploying the MCP Server system
+
+---
+# Namespace for MCP Server
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mcp-server
+  labels:
+    app.kubernetes.io/name: mcp-server
+    app.kubernetes.io/version: "1.0.0"
+
+---
+# ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-server-config
+  namespace: mcp-server
+data:
+  server.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 8000
+      workers: 4
+      debug: false
+    
+    database:
+      neo4j:
+        uri: "bolt://neo4j-service:7687"
+        max_pool_size: 20
+        connection_timeout: 30
+      qdrant:
+        host: "qdrant-service"
+        port: 6333
+        timeout: 30
+      redis:
+        url: "redis://redis-service:6379"
+        max_connections: 50
+    
+    performance:
+      cache_type: "hybrid"
+      optimization_level: "aggressive"
+      batch_sizes:
+        document_processing: 25
+        graph_updates: 100
+        vector_updates: 250
+    
+    monitoring:
+      prometheus_port: 9090
+      metrics_enabled: true
+      health_check_interval: 30
+
+---
+# Secret for sensitive configuration
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mcp-server-secrets
+  namespace: mcp-server
+type: Opaque
+data:
+  neo4j-password: bmVvNGpwYXNzd29yZA==  # base64 encoded "neo4jpassword"
+  redis-password: cmVkaXNwYXNzd29yZA==  # base64 encoded "redispassword"
+  jwt-secret: c3VwZXJzZWNyZXRqd3RrZXk=  # base64 encoded "supersecretjwtkey"
+
+---
+# PersistentVolumeClaim for Neo4j data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: neo4j-data-pvc
+  namespace: mcp-server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+# PersistentVolumeClaim for Qdrant data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qdrant-data-pvc
+  namespace: mcp-server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+# PersistentVolumeClaim for Redis data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-pvc
+  namespace: mcp-server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+# Neo4j Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neo4j
+  namespace: mcp-server
+  labels:
+    app: neo4j
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neo4j
+  template:
+    metadata:
+      labels:
+        app: neo4j
+    spec:
+      containers:
+      - name: neo4j
+        image: neo4j:5.15-community
+        ports:
+        - containerPort: 7474
+          name: http
+        - containerPort: 7687
+          name: bolt
+        env:
+        - name: NEO4J_AUTH
+          valueFrom:
+            secretKeyRef:
+              name: mcp-server-secrets
+              key: neo4j-password
+        - name: NEO4J_PLUGINS
+          value: '["apoc", "graph-data-science"]'
+        - name: NEO4J_dbms_memory_heap_initial__size
+          value: "2G"
+        - name: NEO4J_dbms_memory_heap_max__size
+          value: "4G"
+        - name: NEO4J_dbms_memory_pagecache_size
+          value: "2G"
+        - name: NEO4J_dbms_default__listen__address
+          value: "0.0.0.0"
+        - name: NEO4J_dbms_connector_bolt_listen__address
+          value: "0.0.0.0:7687"
+        - name: NEO4J_dbms_connector_http_listen__address
+          value: "0.0.0.0:7474"
+        volumeMounts:
+        - name: neo4j-data
+          mountPath: /data
+        - name: neo4j-logs
+          mountPath: /logs
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1000m"
+          limits:
+            memory: "8Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: neo4j-data
+        persistentVolumeClaim:
+          claimName: neo4j-data-pvc
+      - name: neo4j-logs
+        emptyDir: {}
+
+---
+# Neo4j Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: neo4j-service
+  namespace: mcp-server
+  labels:
+    app: neo4j
+spec:
+  ports:
+  - port: 7474
+    targetPort: 7474
+    name: http
+  - port: 7687
+    targetPort: 7687
+    name: bolt
+  selector:
+    app: neo4j
+  type: ClusterIP
+
+---
+# Qdrant Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qdrant
+  namespace: mcp-server
+  labels:
+    app: qdrant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+      - name: qdrant
+        image: qdrant/qdrant:v1.7.3
+        ports:
+        - containerPort: 6333
+          name: http
+        - containerPort: 6334
+          name: grpc
+        env:
+        - name: QDRANT__SERVICE__HTTP_PORT
+          value: "6333"
+        - name: QDRANT__SERVICE__GRPC_PORT
+          value: "6334"
+        - name: QDRANT__STORAGE__STORAGE_PATH
+          value: "/qdrant/storage"
+        - name: QDRANT__LOG_LEVEL
+          value: "INFO"
+        volumeMounts:
+        - name: qdrant-data
+          mountPath: /qdrant/storage
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 6333
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 6333
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: qdrant-data
+        persistentVolumeClaim:
+          claimName: qdrant-data-pvc
+
+---
+# Qdrant Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant-service
+  namespace: mcp-server
+  labels:
+    app: qdrant
+spec:
+  ports:
+  - port: 6333
+    targetPort: 6333
+    name: http
+  - port: 6334
+    targetPort: 6334
+    name: grpc
+  selector:
+    app: qdrant
+  type: ClusterIP
+
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: mcp-server
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.2-alpine
+        ports:
+        - containerPort: 6379
+          name: redis
+        command:
+        - redis-server
+        - /etc/redis/redis.conf
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcp-server-secrets
+              key: redis-password
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        - name: redis-config
+          mountPath: /etc/redis
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-data-pvc
+      - name: redis-config
+        configMap:
+          name: redis-config
+
+---
+# Redis Config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: mcp-server
+data:
+  redis.conf: |
+    maxmemory 512mb
+    maxmemory-policy allkeys-lru
+    save 900 1
+    save 300 10
+    save 60 10000
+    appendonly yes
+    appendfsync everysec
+
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: mcp-server
+  labels:
+    app: redis
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  selector:
+    app: redis
+  type: ClusterIP
+
+---
+# MCP Server API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server-api
+  namespace: mcp-server
+  labels:
+    app: mcp-server-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mcp-server-api
+  template:
+    metadata:
+      labels:
+        app: mcp-server-api
+    spec:
+      containers:
+      - name: mcp-server-api
+        image: mcp-server:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: CONFIG_PATH
+          value: "/etc/mcp-server/server.yaml"
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcp-server-secrets
+              key: neo4j-password
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcp-server-secrets
+              key: redis-password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mcp-server-secrets
+              key: jwt-secret
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mcp-server
+        - name: logs
+          mountPath: /var/log/mcp-server
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /startup
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 30
+      volumes:
+      - name: config
+        configMap:
+          name: mcp-server-config
+      - name: logs
+        emptyDir: {}
+      initContainers:
+      - name: wait-for-neo4j
+        image: busybox:1.35
+        command: ['sh', '-c', 'until nc -z neo4j-service 7687; do echo waiting for neo4j; sleep 2; done;']
+      - name: wait-for-qdrant
+        image: busybox:1.35
+        command: ['sh', '-c', 'until nc -z qdrant-service 6333; do echo waiting for qdrant; sleep 2; done;']
+      - name: wait-for-redis
+        image: busybox:1.35
+        command: ['sh', '-c', 'until nc -z redis-service 6379; do echo waiting for redis; sleep 2; done;']
+
+---
+# MCP Server API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-server-api-service
+  namespace: mcp-server
+  labels:
+    app: mcp-server-api
+spec:
+  ports:
+  - port: 80
+    targetPort: 8000
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: mcp-server-api
+  type: ClusterIP
+
+---
+# MCP Server Workers Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server-workers
+  namespace: mcp-server
+  labels:
+    app: mcp-server-workers
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mcp-server-workers
+  template:
+    metadata:
+      labels:
+        app: mcp-server-workers
+    spec:
+      containers:
+      - name: scraper-worker
+        image: mcp-server:latest
+        command: ["python", "-m", "agents.scraper.scraper"]
+        env:
+        - name: WORKER_TYPE
+          value: "scraper"
+        - name: CONFIG_PATH
+          value: "/etc/mcp-server/server.yaml"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mcp-server
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      - name: processor-worker
+        image: mcp-server:latest
+        command: ["python", "-m", "agents.text_processor.processor"]
+        env:
+        - name: WORKER_TYPE
+          value: "processor"
+        - name: CONFIG_PATH
+          value: "/etc/mcp-server/server.yaml"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mcp-server
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+      volumes:
+      - name: config
+        configMap:
+          name: mcp-server-config
+
+---
+# Dashboard Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server-dashboard
+  namespace: mcp-server
+  labels:
+    app: mcp-server-dashboard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mcp-server-dashboard
+  template:
+    metadata:
+      labels:
+        app: mcp-server-dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: mcp-server:latest
+        command: ["streamlit", "run", "dashboard/app.py", "--server.port=8501"]
+        ports:
+        - containerPort: 8501
+          name: http
+        env:
+        - name: CONFIG_PATH
+          value: "/etc/mcp-server/server.yaml"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mcp-server
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: mcp-server-config
+
+---
+# Dashboard Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-server-dashboard-service
+  namespace: mcp-server
+  labels:
+    app: mcp-server-dashboard
+spec:
+  ports:
+  - port: 80
+    targetPort: 8501
+    name: http
+  selector:
+    app: mcp-server-dashboard
+  type: ClusterIP
+
+---
+# Ingress for external access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-server-ingress
+  namespace: mcp-server
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+spec:
+  tls:
+  - hosts:
+    - api.mcp-server.example.com
+    - dashboard.mcp-server.example.com
+    secretName: mcp-server-tls
+  rules:
+  - host: api.mcp-server.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-server-api-service
+            port:
+              number: 80
+  - host: dashboard.mcp-server.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-server-dashboard-service
+            port:
+              number: 80
+
+---
+# HorizontalPodAutoscaler for API
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mcp-server-api-hpa
+  namespace: mcp-server
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mcp-server-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+
+---
+# HorizontalPodAutoscaler for Workers
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mcp-server-workers-hpa
+  namespace: mcp-server
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mcp-server-workers
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+
+---
+# ServiceMonitor for Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mcp-server-metrics
+  namespace: mcp-server
+  labels:
+    app: mcp-server
+spec:
+  selector:
+    matchLabels:
+      app: mcp-server-api
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+# PrometheusRule for alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: mcp-server-alerts
+  namespace: mcp-server
+  labels:
+    app: mcp-server
+spec:
+  groups:
+  - name: mcp-server
+    rules:
+    - alert: MCPServerHighCPU
+      expr: container_cpu_usage_seconds_total{namespace="mcp-server"} > 0.8
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "MCP Server high CPU usage"
+        description: "MCP Server CPU usage is above 80% for more than 5 minutes"
+    
+    - alert: MCPServerHighMemory
+      expr: container_memory_usage_bytes{namespace="mcp-server"} / container_spec_memory_limit_bytes > 0.9
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "MCP Server high memory usage"
+        description: "MCP Server memory usage is above 90% for more than 5 minutes"
+    
+    - alert: MCPServerPodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="mcp-server"}[5m]) > 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "MCP Server pod is crash looping"
+        description: "MCP Server pod {{ $labels.pod }} is crash looping"
+    
+    - alert: MCPServerDatabaseDown
+      expr: up{job="neo4j",namespace="mcp-server"} == 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "MCP Server database is down"
+        description: "Neo4j database is not responding"
+
+---
+# NetworkPolicy for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mcp-server-network-policy
+  namespace: mcp-server
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - podSelector:
+        matchLabels:
+          app: mcp-server-api
+    - podSelector:
+        matchLabels:
+          app: mcp-server-dashboard
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  - to:
+    - podSelector:
+        matchLabels:
+          app: neo4j
+    ports:
+    - protocol: TCP
+      port: 7687
+  - to:
+    - podSelector:
+        matchLabels:
+          app: qdrant
+    ports:
+    - protocol: TCP
+      port: 6333
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+
+---
+# PodDisruptionBudget for high availability
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: mcp-server-api-pdb
+  namespace: mcp-server
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: mcp-server-api
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: mcp-server-workers-pdb
+  namespace: mcp-server
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: mcp-server-workers

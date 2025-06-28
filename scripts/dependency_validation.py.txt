@@ -1,0 +1,301 @@
+#!/usr/bin/env python3
+"""
+Dependency Validation Script
+Validates Python dependencies and checks for conflicts
+"""
+
+import subprocess
+import sys
+import importlib
+import pkg_resources
+from typing import List, Dict, Optional, Tuple
+import logging
+from packaging import version
+import json
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+class DependencyValidator:
+    """Validates and manages Python dependencies"""
+    
+    def __init__(self, requirements_file: str = "requirements.txt"):
+        """Initialize validator with requirements file"""
+        self.requirements_file = requirements_file
+        self.required_packages = self._parse_requirements()
+        self.installed_packages = self._get_installed_packages()
+    
+    def _parse_requirements(self) -> Dict[str, str]:
+        """Parse requirements.txt and extract package names and versions"""
+        packages = {}
+        
+        try:
+            with open(self.requirements_file, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        # Handle different version specifiers
+                        if '>=' in line:
+                            name, ver = line.split('>=')
+                            packages[name.strip()] = f">={ver.strip()}"
+                        elif '==' in line:
+                            name, ver = line.split('==')
+                            packages[name.strip()] = f"=={ver.strip()}"
+                        elif '>' in line:
+                            name, ver = line.split('>')
+                            packages[name.strip()] = f">{ver.strip()}"
+                        else:
+                            packages[line.strip()] = ""
+                            
+        except FileNotFoundError:
+            logger.error(f"Requirements file {self.requirements_file} not found")
+            return {}
+        
+        return packages
+    
+    def _get_installed_packages(self) -> Dict[str, str]:
+        """Get currently installed packages and their versions"""
+        installed = {}
+        
+        try:
+            for dist in pkg_resources.working_set:
+                installed[dist.project_name.lower()] = dist.version
+        except Exception as e:
+            logger.error(f"Error getting installed packages: {e}")
+        
+        return installed
+    
+    def check_python_version(self) -> bool:
+        """Check if Python version meets requirements"""
+        current_version = sys.version_info
+        required_version = (3, 10)  # Python 3.10+
+        
+        if current_version >= required_version:
+            logger.info(f"✅ Python version {current_version.major}.{current_version.minor}.{current_version.micro} meets requirements")
+            return True
+        else:
+            logger.error(f"❌ Python version {current_version.major}.{current_version.minor} is too old. Requires 3.10+")
+            return False
+    
+    def install_missing_packages(self) -> bool:
+        """Install missing packages"""
+        try:
+            logger.info("Installing packages from requirements.txt...")
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "install", "-r", self.requirements_file],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            logger.info("✅ Package installation completed")
+            return True
+            
+        except subprocess.CalledProcessError as e:
+            logger.error(f"❌ Package installation failed: {e.stderr}")
+            return False
+    
+    def check_package_conflicts(self) -> List[str]:
+        """Check for package version conflicts"""
+        conflicts = []
+        
+        try:
+            # Run pip check to find conflicts
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "check"],
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode != 0:
+                conflicts = result.stdout.strip().split('\n')
+                
+        except Exception as e:
+            logger.error(f"Error checking conflicts: {e}")
+        
+        return conflicts
+    
+    def validate_critical_imports(self) -> Dict[str, bool]:
+        """Test importing critical packages"""
+        critical_packages = {
+            'fastapi': 'FastAPI web framework',
+            'neo4j': 'Neo4j database driver', 
+            'qdrant_client': 'Qdrant vector database client',
+            'redis': 'Redis cache client',
+            'scrapy': 'Web scraping framework',
+            'spacy': 'NLP library',
+            'sentence_transformers': 'Sentence embedding models',
+            'sklearn': 'Machine learning library',
+            'pandas': 'Data manipulation library',
+            'numpy': 'Numerical computing library',
+            'networkx': 'Graph analysis library',
+            'streamlit': 'Dashboard framework',
+            'celery': 'Task queue',
+            'prometheus_client': 'Monitoring client'
+        }
+        
+        results = {}
+        
+        for package, description in critical_packages.items():
+            try:
+                if package == 'sklearn':
+                    importlib.import_module('sklearn')
+                else:
+                    importlib.import_module(package)
+                results[package] = True
+                logger.info(f"✅ {package} ({description}) - OK")
+                
+            except ImportError as e:
+                results[package] = False
+                logger.error(f"❌ {package} ({description}) - FAILED: {e}")
+        
+        return results
+    
+    def check_system_dependencies(self) -> Dict[str, bool]:
+        """Check system dependencies like Tesseract"""
+        system_deps = {
+            'tesseract': 'tesseract --version',
+            'chromium': 'chromium --version',
+            'libreoffice': 'libreoffice --version'
+        }
+        
+        results = {}
+        
+        for dep, command in system_deps.items():
+            try:
+                result = subprocess.run(
+                    command.split(),
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+                
+                if result.returncode == 0:
+                    results[dep] = True
+                    logger.info(f"✅ {dep} - OK")
+                else:
+                    results[dep] = False
+                    logger.warning(f"⚠️ {dep} - Not found")
+                    
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                results[dep] = False
+                logger.warning(f"⚠️ {dep} - Not found")
+        
+        return results
+    
+    def download_models(self) -> bool:
+        """Download required ML models"""
+        models = [
+            ('spacy', 'en_core_web_sm'),
+            ('spacy', 'en_core_web_lg'),
+        ]
+        
+        success = True
+        
+        for library, model in models:
+            try:
+                if library == 'spacy':
+                    logger.info(f"Downloading spaCy model: {model}")
+                    result = subprocess.run(
+                        [sys.executable, "-m", "spacy", "download", model],
+                        capture_output=True,
+                        text=True,
+                        check=True
+                    )
+                    logger.info(f"✅ Downloaded {model}")
+                    
+            except subprocess.CalledProcessError as e:
+                logger.error(f"❌ Failed to download {model}: {e.stderr}")
+                success = False
+        
+        return success
+    
+    def generate_report(self) -> Dict:
+        """Generate comprehensive validation report"""
+        report = {
+            'python_version': {
+                'current': f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+                'valid': self.check_python_version()
+            },
+            'packages': self.validate_critical_imports(),
+            'system_dependencies': self.check_system_dependencies(),
+            'conflicts': self.check_package_conflicts(),
+            'total_packages_required': len(self.required_packages),
+            'total_packages_installed': len(self.installed_packages)
+        }
+        
+        return report
+    
+    def save_report(self, report: Dict, filename: str = "validation_report.json") -> None:
+        """Save validation report to file"""
+        with open(filename, 'w') as f:
+            json.dump(report, f, indent=2)
+        logger.info(f"✅ Validation report saved to {filename}")
+
+
+def main():
+    """Main validation workflow"""
+    print("🔍 MCP Server Dependency Validation")
+    print("=" * 50)
+    
+    validator = DependencyValidator()
+    
+    # Install packages first
+    if not validator.install_missing_packages():
+        logger.error("❌ Failed to install packages. Aborting validation.")
+        sys.exit(1)
+    
+    # Generate comprehensive report
+    report = validator.generate_report()
+    
+    # Download required models
+    validator.download_models()
+    
+    # Print summary
+    print("\n📊 Validation Summary:")
+    print("-" * 30)
+    
+    if report['python_version']['valid']:
+        print(f"✅ Python: {report['python_version']['current']}")
+    else:
+        print(f"❌ Python: {report['python_version']['current']} (requires 3.10+)")
+    
+    packages_ok = sum(1 for v in report['packages'].values() if v)
+    packages_total = len(report['packages'])
+    print(f"📦 Packages: {packages_ok}/{packages_total} OK")
+    
+    sys_deps_ok = sum(1 for v in report['system_dependencies'].values() if v)
+    sys_deps_total = len(report['system_dependencies'])
+    print(f"🔧 System Dependencies: {sys_deps_ok}/{sys_deps_total} OK")
+    
+    if report['conflicts']:
+        print(f"⚠️ Conflicts: {len(report['conflicts'])} found")
+        for conflict in report['conflicts']:
+            print(f"   - {conflict}")
+    else:
+        print("✅ No package conflicts detected")
+    
+    # Save detailed report
+    validator.save_report(report)
+    
+    # Overall status
+    overall_success = (
+        report['python_version']['valid'] and
+        all(report['packages'].values()) and
+        not report['conflicts']
+    )
+    
+    if overall_success:
+        print("\n🎉 All validations passed! Ready to proceed.")
+        sys.exit(0)
+    else:
+        print("\n❌ Some validations failed. Check the report for details.")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

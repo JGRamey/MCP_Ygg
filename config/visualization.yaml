@@ -1,0 +1,29 @@
+# Color-coordinated chart settings
+node_colors:
+  document: "#3498db"     # Blue
+  concept: "#e74c3c"      # Red
+  person: "#2ecc71"       # Green
+  event: "#f1c40f"        # Yellow
+  pattern: "#9b59b6"      # Purple
+  root: "#34495e"         # Dark gray
+  domain: "#e67e22"       # Orange
+
+edge_colors:
+  DERIVED_FROM: "#95a5a6"
+  REFERENCES: "#3498db"
+  INFLUENCED_BY: "#e74c3c"
+  CONTAINS_CONCEPT: "#2ecc71"
+  SIMILAR_CONCEPT: "#9b59b6"
+  default: "#bdc3c7"
+
+layout:
+  tree_spacing:
+    node_distance: 100
+    level_distance: 200
+    root_x: 0
+    root_y: 0
+  
+  node_sizes:
+    min_size: 10
+    max_size: 50
+    size_factor: 1.5
