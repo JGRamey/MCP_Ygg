@@ -14,8 +14,36 @@ test:
 	python scripts/run_tests.py
 
 lint:
-	flake8 agents/ api/ tests/
-	mypy agents/ api/
+	python tests/lint/lint_project.py
+
+lint-fix:
+	python tests/lint/lint_project.py --fix
+
+lint-parallel:
+	python tests/lint/lint_project.py --parallel
+
+lint-sequential:
+	python tests/lint/lint_project.py --sequential
+
+lint-report:
+	python tests/lint/lint_project.py --output lint_report.txt
+
+lint-individual:
+	flake8 agents/ api/ dashboard/ scripts/ tests/
+	black --check agents/ api/ dashboard/ scripts/ tests/
+	isort --check-only agents/ api/ dashboard/ scripts/ tests/
+	mypy agents/ api/ dashboard/ scripts/
+	pylint agents/ api/ dashboard/ scripts/
+	bandit -r agents/ api/ dashboard/ scripts/
+	ruff check agents/ api/ dashboard/ scripts/ tests/
+
+setup-dev:
+	pip install -r tests/lint/requirements-dev.txt
+	pre-commit install
+	python -m spacy download en_core_web_sm
+
+setup-lint:
+	python tests/lint/setup_linting.py
 
 format:
 	black agents/ api/ tests/

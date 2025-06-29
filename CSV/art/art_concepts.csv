@@ -1,0 +1,3 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+ART001,Art,root,1,Creative expression through visual and auditory media,-40000,Cave paintings,Global,None,Root concept of artistic creation,confirmed
+ART002,Cave_Paintings,sub_root,2,Painted images on cave walls,-40000,Lascaux caves,France,None,Painted in France 40000 BC,confirmed

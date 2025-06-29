@@ -1,0 +1,4 @@
+person_id,name,birth_year,death_year,location,culture,description,historical_status
+MATH_PERS001,Unknown_Early_Humans,-20000,NULL,Africa,Prehistoric,Creators of earliest tally systems,prehistoric
+MATH_PERS002,Euclid,-300,-270,Alexandria,Greek,Mathematician father of geometry,historical
+MATH_PERS003,Pythagoras,-570,-495,Samos,Greek,Mathematician and philosopher,historical

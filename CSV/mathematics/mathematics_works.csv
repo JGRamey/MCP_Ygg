@@ -1,0 +1,3 @@
+work_id,title,creation_year,location,language,medium,description,preservation_status
+MATH_WORK001,Ishango_Bone,-20000,Africa,Symbolic,Bone,Early mathematical tally system,extant
+MATH_WORK002,Euclids_Elements,-300,Alexandria,Greek,Papyrus,Systematic geometry textbook,extant

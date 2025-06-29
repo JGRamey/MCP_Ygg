@@ -1,0 +1,11 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+PHIL001,Philosophy,root,1,Love of wisdom and rational inquiry,-2600,Sumerian tablets,Global,Various,Root concept of rational thought,confirmed
+PHIL002,Early_Wisdom_Traditions,sub_root,2,Ancient moral and ethical teachings,-2600,Sumerian tablets,Mesopotamia,Cuneiform,Earliest philosophical writings,confirmed
+PHIL003,Moral_Guidelines,branch,3,Early ethical instructions,-2600,Ptahhotep Instructions,Egypt/Mesopotamia,Hieratic/Cuneiform,Ancient moral teachings,confirmed
+PHIL004,Ptahhotep_Instructions,sub_branch,4,Ancient Egyptian wisdom literature,-2400,Papyrus texts,Egypt,Hieratic,Written in hieratic 2400 BC,confirmed
+PHIL005,Shuruppak_Wisdom,sub_branch,4,Sumerian wisdom literature,-2600,Clay tablets,Mesopotamia,Cuneiform,Written in cuneiform 2600 BC,confirmed
+PHIL006,Pre_Socratic_Thought,sub_root,2,Early Greek philosophical inquiry,-600,Fragments,Greece,Greek,Foundation of Western philosophy,confirmed
+PHIL007,Classical_Philosophy,sub_root,2,Systematic philosophical systems,-400,Plato's writings,Athens,Greek,Peak of ancient Greek philosophy,confirmed
+PHIL008,Ethics,branch,3,Study of moral principles and values,-400,Plato's Apology,Athens,Greek,Developed in Athens 400 BC,confirmed
+PHIL009,Metaphysics,branch,3,Study of fundamental reality,-350,Aristotle's works,Athens,Greek,Systematized by Aristotle,confirmed
+PHIL010,Logic_and_Reason,sub_root,2,Systematic reasoning methods,-350,Aristotle's Organon,Athens,Greek,Formal logic development,confirmed

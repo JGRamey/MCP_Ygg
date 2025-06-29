@@ -1,0 +1,26 @@
+source_id,target_id,relationship_type,strength,description,time_period
+RELIG002,RELIG001,BELONGS_TO,1.0,Monotheism is a sub-category of Religion,-1300
+RELIG003,RELIG002,BELONGS_TO,1.0,Judaism belongs to Monotheism,-1300
+RELIG004,RELIG002,BELONGS_TO,0.9,Christianity belongs to Monotheism,30
+RELIG005,RELIG002,BELONGS_TO,0.9,Islam belongs to Monotheism,610
+RELIG006,RELIG001,BELONGS_TO,1.0,Polytheism belongs to Religion,-2000
+RELIG007,RELIG006,BELONGS_TO,1.0,Greek Mythology belongs to Polytheism,-800
+RELIG008,RELIG006,BELONGS_TO,1.0,Hinduism belongs to Polytheism,-1500
+RELIG009,RELIG006,BELONGS_TO,1.0,Egyptian Religion belongs to Polytheism,-2000
+RELIG010,RELIG001,BELONGS_TO,1.0,Non-Theistic Beliefs belong to Religion,-2500
+RELIG011,RELIG010,BELONGS_TO,1.0,Animism belongs to Non-Theistic Beliefs,-2500
+RELIG012,RELIG010,BELONGS_TO,1.0,Buddhism belongs to Non-Theistic Beliefs,-500
+RELIG_WORK001,RELIG_PERS001,CREATED_BY,0.8,Torah attributed to Moses,-1300
+RELIG_WORK003,RELIG_PERS002,ABOUT,1.0,Gospels about Jesus,50
+RELIG_WORK004,RELIG_PERS003,REVEALED_TO,1.0,Quran revealed to Muhammad,610
+RELIG_WORK005,RELIG_PERS004,CREATED_BY,1.0,Iliad composed by Homer,-800
+RELIG_WORK006,RELIG_PERS004,CREATED_BY,1.0,Odyssey composed by Homer,-750
+RELIG_PERS005,RELIG_PERS001,BROTHER_OF,1.0,Aaron was brother of Moses,-1350
+RELIG_PERS006,RELIG_PERS002,DISCIPLE_OF,1.0,Peter was disciple of Jesus,30
+RELIG_PERS007,RELIG_PERS002,DISCIPLE_OF,1.0,Paul was disciple of Jesus,35
+RELIG_PERS008,RELIG_PERS003,COUSIN_OF,1.0,Ali was cousin of Muhammad,600
+RELIG004,RELIG003,INFLUENCED_BY,0.9,Christianity influenced by Judaism,30
+RELIG005,RELIG003,INFLUENCED_BY,0.7,Islam influenced by Judaism,610
+RELIG005,RELIG004,INFLUENCED_BY,0.6,Islam influenced by Christianity,610
+RELIG_PERS003,RELIG_PERS001,INFLUENCED_BY,0.6,Muhammad influenced by Moses,610
+RELIG_PERS003,RELIG_PERS002,INFLUENCED_BY,0.5,Muhammad influenced by Jesus,610

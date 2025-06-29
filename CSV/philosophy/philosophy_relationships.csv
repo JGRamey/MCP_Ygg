@@ -1,0 +1,6 @@
+source_id,target_id,relationship_type,strength,description,time_period
+PHIL002,PHIL001,BELONGS_TO,1.0,Early Wisdom belongs to Philosophy,-2600
+PHIL003,PHIL002,BELONGS_TO,1.0,Moral Guidelines belong to Early Wisdom,-2600
+PHIL004,PHIL003,BELONGS_TO,1.0,Ptahhotep Instructions are Moral Guidelines,-2400
+PHIL_PERS004,PHIL_PERS003,STUDENT_OF,1.0,Plato was student of Socrates,-400
+PHIL_PERS005,PHIL_PERS004,STUDENT_OF,1.0,Aristotle was student of Plato,-350

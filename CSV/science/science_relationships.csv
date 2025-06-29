@@ -1,0 +1,2 @@
+source_id,target_id,relationship_type,strength,description,time_period
+SCI002,SCI001,BELONGS_TO,1.0,Early_Astronomy belongs to Science,-1800

@@ -1,0 +1,3 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+SCI001,Science,root,1,Systematic study of natural world,-1800,Babylonian tablets,Global,Various,Root concept of natural investigation,confirmed
+SCI002,Early_Astronomy,sub_root,2,Observation and recording of celestial bodies,-1800,Babylonian tablets,Babylon,Akkadian,Systematic sky observation,confirmed

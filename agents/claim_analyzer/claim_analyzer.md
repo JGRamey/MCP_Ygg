@@ -1,276 +1,390 @@
-# AI Claim Analyzer MCP Server
+# Claim Analyzer Agent for MCP Server
 
-A sophisticated AI-powered Model Context Protocol (MCP) server that provides claim extraction, fact-checking, and analysis capabilities to AI models and applications.
+An advanced AI agent that extracts verifiable claims from text and performs automated fact-checking using the existing MCP server's hybrid Neo4j/Qdrant database infrastructure.
 
-## 🎯 Features
+## 🎯 Overview
 
-- **Claim Extraction**: Uses advanced NLP to identify verifiable claims in text
-- **Fact-Checking**: Cross-references claims against trusted sources
-- **Semantic Search**: Find similar claims using vector similarity
-- **Evidence Analysis**: Weighs multiple sources and provides reasoning
-- **Caching System**: Stores results to improve performance
-- **MCP Integration**: Seamlessly integrates with AI models via Model Context Protocol
+The Claim Analyzer Agent integrates seamlessly with your existing MCP server architecture to provide:
 
-## 🏗️ Architecture
+- **Intelligent Claim Extraction**: Uses spaCy NLP to identify verifiable claims in text
+- **Multi-Source Fact-Checking**: Cross-references claims against your knowledge graph and external APIs
+- **Cross-Domain Analysis**: Leverages your six-domain structure (Math, Science, Religion, History, Literature, Philosophy)
+- **Vector Similarity Search**: Uses Qdrant for semantic claim matching
+- **Graph-Based Evidence**: Explores relationships in your Neo4j knowledge graph
+- **Real-Time Processing**: Async processing with Redis caching
+
+## 🏗️ Architecture Integration
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   AI Model      │◄──►│  MCP Server     │◄──►│  External APIs  │
-│   (Claude, etc) │    │  (This Server)  │    │  (Fact Checkers)│
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │
-                              ▼
-                       ┌─────────────────┐
-                       │   SQLite DB     │
-                       │   (Claims Cache)│
-                       └─────────────────┘
+┌─────────────────────────┐    ┌─────────────────────────┐
+│   Existing MCP Server   │    │  Claim Analyzer Agent   │
+│                         │    │                         │
+│ ┌─────────────────────┐ │    │ ┌─────────────────────┐ │
+│ │    Neo4j Graph      │◄┼────┼►│  Claim Extractor    │ │
+│ │  (Knowledge Base)   │ │    │ │   (spaCy + NLP)     │ │
+│ └─────────────────────┘ │    │ └─────────────────────┘ │
+│                         │    │                         │
+│ ┌─────────────────────┐ │    │ ┌─────────────────────┐ │
+│ │   Qdrant Vectors    │◄┼────┼►│   Fact Checker      │ │
+│ │  (Semantic Search)  │ │    │ │ (Evidence Analysis) │ │
+│ └─────────────────────┘ │    │ └─────────────────────┘ │
+│                         │    │                         │
+│ ┌─────────────────────┐ │    │ ┌─────────────────────┐ │
+│ │   Redis Cache       │◄┼────┼►│  Results Storage    │ │
+│ │  (Performance)      │ │    │ │   (Caching)         │ │
+│ └─────────────────────┘ │    │ └─────────────────────┘ │
+└─────────────────────────┘    └─────────────────────────┘
 ```
 
-## 📋 Requirements
+## 🚀 Quick Installation
 
-- Python 3.8+
-- 4GB+ RAM recommended
-- Internet connection for fact-checking APIs
-- Optional: GPU for enhanced NLP processing
-
-## 🚀 Quick Start
-
-### 1. Installation
+### 1. Install the Agent
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-org/claim-analyzer-mcp
-cd claim-analyzer-mcp
+# Navigate to your MCP server directory
+cd /path/to/your/mcp-server
 
 # Run the installation script
-chmod +x install.sh
-./install.sh
-```
+python scripts/install_claim_analyzer.py
 
-Or install manually:
-
-```bash
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Download spaCy model
+# Or install manually
+pip install spacy sentence-transformers
 python -m spacy download en_core_web_sm
-
-# Initialize database
-python3 -c "from claim_analyzer import ClaimDatabase; ClaimDatabase()"
 ```
 
-### 2. Configuration
+### 2. Copy Agent Files
 
-Copy and customize the configuration file:
+Place these files in your MCP server structure:
 
-```bash
-cp config.yml.example config.yml
-# Edit config.yml with your API keys and preferences
+```
+mcp-server/
+├── agents/
+│   └── claim_analyzer/
+│       ├── __init__.py
+│       ├── claim_analyzer_agent.py
+│       ├── config.yaml
+│       └── logs/
+├── api/routes/
+│   └── claim_analyzer.py
+├── dashboard/pages/
+│   └── claim_analyzer.py
+└── scripts/
+    └── install_claim_analyzer.py
 ```
 
-### 3. Running the Server
+### 3. Update Main Configuration
 
-```bash
-# Activate virtual environment
-source venv/bin/activate
+Add to your main `config/server.yaml`:
 
-# Start the MCP server
-python3 claim_analyzer.py
+```yaml
+agents:
+  claim_analyzer:
+    enabled: true
+    config_path: "agents/claim_analyzer/config.yaml"
+    auto_start: true
 ```
 
-The server will run in stdio mode by default, ready to accept MCP connections.
+### 4. Update API Router
 
-## 🔧 MCP Tools
-
-The server exposes the following tools to AI models:
-
-### `analyze_claims`
-Extract claims from text input.
-
-**Parameters:**
-- `text` (string): Text to analyze for claims
-- `source` (string, optional): Source identifier
-
-**Example:**
-```json
-{
-  "text": "The Earth is flat and climate change is a hoax.",
-  "source": "social_media_post"
-}
-```
-
-### `fact_check_claim`
-Fact-check a specific claim.
-
-**Parameters:**
-- `claim` (string): The claim to fact-check
-- `detailed` (boolean, optional): Whether to return detailed analysis
-
-**Example:**
-```json
-{
-  "claim": "Vaccines cause autism",
-  "detailed": true
-}
-```
-
-### `search_similar_claims`
-Find similar claims in the database.
-
-**Parameters:**
-- `claim` (string): Claim to find similar ones for
-- `limit` (integer, optional): Maximum number of results
-
-### `get_recent_fact_checks`
-Retrieve recent fact-checking activity.
-
-**Parameters:**
-- `limit` (integer, optional): Number of results to return
-
-## 💻 Usage Examples
-
-### Python Client
+Add to your main API application (`api/main.py`):
 
 ```python
-from mcp_client import ClaimAnalyzerClient
+from api.routes import claim_analyzer
 
-async def main():
-    client = ClaimAnalyzerClient()
-    await client.connect("python3 claim_analyzer.py")
-    
-    # Analyze text for claims
-    result = await client.analyze_claims(
-        "The moon landing was faked in a Hollywood studio."
-    )
-    print(f"Found {result['total_claims']} claims")
-    
-    # Fact-check a specific claim
-    fact_check = await client.fact_check_claim(
-        "The moon landing was faked"
-    )
-    print(f"Verdict: {fact_check['verdict']}")
-    print(f"Confidence: {fact_check['confidence']:.2f}")
-    
-    await client.disconnect()
+app.include_router(claim_analyzer.router, prefix="/api/v1")
 ```
 
-### Command Line Interface
+### 5. Update Dashboard
 
-```bash
-# Interactive demo
-python3 mcp_client.py
+Add to your dashboard navigation (`dashboard/app.py`):
 
-# Batch analysis
-python3 mcp_client.py batch
-```
+```python
+import streamlit as st
+from dashboard.pages import claim_analyzer
 
-### Integration with Claude
-
-Add to your Claude configuration:
-
-```json
-{
-  "mcpServers": {
-    "claim-analyzer": {
-      "command": "python3",
-      "args": ["/path/to/claim_analyzer.py"],
-      "env": {}
-    }
-  }
-}
+# Add to your page selection
+if page == "Claim Analyzer":
+    claim_analyzer.main()
 ```
 
 ## ⚙️ Configuration
 
-### Basic Configuration (`config.yml`)
+### Database Integration
+
+The agent automatically connects to your existing databases:
 
 ```yaml
-# API Keys for external services
-api_keys:
-  google_fact_check: "your_api_key"
-  bing_search: "your_api_key"
-
-# Trusted sources for fact-checking
-trusted_sources:
-  - "wikipedia.org"
-  - "snopes.com"
-  - "factcheck.org"
-  - "reuters.com"
-
-# Analysis settings
-analysis:
-  language: "english"
-  max_results: 10
-  confidence_threshold: 0.5
-  cache_duration_hours: 24
-
-# Rate limiting
-rate_limiting:
-  api_requests_per_minute: 30
-  fact_check_delay: 2.0
+# agents/claim_analyzer/config.yaml
+database:
+  neo4j:
+    uri: "bolt://localhost:7687"  # Your Neo4j instance
+    user: "neo4j"
+    password: "password"
+    
+  qdrant:
+    host: "localhost"             # Your Qdrant instance
+    port: 6333
+    
+  redis:
+    url: "redis://localhost:6379" # Your Redis instance
 ```
 
-### Advanced Configuration
+### Domain Classification
 
-See the full `config.yml` for all available options including:
-- Custom claim detection patterns
-- Source credibility scoring
-- Performance tuning
-- Security settings
-- Feature flags
+Leverages your existing six-domain structure:
+
+```yaml
+domain_keywords:
+  science: ["experiment", "study", "research", "theory"]
+  math: ["theorem", "proof", "equation", "formula"]
+  religion: ["god", "faith", "belief", "scripture"]
+  history: ["ancient", "war", "civilization", "empire"]
+  literature: ["novel", "poem", "author", "book"]
+  philosophy: ["ethics", "logic", "metaphysics", "moral"]
+```
+
+### Source Credibility
+
+Configure trusted sources for fact-checking:
+
+```yaml
+source_credibility:
+  "snopes.com": 0.95
+  "factcheck.org": 0.95
+  "nasa.gov": 0.95
+  "cdc.gov": 0.95
+  "wikipedia.org": 0.80
+```
+
+## 📋 Usage Examples
+
+### 1. API Integration
+
+```python
+import requests
+
+# Analyze text for claims
+response = requests.post("http://localhost:8000/api/v1/claim-analyzer/analyze-text", 
+    json={
+        "text": "The Earth is flat and climate change is a hoax.",
+        "source": "social_media",
+        "domain": "science"
+    }
+)
+
+results = response.json()
+print(f"Found {results['total_claims']} claims")
+```
+
+### 2. Direct Agent Usage
+
+```python
+from agents.claim_analyzer import ClaimAnalyzerAgent
+
+agent = ClaimAnalyzerAgent()
+await agent.initialize()
+
+# Process text
+results = await agent.process_text(
+    text="Vaccines are completely safe and effective.",
+    source="medical_article",
+    domain="science"
+)
+
+# Fact-check single claim
+result = await agent.fact_check_single_claim(
+    claim_text="The moon landing was faked",
+    domain="history"
+)
+```
+
+### 3. Integration with Other Agents
+
+```python
+# agents/scraper/scraper_agent.py
+from agents.claim_analyzer import ClaimAnalyzerAgent
+
+class WebScraperAgent:
+    def __init__(self):
+        self.claim_analyzer = ClaimAnalyzerAgent()
+    
+    async def process_scraped_content(self, content, url, domain):
+        # Scrape content as usual
+        # ...
+        
+        # Automatically analyze claims
+        claim_results = await self.claim_analyzer.process_text(
+            text=content,
+            source=url,
+            domain=domain
+        )
+        
+        return claim_results
+```
+
+## 🔧 Advanced Features
+
+### Cross-Domain Pattern Analysis
+
+The agent automatically detects patterns across your six domains:
+
+```python
+# Example: Trinity concept across religion and philosophy
+patterns = await agent._analyze_cross_domain_patterns(claim)
+# Returns: ["Trinity appears across religion and philosophy domains"]
+```
+
+### Vector Similarity Search
+
+Leverages your existing Qdrant setup:
+
+```python
+similar_claims = await agent.get_similar_claims(
+    claim_text="Earth's shape is spherical",
+    limit=5
+)
+```
+
+### Graph-Based Evidence
+
+Explores relationships in your Neo4j knowledge graph:
+
+```cypher
+MATCH (c:Claim {id: $claim_id})-[:MENTIONS]->(e:Entity)
+MATCH (e)<-[:MENTIONS]-(d:Document {domain: $domain})
+RETURN d.content as evidence
+```
+
+## 📊 Dashboard Integration
+
+The agent includes a comprehensive Streamlit dashboard:
+
+### Pages Available:
+- **Text Analysis**: Upload/paste text for claim extraction
+- **Single Fact-Check**: Verify individual claims
+- **Similar Claims**: Find related claims in database
+- **Agent Stats**: Performance monitoring
+- **Health Monitor**: System status
+
+### Access Dashboard:
+```bash
+streamlit run dashboard/app.py
+# Navigate to "Claim Analyzer" in the sidebar
+```
 
 ## 🧪 Testing
 
-Run the test suite:
+### Unit Tests
 
 ```bash
-# Run all tests
-python3 -m pytest tests/ -v
+# Run claim analyzer tests
+pytest tests/agents/test_claim_analyzer.py -v
 
-# Run specific test categories
-python3 -m pytest tests/test_claim_extractor.py -v
-python3 -m pytest tests/test_fact_checker.py -v
-
-# Run with coverage
-pip install pytest-cov
-python3 -m pytest --cov=claim_analyzer tests/
+# Test database integration
+pytest tests/agents/test_claim_analyzer_integration.py -v
 ```
 
-## 📊 Performance
+### Manual Testing
 
-### Benchmarks
+```bash
+# Test the agent directly
+python agents/claim_analyzer/claim_analyzer_agent.py
 
-- **Claim Extraction**: ~100 claims/second
-- **Fact-Checking**: ~5 claims/second (with external APIs)
-- **Cache Lookup**: ~1000 queries/second
-- **Memory Usage**: ~500MB baseline + ~50MB per 1000 cached claims
+# Test API endpoints
+curl -X POST http://localhost:8000/api/v1/claim-analyzer/health
+```
 
-### Optimization Tips
+## 📈 Performance Optimization
 
-1. **Enable Caching**: Set appropriate `cache_duration_hours`
-2. **Rate Limiting**: Configure `api_requests_per_minute` to avoid API limits
-3. **Batch Processing**: Process multiple claims together
-4. **GPU Acceleration**: Enable `use_gpu: true` for NLP models
+### Batch Processing
 
-## 🔒 Security
+```yaml
+# config.yaml
+agent:
+  batch_size: 50
+  max_concurrent_checks: 5
+  processing_interval: 300
+```
 
-### Best Practices
+### Caching Strategy
 
-- Store API keys securely (environment variables recommended)
-- Enable input sanitization: `sanitize_input: true`
-- Set reasonable rate limits: `enable_client_rate_limiting: true`
-- Limit request sizes: `max_request_size: 1048576`
+```yaml
+performance:
+  caching:
+    enable_claim_cache: true
+    enable_evidence_cache: true
+    cache_size_limit: "1GB"
+```
+
+### Database Optimization
+
+```yaml
+database_optimization:
+  connection_pooling: true
+  query_timeout: 30
+  batch_operations: true
+```
+
+## 🔍 Monitoring & Metrics
+
+### Prometheus Metrics
+
+The agent exposes metrics on port 9091:
+
+- `claims_processed_total`
+- `fact_checks_performed_total`
+- `verdict_distribution`
+- `average_confidence_score`
+- `cross_domain_patterns_found`
+
+### Health Checks
+
+```bash
+# Check agent health
+curl http://localhost:8000/api/v1/claim-analyzer/health
+
+# Response:
+{
+  "status": "healthy",
+  "database_connections": {
+    "neo4j": true,
+    "qdrant": true,
+    "redis": true
+  },
+  "agent_running": true
+}
+```
+
+## 🔒 Security & Privacy
+
+### Input Validation
+
+```yaml
+security:
+  input_validation:
+    max_text_length: 100000
+    sanitize_html: true
+    filter_malicious_patterns: true
+```
+
+### Rate Limiting
+
+```yaml
+security:
+  rate_limiting:
+    max_requests_per_minute: 60
+    max_claims_per_request: 10
+```
 
 ### Data Privacy
 
-- Claims are cached locally by default
-- No sensitive data is sent to external APIs
-- All network requests are logged for audit
+```yaml
+security:
+  data_privacy:
+    anonymize_sources: false
+    retention_period_days: 365
+    encrypt_sensitive_data: false
+```
 
 ## 🐛 Troubleshooting
 
@@ -281,103 +395,124 @@ python3 -m pytest --cov=claim_analyzer tests/
 python -m spacy download en_core_web_sm
 ```
 
-#### "MCP connection failed"
-- Ensure the server is running
-- Check Python path in MCP client configuration
-- Verify virtual environment is activated
+#### "Database connection failed"
+```bash
+# Check your existing MCP server databases
+docker-compose ps
+kubectl get pods -n mcp-server
+```
 
-#### "Rate limit exceeded"
-- Reduce `api_requests_per_minute` in config
-- Increase `fact_check_delay`
-- Check external API quotas
+#### "Qdrant collection not found"
+```bash
+# Collections are auto-created on first run
+# Check Qdrant UI: http://localhost:6333/dashboard
+```
 
-#### "Database locked"
-- Ensure only one server instance is running
-- Check file permissions on `claims.db`
+#### "Low fact-checking accuracy"
+```yaml
+# Adjust confidence thresholds in config.yaml
+agent:
+  confidence_threshold: 0.3  # Lower = more permissive
+  similarity_threshold: 0.6  # Lower = more matches
+```
 
 ### Debug Mode
 
-Enable detailed logging:
-
 ```yaml
+# config.yaml
 logging:
   level: "DEBUG"
-  log_to_file: true
-  log_file: "debug.log"
+  components:
+    claim_extractor: "DEBUG"
+    fact_checker: "DEBUG"
 ```
 
-## 📈 Monitoring
+## 🚦 Integration Checklist
 
-### Health Checks
+- [ ] Install dependencies (`spacy`, `sentence-transformers`)
+- [ ] Download NLP models (`en_core_web_sm`)
+- [ ] Copy agent files to correct directories
+- [ ] Update main server configuration
+- [ ] Add API routes to main application
+- [ ] Include dashboard pages
+- [ ] Configure database connections
+- [ ] Set up monitoring/metrics
+- [ ] Run health checks
+- [ ] Test with sample data
 
-```bash
-# Check server status
-curl localhost:8000/health  # If using HTTP transport
+## 📚 API Reference
 
-# Database stats
-python3 -c "
-from claim_analyzer import ClaimDatabase
-db = ClaimDatabase()
-print(f'Recent fact-checks: {len(db.get_recent_results(100))}')
-"
+### Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/claim-analyzer/analyze-text` | Analyze text for claims |
+| POST | `/api/v1/claim-analyzer/fact-check` | Fact-check single claim |
+| POST | `/api/v1/claim-analyzer/similar-claims` | Find similar claims |
+| GET | `/api/v1/claim-analyzer/stats` | Get agent statistics |
+| GET | `/api/v1/claim-analyzer/health` | Health check |
+
+### Request/Response Examples
+
+#### Analyze Text
+```json
+// Request
+{
+  "text": "The Earth is flat and vaccines cause autism.",
+  "source": "social_media",
+  "domain": "science"
+}
+
+// Response
+{
+  "total_claims": 2,
+  "fact_check_results": [
+    {
+      "claim": {
+        "text": "The Earth is flat",
+        "domain": "science",
+        "confidence": 0.8
+      },
+      "verdict": "False",
+      "confidence": 0.95,
+      "reasoning": "Scientific evidence confirms Earth is spherical...",
+      "evidence_list": [...]
+    }
+  ]
+}
 ```
-
-### Metrics
-
-The server tracks:
-- Claims processed per hour
-- Fact-check accuracy by source
-- Cache hit rates
-- API response times
-
-## 🔮 Future Enhancements
-
-- [ ] Multi-language support
-- [ ] Real-time video transcript analysis
-- [ ] Machine learning model training
-- [ ] Web dashboard for monitoring
-- [ ] Integration with more fact-checking APIs
-- [ ] Vector database for improved similarity search
 
 ## 🤝 Contributing
 
+### Adding New Features
+
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make changes and add tests
-4. Run the test suite: `python3 -m pytest`
-5. Submit a pull request
+2. Create feature branch: `git checkout -b feature/new-claim-type`
+3. Add tests for new functionality
+4. Update documentation
+5. Submit pull request
 
-### Development Setup
+### Extending Fact-Checking
 
-```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
-
-# Install pre-commit hooks
-pre-commit install
-
-# Run code formatting
-black claim_analyzer.py
-flake8 claim_analyzer.py
+```python
+# agents/claim_analyzer/extensions/custom_checker.py
+class CustomFactChecker:
+    async def check_domain_specific_claim(self, claim, domain):
+        # Add domain-specific fact-checking logic
+        pass
 ```
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This agent inherits the same license as the main MCP server project.
 
 ## 🙏 Acknowledgments
 
-- **spaCy** for excellent NLP capabilities
-- **Sentence Transformers** for semantic similarity
-- **Model Context Protocol** for AI integration standards
-- **Anthropic** for MCP development support
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/your-org/claim-analyzer-mcp/issues)
-- **Documentation**: [Wiki](https://github.com/your-org/claim-analyzer-mcp/wiki)
-- **Community**: [Discussions](https://github.com/your-org/claim-analyzer-mcp/discussions)
+- Built on the existing MCP server infrastructure
+- Integrates with Neo4j knowledge graph
+- Leverages Qdrant vector search capabilities
+- Uses spaCy for natural language processing
 
 ---
 
-**Built with ❤️ for accurate information and critical thinking**
+**Ready to enhance your MCP server with intelligent claim analysis and fact-checking capabilities!**

@@ -1,0 +1,13 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+RELIG001,Religion,root,1,Spiritual and religious beliefs and practices,-2500,animist artifacts,Global,Various,Root concept of spiritual practices,confirmed
+RELIG002,Monotheism,sub_root,2,Belief in single deity,-1300,Torah scrolls,Middle East,Hebrew,Early monotheistic traditions,confirmed
+RELIG003,Judaism,branch,3,Abrahamic monotheistic religion,-1300,Torah scrolls,Middle East,Hebrew,Written in Hebrew 1300 BC,confirmed
+RELIG004,Christianity,branch,3,Christian faith based on Jesus Christ,30,Gospel texts,Middle East,Greek/Aramaic,Founded in 1st century AD,confirmed
+RELIG005,Islam,branch,3,Islamic faith founded by Muhammad,610,Quran,Arabian Peninsula,Arabic,Founded in 7th century AD,confirmed
+RELIG006,Polytheism,sub_root,2,Belief in multiple deities,-2000,Vedas,India,Sanskrit,Multiple deity worship systems,confirmed
+RELIG007,Greek_Mythology,branch,3,Greek polytheistic beliefs,-800,Homer texts,Greece,Greek,Composed in Greek 800 BC,confirmed
+RELIG008,Hinduism,branch,3,Major world religion from India,-1500,Vedas,India,Sanskrit,Composed in Sanskrit 1500 BC,confirmed
+RELIG009,Egyptian_Religion,branch,3,Ancient Egyptian religious practices,-2000,Religious texts,Egypt,Hieroglyphic,Found in Egypt 2000 BC,confirmed
+RELIG010,Non_Theistic_Beliefs,sub_root,2,Spiritual systems without deities,-2500,animist artifacts,Global,Various,Non-deity based spiritual practices,confirmed
+RELIG011,Animism,branch,3,Belief in spirit beings and forces,-2500,animist artifacts,Indus Valley,Various,Practiced in Indus Valley 2500 BC,confirmed
+RELIG012,Buddhism,branch,3,Buddhist teachings and practices,-500,Buddhist texts,India,Pali/Sanskrit,Founded in 5th century BC,confirmed

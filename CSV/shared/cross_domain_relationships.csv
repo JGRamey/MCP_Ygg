@@ -1,0 +1,7 @@
+source_id,target_id,relationship_type,strength,description,time_period,domains_connected
+RELIG003,PHIL004,INFLUENCED_BY,0.7,Judaism influenced by Egyptian wisdom traditions,-1200,"Religion,Philosophy"
+MATH003,TECH002,REQUIRED_BY,1.0,Early arithmetic required by stone tool production planning,-2600000,"Mathematics,Technology"
+LANG002,SCI002,ENABLED,1.0,Written language enabled recording of astronomical observations,-1800,"Language,Science"
+ART002,TECH002,ENABLED_BY,1.0,Cave paintings enabled by fire control technology,-40000,"Art,Technology"
+ASTRO002,SCI002,EVOLVED_FROM,0.9,Mesopotamian astrology evolved from astronomical observation,-1500,"Astrology,Science"
+PHIL_PERS004,MATH_PERS002,INFLUENCED_BY,0.5,Plato influenced by geometric mathematical concepts,-350,"Philosophy,Mathematics"

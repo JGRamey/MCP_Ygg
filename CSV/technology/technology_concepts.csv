@@ -1,0 +1,3 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+TECH001,Technology,root,1,Application of knowledge for practical purposes,-2600000,Stone tools,Africa,None,Root concept of tool use,confirmed
+TECH002,Early_Tool_Use,sub_root,2,Primitive tool making and use,-2600000,Flake tools,Africa,None,Earliest technological evidence,confirmed

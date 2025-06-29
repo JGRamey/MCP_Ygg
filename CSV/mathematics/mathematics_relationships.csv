@@ -1,0 +1,4 @@
+source_id,target_id,relationship_type,strength,description,time_period
+MATH002,MATH001,BELONGS_TO,1.0,Early Arithmetic belongs to Mathematics,-20000
+MATH003,MATH002,BELONGS_TO,1.0,Tally Systems belong to Early Arithmetic,-20000
+MATH_PERS002,MATH005,DEVELOPED,1.0,Euclid developed systematic geometry,-300

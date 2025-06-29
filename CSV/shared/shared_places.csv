@@ -1,0 +1,21 @@
+place_id,name,region,coordinates,description,time_period,cultural_significance
+PLAC001,Mesopotamia,Middle East,"33.0,44.0",Cradle of civilization between Tigris and Euphrates,-3500 to 500,"Birthplace of writing, law, and urban civilization"
+PLAC002,Egypt,Africa,"26.0,30.0",Ancient Egyptian civilization along the Nile,-3100 to 30,Monumental architecture and religious traditions
+PLAC003,Greece,Europe,"39.0,22.0",Classical Greek civilization and city-states,-800 to 146,"Philosophy, democracy, and rational inquiry"
+PLAC004,India,Asia,"20.0,77.0",Indus Valley and Vedic civilizations,-2600 to present,Religious and philosophical traditions
+PLAC005,Ethiopia,Africa,"9.0,40.0",Early human development and tool-making site,-2600000 to present,Earliest human technological development
+PLAC006,Turkey,Asia Minor,"39.0,35.0",Anatolia - bridge between Europe and Asia,-9600 to present,Early monumental architecture and metallurgy
+PLAC007,France,Europe,"46.0,2.0",Paleolithic art and early European culture,-40000 to present,Earliest European artistic expression
+PLAC008,Germany,Europe,"51.0,9.0",Central European cultural development,-40000 to present,Early musical instruments and technology
+PLAC009,China,Asia,"35.0,105.0",Ancient Chinese civilization,-5000 to present,Independent technological and philosophical development
+PLAC010,Babylon,Middle East,"32.5,44.4",Major Mesopotamian city-state,-2000 to 500,Astronomical and mathematical achievements
+PLAC011,Alexandria,Africa,"31.2,29.9",Hellenistic center of learning,-300 to 600,Mathematical and scientific scholarship
+PLAC012,Athens,Europe,"37.9,23.7",Classical Greek city-state,-800 to 146,Philosophical and democratic innovation
+PLAC013,Rome,Europe,"41.9,12.5",Roman Empire center,-750 to 500,Legal and engineering achievements
+PLAC014,Sumer,Middle East,"31.0,46.0",Earliest Mesopotamian civilization,-3500 to -1750,"First cities, writing, and organized religion"
+PLAC015,Canaan,Middle East,"31.5,35.0",Ancient Levantine region,-2000 to 500,Alphabetic writing development
+PLAC016,Miletus,Asia Minor,"37.5,27.3",Greek city in Anatolia,-700 to 500,Birthplace of philosophy and science
+PLAC017,Syracuse,Europe,"37.1,15.3",Greek city in Sicily,-700 to 200,Mathematical and engineering center
+PLAC018,Perga,Asia Minor,"36.9,30.9",Ancient city in Pamphylia,-300 to 500,Mathematical scholarship
+PLAC019,Rhodes,Europe,"36.2,28.0",Greek island city-state,-400 to 200,Astronomical observations
+PLAC020,Kos,Europe,"36.9,27.3",Greek island medical center,-500 to 200,Medical knowledge development

@@ -1,0 +1,254 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-yggdrasil"
+description = "Hybrid Neo4j and Qdrant Knowledge Base with AI Agents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "MCP Yggdrasil Team", email = "team@mcpyggdrasil.com"},
+]
+keywords = ["knowledge-graph", "vector-database", "ai", "nlp", "fact-checking"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Database",
+    "Topic :: Text Processing :: Linguistic",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/your-org/mcp-yggdrasil"
+Documentation = "https://mcp-yggdrasil.readthedocs.io"
+Repository = "https://github.com/your-org/mcp-yggdrasil.git"
+"Bug Tracker" = "https://github.com/your-org/mcp-yggdrasil/issues"
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | venv
+  | env
+  | node_modules
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_gitignore = true
+src_paths = ["agents", "api", "dashboard", "scripts", "tests"]
+known_first_party = ["agents", "api", "dashboard", "config"]
+known_third_party = [
+    "fastapi", "uvicorn", "pydantic", "neo4j", "qdrant_client", "redis",
+    "spacy", "sentence_transformers", "numpy", "pandas", "scikit_learn",
+    "aiohttp", "aiofiles", "asyncio", "streamlit", "plotly", "pytest"
+]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+# mypy configuration
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+# Per-module configuration
+[[tool.mypy.overrides]]
+module = [
+    "spacy.*",
+    "sentence_transformers.*",
+    "qdrant_client.*",
+    "neo4j.*",
+    "scrapy.*",
+    "pdfplumber.*",
+    "pytesseract.*",
+    "selenium.*",
+    "streamlit.*",
+    "plotly.*",
+    "fitz.*",
+    "PIL.*"
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+# pytest configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+    "database: marks tests that require database connections",
+    "external_api: marks tests that require external API access",
+    "gpu: marks tests that require GPU resources",
+]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["agents", "api", "dashboard", "scripts"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__init__.py",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/env/*",
+    "setup.py",
+]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+ignore_errors = true
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# pylint configuration
+[tool.pylint.messages_control]
+disable = [
+    "C0103",  # invalid-name (sometimes needed for mathematical variables)
+    "C0114",  # missing-module-docstring (not always necessary)
+    "C0115",  # missing-class-docstring (handled by other tools)
+    "C0116",  # missing-function-docstring (handled by other tools)
+    "R0903",  # too-few-public-methods (dataclasses, simple classes)
+    "R0913",  # too-many-arguments (sometimes necessary for complex functions)
+    "R0914",  # too-many-locals (sometimes necessary for complex logic)
+    "W0212",  # protected-access (sometimes needed for testing)
+    "W0613",  # unused-argument (sometimes needed for interface compliance)
+    "W0622",  # redefined-builtin (sometimes needed for shadowing)
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.design]
+max-args = 8
+max-locals = 20
+max-branches = 15
+max-statements = 60
+
+# bandit security configuration
+[tool.bandit]
+exclude_dirs = ["tests", "test_*", "*_test.py"]
+skips = ["B101", "B601"]  # Skip assert_used and shell injection (handled manually)
+
+# ruff configuration (fast alternative to flake8)
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "D",   # pydocstyle
+    "UP",  # pyupgrade
+    "YTT", # flake8-2020
+    "S",   # bandit
+    "BLE", # flake8-blind-except
+    "B",   # flake8-bugbear
+    "A",   # flake8-builtins
+    "C4",  # flake8-comprehensions
+    "T10", # flake8-debugger
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",  # Missing docstrings
+    "S101",  # Use of assert (needed for tests)
+    "S105",  # Possible hardcoded password (false positives)
+    "S106",  # Possible hardcoded password (false positives)
+    "S107",  # Possible hardcoded password (false positives)
+    "S113",  # Probable use of requests without timeout (handled manually)
+    "S301",  # Use of pickle (needed for caching)
+    "S603",  # Subprocess without shell=False (handled manually)
+    "S607",  # Starting process with partial executable path (handled manually)
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+"test_*.py" = ["S101", "S105", "S106", "S107", "D", "A", "N"]
+"tests/*.py" = ["S101", "S105", "S106", "S107", "D", "A", "N"]
+"scripts/*.py" = ["T10", "S"]
+"config/*.py" = ["S105", "S106"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.ruff.isort]
+known-first-party = ["agents", "api", "dashboard", "config"]

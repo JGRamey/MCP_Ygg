@@ -1,0 +1,13 @@
+person_id,name,birth_year,death_year,location,culture,description,historical_status
+RELIG_PERS001,Moses,-1393,-1273,Middle East,Hebrew,Prophet and lawgiver of Judaism,historical
+RELIG_PERS002,Jesus,4,30,Palestine,Jewish,Central figure of Christianity,historical
+RELIG_PERS003,Muhammad,570,632,Arabian Peninsula,Arab,Prophet and founder of Islam,historical
+RELIG_PERS004,Homer,-800,-750,Greece,Greek,Epic poet author of Iliad and Odyssey,historical
+RELIG_PERS005,Aaron,-1393,-1273,Middle East,Hebrew,Brother and high priest under Moses,historical
+RELIG_PERS006,Peter,1,64,Palestine,Jewish,Apostle and disciple of Jesus,historical
+RELIG_PERS007,Paul,5,67,Asia Minor,Jewish-Roman,Apostle and missionary of Christianity,historical
+RELIG_PERS008,Ali_ibn_Abi_Talib,601,661,Arabian Peninsula,Arab,Cousin and son-in-law of Muhammad,historical
+RELIG_PERS009,Gautama_Buddha,-563,-483,India,Indian,Founder of Buddhism,historical
+RELIG_PERS010,Unknown_Shamans,-2500,NULL,Indus Valley,Various,Early animist practitioners,prehistoric
+RELIG_PERS011,Unknown_Egyptian_Priests,-2000,-500,Egypt,Egyptian,Ancient Egyptian religious leaders,historical
+RELIG_PERS012,Unknown_Vedic_Scribes,-1500,-500,India,Indo-Aryan,Composers of Vedic texts,historical

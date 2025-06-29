@@ -1,0 +1,6 @@
+person_id,name,birth_year,death_year,location,culture,description,historical_status
+PHIL_PERS001,Ptahhotep,-2400,-2300,Egypt,Egyptian,Vizier and author of wisdom literature,historical
+PHIL_PERS002,Thales,-624,-546,Miletus,Greek,Pre-Socratic philosopher father of philosophy,historical
+PHIL_PERS003,Socrates,-470,-399,Athens,Greek,Classical philosopher teacher of Plato,historical
+PHIL_PERS004,Plato,-428,-348,Athens,Greek,Classical philosopher student of Socrates,historical
+PHIL_PERS005,Aristotle,-384,-322,Athens,Greek,Classical philosopher student of Plato,historical

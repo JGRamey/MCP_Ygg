@@ -1,0 +1,9 @@
+work_id,title,creation_year,location,language,medium,description,preservation_status
+RELIG_WORK001,Torah_Scrolls,-1300,Middle East,Hebrew,Parchment,Hebrew religious texts,extant
+RELIG_WORK002,Vedas,-1500,India,Sanskrit,Oral/Written,Hindu religious texts,extant
+RELIG_WORK003,Gospel_Texts,50,Palestine,Greek,Parchment,Christian religious texts,extant
+RELIG_WORK004,Quran,610,Arabian Peninsula,Arabic,Parchment,Islamic religious text,extant
+RELIG_WORK005,Iliad,-800,Greece,Greek,Oral/Written,Greek epic poem with religious themes,extant
+RELIG_WORK006,Odyssey,-750,Greece,Greek,Oral/Written,Greek epic poem with religious themes,extant
+RELIG_WORK007,Buddhist_Sutras,-400,India,Pali/Sanskrit,Palm leaves,Buddhist religious texts,extant
+RELIG_WORK008,Egyptian_Religious_Texts,-2000,Egypt,Hieroglyphic,Papyrus/Stone,Ancient Egyptian religious writings,extant

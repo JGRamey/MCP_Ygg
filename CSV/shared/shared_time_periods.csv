@@ -1,0 +1,12 @@
+period_id,name,start_year,end_year,description,evidence_type,key_developments
+TIME001,Prehistoric,-2600000,-3000,Before written records,Archaeological,"Tool use, fire control, early art"
+TIME002,Paleolithic,-2600000,-10000,Old Stone Age,Archaeological,"Cave art, stone tools, early music"
+TIME003,Neolithic,-10000,-3000,New Stone Age,Archaeological,"Agriculture, pottery, megalithic architecture"
+TIME004,Bronze_Age,-3200,-1200,Bronze metallurgy period,Archaeological,"Writing systems, organized states, trade"
+TIME005,Iron_Age,-1200,-500,Iron metallurgy period,Archaeological,"Advanced metallurgy, alphabetic writing"
+TIME006,Ancient,-3000,-500,Early civilizations with writing,Historical,Development of major knowledge domains
+TIME007,Classical,-500,500,Greek and Roman periods,Historical,"Systematic philosophy, science, literature"
+TIME008,Archaic_Period,-800,-480,Early Greek development,Historical,Foundation of philosophical inquiry
+TIME009,Hellenistic,-323,-31,Greek cultural expansion,Historical,Scientific and mathematical advancement
+TIME010,Early_Imperial,31,284,Early Roman Empire,Historical,Consolidation and preservation of knowledge
+TIME011,Late_Antiquity,284,600,Transition period,Historical,Preservation and transmission of classical knowledge

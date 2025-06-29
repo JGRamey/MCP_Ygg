@@ -1,0 +1,6 @@
+concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
+MATH001,Mathematics,root,1,Study of numbers patterns and structures,-20000,Ishango Bone,Global,Various,Root concept of mathematical thought,confirmed
+MATH002,Early_Arithmetic,sub_root,2,Basic counting and calculation,-20000,Ishango Bone,Africa,Symbolic,Earliest mathematical evidence,confirmed
+MATH003,Tally_Systems,branch,3,Early counting methods,-20000,Bone carvings,Africa,Symbolic,Carved in Africa 20000 BC,confirmed
+MATH004,Geometry,sub_root,2,Study of shapes space and measurement,-3000,Clay tablets,Mesopotamia,Cuneiform,Early geometric knowledge,confirmed
+MATH005,Euclidean_Geometry,branch,3,Systematic geometric principles,-300,Elements,Alexandria,Greek,Systematized by Euclid,confirmed

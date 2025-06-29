@@ -1,0 +1,74 @@
+[flake8]
+# PEP8 Configuration for MCP Yggdrasil Project
+
+# Maximum line length
+max-line-length = 88
+
+# Exclude directories and files
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    venv,
+    env,
+    .venv,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    .tox,
+    docs/_build,
+    migrations,
+    node_modules,
+    .mypy_cache
+
+# Ignore specific error codes
+ignore = 
+    E203,  # whitespace before ':' (conflicts with black)
+    E501,  # line too long (handled by black)
+    W503,  # line break before binary operator (conflicts with black)
+    E402,  # module level import not at top of file (sometimes needed for path manipulation)
+    F401,  # imported but unused (handled by isort and manual review)
+    E722,  # do not use bare 'except' (sometimes needed for broad exception handling)
+
+# Select specific error codes to check
+select = 
+    E,     # pycodestyle errors
+    W,     # pycodestyle warnings
+    F,     # pyflakes
+    C,     # mccabe complexity
+    N,     # pep8-naming
+
+# Maximum complexity allowed
+max-complexity = 10
+
+# Per-file ignores for specific patterns
+per-file-ignores =
+    # __init__.py files can have unused imports
+    __init__.py: F401, F403
+    # Configuration files might have long lines
+    config/*.py: E501
+    # Test files can have specific patterns
+    test_*.py: E501, F401, F403, F811
+    tests/*.py: E501, F401, F403, F811
+    # Scripts might need more flexibility
+    scripts/*.py: E501, F401
+    # Dashboard files might have longer lines for UI elements
+    dashboard/*.py: E501
+
+# Inline comments configuration
+inline-quotes = double
+multiline-quotes = double
+
+# Import order configuration (for flake8-import-order)
+import-order-style = google
+application-import-names = agents,api,dashboard,config,scripts,tests
+
+# Docstring configuration (for flake8-docstrings)
+docstring-convention = google
+
+# Type checking configuration
+enable-extensions = G
+
+# Additional checks
+hang-closing = true

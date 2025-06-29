@@ -1,0 +1,4 @@
+work_id,title,creation_year,location,language,medium,description,preservation_status
+PHIL_WORK001,Ptahhotep_Instructions,-2400,Egypt,Hieratic,Papyrus,Egyptian wisdom literature,extant
+PHIL_WORK002,Platos_Republic,-380,Athens,Greek,Manuscript,Political philosophy and justice,extant
+PHIL_WORK003,Aristotles_Ethics,-330,Athens,Greek,Manuscript,Systematic ethical philosophy,extant
