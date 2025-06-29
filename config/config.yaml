@@ -1,0 +1,473 @@
+
+scraper:
+    general:
+        user_agent: 'MCP-Server/1.0 (Academic Research; +https://github.com/mcp-project)'
+        request_delay: 1.0
+        max_retries: 3
+        timeout: 30
+        max_concurrent: 5
+        max_file_size: 52428800  # 50MB
+        supported_formats: ['pdf', 'html', 'txt', 'doc', 'docx', 'epub']
+        output_dir: 'data/raw'
+        respect_robots_txt: True
+    domains:
+        math:
+            sources:
+                - 'arxiv.org/list/math'
+                - 'mathworld.wolfram.com'
+                - 'oeis.org'
+                - 'projecteuclid.org'
+            keywords: ['theorem', 'proof', 'equation', 'mathematics', 'algebra', 'geometry']
+            rate_limit: 2.0
+        science:
+            sources:
+                - 'arxiv.org/list/physics'
+                - 'pubmed.ncbi.nlm.nih.gov'
+                - 'nature.com'
+                - 'sciencedirect.com'
+            keywords: ['research', 'experiment', 'hypothesis', 'data', 'analysis']
+            rate_limit: 2.0
+        religion:
+            sources:
+                - 'sacred-texts.com'
+                - 'ccel.org'
+                - 'earlychristianwritings.com'
+                - 'perseus.tufts.edu'
+            keywords: ['scripture', 'theology', 'doctrine', 'faith', 'spiritual']
+            rate_limit: 1.0
+        history:
+            sources:
+                - 'archive.org'
+                - 'loc.gov'
+                - 'europeana.eu'
+                - 'worldhistory.org'
+            keywords: ['historical', 'ancient', 'medieval', 'chronology', 'civilization']
+            rate_limit: 1.5
+        literature:
+            sources:
+                - 'gutenberg.org'
+                - 'archive.org/details/texts'
+                - 'poetryfoundation.org'
+                - 'bartleby.com'
+            keywords: ['poetry', 'novel', 'drama', 'literature', 'author', 'text']
+            rate_limit: 1.0
+        philosophy:
+            sources:
+                - 'plato.stanford.edu'
+                - 'iep.utm.edu'
+                - 'archive.org/details/philosophy'
+                - 'perseus.tufts.edu'
+            keywords: ['philosophy', 'ethics', 'metaphysics', 'logic', 'epistemology']
+            rate_limit: 1.5
+    source_types:
+        academic:
+            api_keys:
+                crossref: null
+                pubmed: null
+                arxiv: null
+                ieee: null
+            rate_limits:
+                crossref: 1.0
+                pubmed: 0.5
+                arxiv: 3.0
+                ieee: 2.0
+            authentication: True
+        public_domain:
+            rate_limits:
+                gutenberg: 1.0
+                archive_org: 2.0
+                wikisource: 1.0
+            authentication: False
+        manuscript:
+            ocr_required: True
+            languages: ['en', 'la', 'grc', 'de', 'fr']
+            preprocessing: True
+        tablet:
+            ocr_required: True
+            languages: ['akk', 'sux', 'egy']
+            special_processing: True
+    licensing:
+        allowed_licenses:
+            - 'public_domain'
+            - 'creative_commons'
+            - 'mit'
+            - 'apache'
+            - 'gpl'
+        check_copyright: True
+        require_license: True
+        fallback_to_fair_use: False
+    quality_control:
+        min_word_count: 100
+        max_word_count: 1000000
+        language_detection: True
+        duplicate_detection: True
+        content_validation: True
+
+text_processor:
+    processing:
+        chunk_size: 1000
+        chunk_overlap: 200
+        min_text_length: 100
+        max_text_length: 1000000
+        max_workers: 8
+        batch_size: 50
+        enable_parallel_processing: True
+        timeout_seconds: 300
+    embedding_models:
+        default: 'all-MiniLM-L6-v2'
+        multilingual: 'paraphrase-multilingual-MiniLM-L12-v2'
+        domain_specific:
+            science: 'allenai/scibert_scivocab_uncased'
+            math: 'sentence-transformers/all-MiniLM-L6-v2'
+            literature: 'sentence-transformers/all-MiniLM-L6-v2'
+            philosophy: 'sentence-transformers/all-MiniLM-L6-v2'
+            history: 'sentence-transformers/all-MiniLM-L6-v2'
+            religion: 'sentence-transformers/all-MiniLM-L6-v2'
+        cache_embeddings: True
+        embedding_dimension: 384
+        normalize_embeddings: True
+    nlp_models:
+        spacy_models:
+            english: 'en_core_web_lg'
+            latin: 'la_core_web_sm'
+            greek: 'grc_proiel_sm'
+            german: 'de_core_news_lg'
+            french: 'fr_core_news_lg'
+            spanish: 'es_core_news_lg'
+            italian: 'it_core_news_lg'
+            portuguese: 'pt_core_news_lg'
+        fallback_model: 'en_core_web_sm'
+        disable_components: ['parser']
+        entity_types:
+            - 'PERSON'
+            - 'ORG'
+            - 'GPE'
+            - 'LOC'
+            - 'EVENT'
+            - 'WORK_OF_ART'
+            - 'LAW'
+            - 'LANGUAGE'
+            - 'DATE'
+            - 'TIME'
+            - 'MONEY'
+            - 'QUANTITY'
+            - 'ORDINAL'
+            - 'CARDINAL'
+    languages:
+        supported:
+            - 'english'
+            - 'latin'
+            - 'greek'
+            - 'german'
+            - 'french'
+            - 'spanish'
+            - 'italian'
+            - 'portuguese'
+            - 'russian'
+            - 'arabic'
+            - 'hebrew'
+            - 'sanskrit'
+            - 'chinese'
+            - 'japanese'
+        detection:
+            confidence_threshold: 0.7
+            fallback_language: 'english'
+            use_statistical_detection: True
+        preprocessing:
+            normalize_unicode: True
+            remove_accents: False
+            lowercase: False
+            remove_punctuation: False
+    chunking:
+        methods: ['sentences', 'paragraphs', 'semantic']
+        default_method: 'sentences'
+        sentence_chunking:
+            min_sentences_per_chunk: 3
+            max_sentences_per_chunk: 20
+            respect_paragraph_boundaries: True
+        paragraph_chunking:
+            min_paragraphs_per_chunk: 1
+            max_paragraphs_per_chunk: 5
+        semantic_chunking:
+            similarity_threshold: 0.8
+            min_chunk_size: 500
+            max_chunk_size: 2000
+    entity_extraction:
+        enable_custom_entities: True
+        custom_patterns:
+            biblical_books:
+                - 'Genesis'
+                - 'Exodus'
+                - 'Leviticus'
+                - 'Numbers'
+                - 'Deuteronomy'
+                - 'Matthew'
+                - 'Mark'
+                - 'Luke'
+                - 'John'
+                - 'Romans'
+                - 'Corinthians'
+            mathematical_concepts:
+                - 'theorem'
+                - 'lemma'
+                - 'corollary'
+                - 'proof'
+                - 'axiom'
+                - 'algebra'
+                - 'geometry'
+                - 'calculus'
+                - 'topology'
+            philosophical_concepts:
+                - 'metaphysics'
+                - 'epistemology'
+                - 'ethics'
+                - 'aesthetics'
+                - 'logic'
+                - 'ontology'
+                - 'phenomenology'
+        confidence_threshold: 0.5
+        enable_entity_linking: True
+        knowledge_bases:
+            wikidata: True
+            dbpedia: True
+            custom: True
+    text_cleaning:
+        remove_headers_footers: True
+        remove_page_numbers: True
+        fix_ocr_errors: True
+        normalize_whitespace: True
+        preserve_structure: True
+        handle_footnotes: 'preserve'
+        encoding_normalization:
+            target_encoding: 'utf-8'
+            handle_unknown_chars: 'replace'
+            normalize_unicode: 'NFC'
+    quality_control:
+        min_word_count: 50
+        max_word_count: 100000
+        min_sentence_count: 3
+        language_detection_confidence: 0.7
+        duplicate_detection:
+            enabled: True
+            similarity_threshold: 0.95
+            hash_algorithm: 'sha256'
+        content_validation:
+            check_encoding: True
+            check_language_consistency: True
+            detect_corrupted_text: True
+    output:
+        base_dir: 'data/processed'
+        subdirs:
+            documents: 'documents'
+            embeddings: 'embeddings'
+            entities: 'entities'
+            chunks: 'chunks'
+            metadata: 'metadata'
+        formats:
+            json: True
+            pickle: True
+            parquet: False
+            hdf5: False
+        compression:
+            enabled: True
+            algorithm: 'gzip'
+            level: 6
+    performance:
+        memory_limit_mb: 4096
+        gc_threshold: 100
+        profile_performance: False
+        cache_models: True
+        lazy_loading: True
+        optimization:
+            use_fast_tokenizers: True
+            enable_mixed_precision: False
+            batch_inference: True
+    logging:
+        level: 'INFO'
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        file: 'logs/text_processor.log'
+        max_file_size_mb: 100
+        backup_count: 5
+        log_processing_stats: True
+    domain_specific:
+        math:
+            enable_latex_parsing: True
+            preserve_equations: True
+            extract_theorems: True
+            symbol_normalization: True
+        religion:
+            enable_scripture_parsing: True
+            preserve_verse_structure: True
+            extract_references: True
+            handle_archaic_language: True
+        history:
+            enable_date_extraction: True
+            preserve_chronology: True
+            extract_locations: True
+            handle_historical_names: True
+        literature:
+            preserve_formatting: True
+            extract_dialogue: True
+            identify_narrative_structure: True
+            handle_poetry: True
+        philosophy:
+            extract_arguments: True
+            identify_logical_structure: True
+            preserve_citations: True
+            handle_technical_terms: True
+        science:
+            extract_methodology: True
+            preserve_data_sections: True
+            identify_hypotheses: True
+            handle_technical_notation: True
+
+vector_index:
+    qdrant:
+        host: 'localhost'
+        port: 6333
+        api_key: null
+        timeout: 60
+        prefer_grpc: True
+        https: False
+        prefix: 'mcp_'
+        connection_pool_size: 10
+    redis:
+        url: 'redis://localhost:6379'
+        prefix: 'mcp_vector:'
+        max_connections: 20
+        socket_timeout: 30
+        socket_connect_timeout: 30
+        retry_on_timeout: True
+        decode_responses: False
+    collections:
+        vector_size: 384
+        distance_metric: 'Cosine'
+        hnsw_config:
+            m: 16
+            ef_construct: 100
+            full_scan_threshold: 10000
+            max_indexing_threads: 0
+            on_disk: False
+            payload_m: null
+        quantization:
+            enabled: True
+            type: 'scalar'
+            scalar_config:
+                type: 'int8'
+                quantile: 0.99
+                always_ram: True
+        optimizer:
+            deleted_threshold: 0.2
+            vacuum_min_vector_number: 1000
+            default_segment_number: 0
+            max_segment_size: null
+            memmap_threshold: null
+            indexing_threshold: 20000
+            flush_interval_sec: 5
+            max_optimization_threads: 1
+        replication:
+            replication_factor: 1
+            write_consistency_factor: 1
+            read_fan_out_factor: null
+    indexing:
+        batch_size: 100
+        max_workers: 8
+        chunk_size: 1000
+        enable_parallel_processing: True
+        timeout_per_batch: 300
+        retry_failed_batches: True
+        max_retries: 3
+        retry_delay: 5.0
+        memory_limit_mb: 2048
+        progress_reporting: True
+    search:
+        default_limit: 10
+        max_limit: 1000
+        score_threshold: 0.7
+        enable_caching: True
+        cache_ttl: 3600
+        exact_search_threshold: 1000
+        search_timeout: 30
+        enable_rescoring: False
+        rescore_query: null
+    domains:
+        math:
+            collection_suffix: 'math'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 200
+                quantization_enabled: True
+        science:
+            collection_suffix: 'science'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 150
+                quantization_enabled: True
+        religion:
+            collection_suffix: 'religion'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 100
+                quantization_enabled': True
+        history:
+            collection_suffix: 'history'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 100
+                quantization_enabled: True
+        literature:
+            collection_suffix: 'literature'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 120
+                quantization_enabled: True
+        philosophy:
+            collection_suffix: 'philosophy'
+            vector_size: 384
+            special_config:
+                hnsw_ef_construct: 150
+                quantization_enabled: True
+    backup:
+        enabled: True
+        schedule: 'daily'
+        retention_days: 30
+        backup_location: 'data/backups/vector_index'
+        compression: True
+        incremental: True
+        verify_backups: True
+    monitoring:
+        enabled: True
+        metrics_collection: True
+        performance_logging: True
+        alert_thresholds:
+            memory_usage_percent: 85
+            disk_usage_percent: 90
+            search_latency_ms: 1000
+            indexing_failure_rate: 0.05
+        health_check_interval: 60
+    optimization:
+        auto_optimize: True
+        optimization_schedule: 'nightly'
+        vacuum_threshold: 0.1
+        merge_threshold: 10
+        background_optimization: True
+        max_optimization_time: 3600
+    security:
+        enable_api_key: False
+        enable_tls: False
+        tls_config:
+            cert_file: null
+            key_file: null
+            ca_file: null
+        rate_limiting:
+            enabled: False
+            requests_per_minute: 1000
+            burst_size: 100
+    logging:
+        level: 'INFO'
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        file: 'logs/vector_indexer.log'
+        max_file_size_mb: 100
+        backup_count: 5
+        log_search_queries: True
+        log_performance_metrics: True

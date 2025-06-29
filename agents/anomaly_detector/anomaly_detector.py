@@ -28,6 +28,8 @@ from neo4j import AsyncGraphDatabase, AsyncDriver
 from qdrant_client import AsyncQdrantClient
 import aiofiles
 
+from config.config_manager import ConfigManager
+
 
 class AnomalyType(Enum):
     """Types of anomalies that can be detected."""
@@ -64,62 +66,37 @@ class Anomaly:
     suggestions: List[str]
 
 
-class AnomalyConfig:
-    """Configuration for anomaly detection."""
-    
-    def __init__(self, config_path: str = "agents/anomaly_detector/config.py"):
-        self.neo4j_uri = "bolt://localhost:7687"
-        self.neo4j_user = "neo4j"
-        self.neo4j_password = "password"
-        self.qdrant_host = "localhost"
-        self.qdrant_port = 6333
-        self.log_dir = "agents/anomaly_detector/logs"
-        self.model_dir = "agents/anomaly_detector/models"
-        
-        # Detection thresholds
-        self.isolation_forest_contamination = 0.1
-        self.dbscan_eps = 0.5
-        self.dbscan_min_samples = 5
-        self.lof_n_neighbors = 20
-        self.temporal_threshold_days = 365 * 100  # 100 years
-        self.content_similarity_threshold = 0.95
-        self.min_word_count = 10
-        self.max_word_count = 1000000
-        
-        # Processing settings
-        self.batch_size = 1000
-        self.max_features_tfidf = 10000
-        self.pca_components = 50
-        self.enable_models = {
-            "isolation_forest": True,
-            "dbscan": True,
-            "lof": True,
-            "statistical": True,
-            "temporal": True,
-            "content": True
-        }
-        
-        self._load_config(config_path)
-    
-    def _load_config(self, config_path: str) -> None:
-        """Load configuration from file if it exists."""
-        try:
-            if Path(config_path).exists():
-                with open(config_path, 'r') as f:
-                    config_data = yaml.safe_load(f)
-                    for key, value in config_data.items():
-                        if hasattr(self, key):
-                            setattr(self, key, value)
-        except Exception as e:
-            logging.warning(f"Could not load config from {config_path}: {e}")
-
-
 class AnomalyDetector:
     """Main anomaly detection agent."""
     
-    def __init__(self, config: Optional[AnomalyConfig] = None):
+    def __init__(self):
         """Initialize the anomaly detector."""
-        self.config = config or AnomalyConfig()
+        self.config_manager = ConfigManager()
+        
+        self.neo4j_uri = self.config_manager.get('anomaly_detector.neo4j_uri')
+        self.neo4j_user = self.config_manager.get('anomaly_detector.neo4j_user')
+        self.neo4j_password = self.config_manager.get('anomaly_detector.neo4j_password')
+        self.qdrant_host = self.config_manager.get('anomaly_detector.qdrant_host')
+        self.qdrant_port = self.config_manager.get('anomaly_detector.qdrant_port')
+        self.log_dir = self.config_manager.get('anomaly_detector.log_dir')
+        self.model_dir = self.config_manager.get('anomaly_detector.model_dir')
+        
+        # Detection thresholds
+        self.isolation_forest_contamination = self.config_manager.get('anomaly_detector.isolation_forest_contamination')
+        self.dbscan_eps = self.config_manager.get('anomaly_detector.dbscan_eps')
+        self.dbscan_min_samples = self.config_manager.get('anomaly_detector.dbscan_min_samples')
+        self.lof_n_neighbors = self.config_manager.get('anomaly_detector.lof_n_neighbors')
+        self.temporal_threshold_days = self.config_manager.get('anomaly_detector.temporal_threshold_days')
+        self.content_similarity_threshold = self.config_manager.get('anomaly_detector.content_similarity_threshold')
+        self.min_word_count = self.config_manager.get('anomaly_detector.min_word_count')
+        self.max_word_count = self.config_manager.get('anomaly_detector.max_word_count')
+        
+        # Processing settings
+        self.batch_size = self.config_manager.get('anomaly_detector.batch_size')
+        self.max_features_tfidf = self.config_manager.get('anomaly_detector.max_features_tfidf')
+        self.pca_components = self.config_manager.get('anomaly_detector.pca_components')
+        self.enable_models = self.config_manager.get('anomaly_detector.enable_models')
+        
         self.neo4j_driver: Optional[AsyncDriver] = None
         self.qdrant_client: Optional[AsyncQdrantClient] = None
         
@@ -130,16 +107,16 @@ class AnomalyDetector:
         self.scaler = StandardScaler()
         self.label_encoders: Dict[str, LabelEncoder] = {}
         self.tfidf_vectorizer = TfidfVectorizer(
-            max_features=self.config.max_features_tfidf,
+            max_features=self.max_features_tfidf,
             stop_words='english',
             ngram_range=(1, 2)
         )
-        self.pca = PCA(n_components=self.config.pca_components)
+        self.pca = PCA(n_components=self.pca_components)
         
         # Storage
         self.detected_anomalies: List[Anomaly] = []
-        self.log_dir = Path(self.config.log_dir)
-        self.model_dir = Path(self.config.model_dir)
+        self.log_dir = Path(self.log_dir)
+        self.model_dir = Path(self.model_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self.model_dir.mkdir(parents=True, exist_ok=True)
         
@@ -730,12 +707,10 @@ async def main():
     parser.add_argument("--data-source", default="all", help="Data source to analyze")
     parser.add_argument("--anomaly-id", help="Anomaly ID for resolution")
     parser.add_argument("--resolution", help="Resolution notes for anomaly")
-    parser.add_argument("--config", help="Configuration file path")
     
     args = parser.parse_args()
     
-    config = AnomalyConfig(args.config) if args.config else AnomalyConfig()
-    detector = AnomalyDetector(config)
+    detector = AnomalyDetector()
     
     await detector.initialize()
     
