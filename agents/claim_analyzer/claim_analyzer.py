@@ -1,12 +1,12 @@
+#!/usr/bin/env python3
 """
-AI Claim Analyzer MCP Server
-Model Context Protocol server providing claim extraction, fact-checking, and analysis tools
+Claim Analyzer Agent for MCP Server
+Integrates with existing Neo4j/Qdrant hybrid database system for claim analysis and fact-checking
 """
 
 import asyncio
 import logging
 import json
-import sqlite3
 import re
 import time
 from typing import List, Dict, Optional, Tuple, Any, Union
@@ -14,22 +14,17 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 import hashlib
 import yaml
-import traceback
+from pathlib import Path
 
 import aiohttp
 import spacy
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-
-# MCP protocol imports
-from mcp.server.models import InitializationOptions
-from mcp.server import NotificationOptions, Server
-from mcp.types import (
-    Resource, Tool, TextContent, ImageContent, EmbeddedResource,
-    PromptMessage, GetPromptResult
-)
-import mcp.types as types
+from neo4j import AsyncGraphDatabase
+import qdrant_client
+from qdrant_client.http.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, Range
+import redis.asyncio as redis
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -38,70 +33,196 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Claim:
     """Represents a claim to be fact-checked"""
+    claim_id: str
     text: str
     source: str
+    domain: str
     timestamp: datetime
-    claim_id: str
     confidence: float = 0.0
     context: str = ""
+    entities: List[str] = None
     
     def __post_init__(self):
         if not self.claim_id:
-            self.claim_id = hashlib.md5(self.text.encode()).hexdigest()
+            self.claim_id = hashlib.md5(f"{self.text}{self.source}".encode()).hexdigest()
+        if self.entities is None:
+            self.entities = []
+
+@dataclass
+class Evidence:
+    """Represents evidence for or against a claim"""
+    evidence_id: str
+    text: str
+    source_url: str
+    credibility_score: float
+    stance: str  # "supports", "refutes", "neutral"
+    domain: str
+    timestamp: datetime
+    vector_embedding: Optional[np.ndarray] = None
 
 @dataclass
 class FactCheckResult:
     """Represents the result of a fact-check"""
     claim: Claim
-    verdict: str  # True, False, Partially True, Unverified, Opinion
+    verdict: str  # "True", "False", "Partially True", "Unverified", "Opinion"
     confidence: float
-    evidence: List[Dict[str, Any]]
+    evidence_list: List[Evidence]
     reasoning: str
     sources: List[str]
+    cross_domain_patterns: List[str]
     timestamp: datetime
+    graph_node_id: Optional[str] = None
 
-@dataclass
-class Source:
-    """Represents a credible source"""
-    url: str
-    title: str
-    credibility_score: float
-    domain: str
-    content: str = ""
+class DatabaseConnector:
+    """Manages connections to Neo4j, Qdrant, and Redis"""
+    
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.neo4j_driver = None
+        self.qdrant_client = None
+        self.redis_client = None
+        
+    async def initialize(self):
+        """Initialize all database connections"""
+        # Neo4j connection
+        neo4j_config = self.config.get('database', {}).get('neo4j', {})
+        self.neo4j_driver = AsyncGraphDatabase.driver(
+            neo4j_config.get('uri', 'bolt://localhost:7687'),
+            auth=(
+                neo4j_config.get('user', 'neo4j'),
+                neo4j_config.get('password', 'password')
+            ),
+            max_connection_pool_size=neo4j_config.get('max_pool_size', 20)
+        )
+        
+        # Qdrant connection
+        qdrant_config = self.config.get('database', {}).get('qdrant', {})
+        self.qdrant_client = qdrant_client.QdrantClient(
+            host=qdrant_config.get('host', 'localhost'),
+            port=qdrant_config.get('port', 6333),
+            timeout=qdrant_config.get('timeout', 30)
+        )
+        
+        # Redis connection
+        redis_config = self.config.get('database', {}).get('redis', {})
+        self.redis_client = redis.from_url(
+            redis_config.get('url', 'redis://localhost:6379'),
+            max_connections=redis_config.get('max_connections', 50)
+        )
+        
+        # Initialize collections if they don't exist
+        await self._initialize_qdrant_collections()
+        
+        logger.info("Database connections initialized successfully")
+    
+    async def _initialize_qdrant_collections(self):
+        """Initialize Qdrant collections for claims and evidence"""
+        collections = [
+            {
+                'name': 'claims',
+                'vector_size': 384,  # all-MiniLM-L6-v2 embedding size
+                'distance': Distance.COSINE
+            },
+            {
+                'name': 'evidence',
+                'vector_size': 384,
+                'distance': Distance.COSINE
+            }
+        ]
+        
+        for collection in collections:
+            try:
+                self.qdrant_client.create_collection(
+                    collection_name=collection['name'],
+                    vectors_config=VectorParams(
+                        size=collection['vector_size'],
+                        distance=collection['distance']
+                    )
+                )
+                logger.info(f"Created Qdrant collection: {collection['name']}")
+            except Exception as e:
+                if "already exists" in str(e).lower():
+                    logger.info(f"Qdrant collection already exists: {collection['name']}")
+                else:
+                    logger.error(f"Error creating collection {collection['name']}: {e}")
+    
+    async def close(self):
+        """Close all database connections"""
+        if self.neo4j_driver:
+            await self.neo4j_driver.close()
+        if self.redis_client:
+            await self.redis_client.close()
 
 class ClaimExtractor:
     """Extracts claims from various text sources using NLP"""
     
-    def __init__(self):
+    def __init__(self, db_connector: DatabaseConnector):
+        self.db_connector = db_connector
+        
         try:
             self.nlp = spacy.load("en_core_web_sm")
         except OSError:
             logger.error("spaCy model not found. Please install: python -m spacy download en_core_web_sm")
-            # Use a simple fallback extractor
             self.nlp = None
         
-        # Patterns that typically indicate claims
+        # Initialize sentence transformer for embeddings
+        self.sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
+        
+        # Claim detection patterns
         self.claim_patterns = [
             r"(?:is|are|was|were|will be|has been|have been)\s+(?:a|an|the)?\s*\w+",
             r"(?:claims?|states?|argues?|believes?|says?)\s+that\s+.*",
             r"(?:according to|research shows|studies indicate|experts say)\s+.*",
             r"(?:it is|this is|that is)\s+(?:true|false|correct|incorrect|a fact)\s+that\s+.*"
         ]
+        
+        # Domain classification keywords
+        self.domain_keywords = {
+            'science': ['experiment', 'study', 'research', 'theory', 'hypothesis', 'data', 'evidence'],
+            'math': ['theorem', 'proof', 'equation', 'formula', 'calculate', 'number', 'geometry'],
+            'religion': ['god', 'faith', 'belief', 'scripture', 'church', 'prayer', 'divine'],
+            'history': ['ancient', 'war', 'civilization', 'empire', 'century', 'historical', 'period'],
+            'literature': ['novel', 'poem', 'author', 'book', 'story', 'character', 'literary'],
+            'philosophy': ['ethics', 'logic', 'metaphysics', 'epistemology', 'moral', 'existence']
+        }
     
-    def extract_claims(self, text: str, source: str = "unknown") -> List[Claim]:
+    async def extract_claims(self, text: str, source: str = "unknown", domain: str = "general") -> List[Claim]:
         """Extract verifiable claims from text"""
+        if not text.strip():
+            return []
+        
         claims = []
         
+        # Auto-detect domain if not specified
+        if domain == "general":
+            domain = self._classify_domain(text)
+        
         if self.nlp:
-            # Use spaCy for better claim extraction
-            claims = self._extract_with_spacy(text, source)
+            claims = await self._extract_with_spacy(text, source, domain)
         else:
-            # Fallback to pattern-based extraction
-            claims = self._extract_with_patterns(text, source)
+            claims = await self._extract_with_patterns(text, source, domain)
+        
+        # Store claims in Neo4j and Qdrant
+        for claim in claims:
+            await self._store_claim(claim)
         
         return claims
     
-    def _extract_with_spacy(self, text: str, source: str) -> List[Claim]:
+    def _classify_domain(self, text: str) -> str:
+        """Classify text into one of the six domains"""
+        text_lower = text.lower()
+        domain_scores = {}
+        
+        for domain, keywords in self.domain_keywords.items():
+            score = sum(1 for keyword in keywords if keyword in text_lower)
+            domain_scores[domain] = score
+        
+        # Return domain with highest score, or 'general' if all scores are 0
+        if max(domain_scores.values()) > 0:
+            return max(domain_scores.items(), key=lambda x: x[1])[0]
+        return 'general'
+    
+    async def _extract_with_spacy(self, text: str, source: str, domain: str) -> List[Claim]:
         """Extract claims using spaCy NLP"""
         claims = []
         doc = self.nlp(text)
@@ -118,19 +239,24 @@ class ClaimExtractor:
                 confidence = self._calculate_claim_confidence(sent_text, sent)
                 
                 if confidence > 0.3:  # Threshold for claim detection
+                    # Extract entities
+                    entities = [ent.text for ent in sent.ents]
+                    
                     claim = Claim(
+                        claim_id="",
                         text=sent_text,
                         source=source,
+                        domain=domain,
                         timestamp=datetime.now(),
-                        claim_id="",
                         confidence=confidence,
-                        context=self._get_context(sent, doc)
+                        context=self._get_context(sent, doc),
+                        entities=entities
                     )
                     claims.append(claim)
         
         return claims
     
-    def _extract_with_patterns(self, text: str, source: str) -> List[Claim]:
+    async def _extract_with_patterns(self, text: str, source: str, domain: str) -> List[Claim]:
         """Fallback pattern-based claim extraction"""
         claims = []
         sentences = re.split(r'[.!?]+', text)
@@ -142,12 +268,14 @@ class ClaimExtractor:
                 
             if self._is_claim_sentence(sentence):
                 claim = Claim(
+                    claim_id="",
                     text=sentence,
                     source=source,
+                    domain=domain,
                     timestamp=datetime.now(),
-                    claim_id="",
                     confidence=0.5,  # Default confidence for pattern-based
-                    context=sentence
+                    context=sentence,
+                    entities=[]
                 )
                 claims.append(claim)
         
@@ -225,38 +353,100 @@ class ClaimExtractor:
             context_tokens.extend(next_sent_tokens[:20])  # First 20 tokens
         
         return ' '.join([token.text for token in context_tokens])
+    
+    async def _store_claim(self, claim: Claim):
+        """Store claim in Neo4j graph and Qdrant vector database"""
+        try:
+            # Generate embedding for the claim
+            embedding = self.sentence_model.encode(claim.text)
+            
+            # Store in Neo4j
+            async with self.db_connector.neo4j_driver.session() as session:
+                query = """
+                CREATE (c:Claim {
+                    id: $claim_id,
+                    text: $text,
+                    source: $source,
+                    domain: $domain,
+                    timestamp: $timestamp,
+                    confidence: $confidence,
+                    context: $context,
+                    entities: $entities
+                })
+                RETURN c.id as node_id
+                """
+                
+                result = await session.run(query, {
+                    'claim_id': claim.claim_id,
+                    'text': claim.text,
+                    'source': claim.source,
+                    'domain': claim.domain,
+                    'timestamp': claim.timestamp.isoformat(),
+                    'confidence': claim.confidence,
+                    'context': claim.context,
+                    'entities': claim.entities
+                })
+                
+                record = await result.single()
+                if record:
+                    logger.info(f"Stored claim in Neo4j: {claim.claim_id}")
+            
+            # Store in Qdrant
+            point = PointStruct(
+                id=claim.claim_id,
+                vector=embedding.tolist(),
+                payload={
+                    'text': claim.text,
+                    'source': claim.source,
+                    'domain': claim.domain,
+                    'timestamp': claim.timestamp.isoformat(),
+                    'confidence': claim.confidence,
+                    'entities': claim.entities
+                }
+            )
+            
+            self.db_connector.qdrant_client.upsert(
+                collection_name='claims',
+                points=[point]
+            )
+            logger.info(f"Stored claim in Qdrant: {claim.claim_id}")
+            
+            # Cache in Redis for quick access
+            cache_key = f"claim:{claim.claim_id}"
+            await self.db_connector.redis_client.setex(
+                cache_key,
+                3600,  # 1 hour TTL
+                json.dumps(asdict(claim), default=str)
+            )
+            
+        except Exception as e:
+            logger.error(f"Error storing claim {claim.claim_id}: {e}")
 
 class FactChecker:
-    """Fact-checks claims using multiple sources and reasoning"""
+    """Fact-checks claims using hybrid database search and external APIs"""
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, db_connector: DatabaseConnector, config: Dict[str, Any]):
+        self.db_connector = db_connector
         self.config = config
-        self.sentence_model = None
-        
-        # Initialize semantic similarity model
-        try:
-            self.sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
-        except Exception as e:
-            logger.warning(f"Could not load sentence transformer: {e}")
-        
-        # Initialize trusted sources
-        self.trusted_domains = config.get('trusted_sources', [
-            'wikipedia.org', 'snopes.com', 'factcheck.org', 'politifact.com',
-            'reuters.com', 'bbc.com', 'npr.org', 'ap.org', 'cdc.gov', 'nasa.gov'
-        ])
+        self.sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
         
         # Source credibility scores
-        self.source_credibility = {
+        self.source_credibility = config.get('source_credibility', {
             'wikipedia.org': 0.8,
             'snopes.com': 0.9,
             'factcheck.org': 0.9,
             'politifact.com': 0.9,
             'reuters.com': 0.9,
             'bbc.com': 0.8,
-            'npr.org': 0.8,
-            'ap.org': 0.9,
-            'cdc.gov': 0.95,
             'nasa.gov': 0.95,
+            'cdc.gov': 0.95,
+        })
+        
+        # Rate limiting
+        self.last_api_call = {}
+        self.api_call_intervals = {
+            'web_search': 1.0,
+            'fact_check_api': 2.0,
         }
     
     async def fact_check_claim(self, claim: Claim) -> FactCheckResult:
@@ -264,24 +454,34 @@ class FactChecker:
         logger.info(f"Fact-checking claim: {claim.text[:100]}...")
         
         try:
-            # Search for similar claims and evidence
-            evidence = await self._search_evidence(claim)
+            # Search for similar claims in the database
+            similar_claims = await self._search_similar_claims(claim)
             
-            # Analyze the evidence
-            verdict, confidence, reasoning = self._analyze_evidence(claim, evidence)
+            # Search for evidence across domains
+            evidence_list = await self._search_evidence(claim)
+            
+            # Cross-domain pattern analysis
+            patterns = await self._analyze_cross_domain_patterns(claim)
+            
+            # Analyze all evidence to determine verdict
+            verdict, confidence, reasoning = self._analyze_evidence(claim, evidence_list, similar_claims)
             
             # Extract source URLs
-            sources = [item.get('url', '') for item in evidence if item.get('url')]
+            sources = [evidence.source_url for evidence in evidence_list]
             
             result = FactCheckResult(
                 claim=claim,
                 verdict=verdict,
                 confidence=confidence,
-                evidence=evidence,
+                evidence_list=evidence_list,
                 reasoning=reasoning,
                 sources=sources,
+                cross_domain_patterns=patterns,
                 timestamp=datetime.now()
             )
+            
+            # Store result in the graph
+            await self._store_fact_check_result(result)
             
             logger.info(f"Fact-check complete: {verdict} (confidence: {confidence:.2f})")
             return result
@@ -292,670 +492,607 @@ class FactChecker:
                 claim=claim,
                 verdict="Error",
                 confidence=0.0,
-                evidence=[],
+                evidence_list=[],
                 reasoning=f"Error during fact-checking: {str(e)}",
                 sources=[],
+                cross_domain_patterns=[],
                 timestamp=datetime.now()
             )
     
-    async def _search_evidence(self, claim: Claim) -> List[Dict[str, Any]]:
-        """Search for evidence related to the claim"""
-        evidence = []
+    async def _search_similar_claims(self, claim: Claim) -> List[Dict]:
+        """Search for similar claims in Qdrant using vector similarity"""
+        try:
+            # Generate embedding for the claim
+            query_embedding = self.sentence_model.encode(claim.text)
+            
+            # Search in Qdrant
+            search_results = self.db_connector.qdrant_client.search(
+                collection_name='claims',
+                query_vector=query_embedding.tolist(),
+                limit=10,
+                score_threshold=0.7  # Similarity threshold
+            )
+            
+            similar_claims = []
+            for result in search_results:
+                similar_claims.append({
+                    'claim_id': result.id,
+                    'text': result.payload.get('text', ''),
+                    'similarity_score': result.score,
+                    'domain': result.payload.get('domain', ''),
+                    'source': result.payload.get('source', '')
+                })
+            
+            return similar_claims
+            
+        except Exception as e:
+            logger.error(f"Error searching similar claims: {e}")
+            return []
+    
+    async def _search_evidence(self, claim: Claim) -> List[Evidence]:
+        """Search for evidence across multiple sources and domains"""
+        evidence_list = []
         
-        # Use multiple search strategies
+        # Search strategies
         strategies = [
-            self._search_web,
-            self._search_fact_check_apis,
-            self._search_cached_claims
+            self._search_graph_evidence,
+            self._search_vector_evidence,
+            self._search_external_apis
         ]
         
         for strategy in strategies:
             try:
                 results = await strategy(claim)
-                evidence.extend(results)
+                evidence_list.extend(results)
             except Exception as e:
-                logger.warning(f"Search strategy failed: {str(e)}")
+                logger.warning(f"Evidence search strategy failed: {str(e)}")
         
         # Remove duplicates and limit results
         unique_evidence = []
         seen_urls = set()
         
-        for item in evidence:
-            url = item.get('url', '')
-            if url not in seen_urls:
-                unique_evidence.append(item)
-                seen_urls.add(url)
+        for evidence in evidence_list:
+            if evidence.source_url not in seen_urls:
+                unique_evidence.append(evidence)
+                seen_urls.add(evidence.source_url)
         
         return unique_evidence[:self.config.get('max_results', 10)]
     
-    async def _search_web(self, claim: Claim) -> List[Dict[str, Any]]:
-        """Search the web for evidence using search APIs"""
-        evidence = []
+    async def _search_graph_evidence(self, claim: Claim) -> List[Evidence]:
+        """Search for evidence using Neo4j graph relationships"""
+        evidence_list = []
         
-        # Extract search terms from claim
-        search_terms = self._extract_search_terms(claim.text)
-        search_query = ' '.join(search_terms[:5])  # Limit to 5 terms
+        try:
+            async with self.db_connector.neo4j_driver.session() as session:
+                # Search for related documents, concepts, and entities
+                query = """
+                MATCH (c:Claim {id: $claim_id})
+                OPTIONAL MATCH (c)-[:MENTIONS]->(e:Entity)
+                OPTIONAL MATCH (e)<-[:MENTIONS]-(d:Document)
+                WHERE d.domain = $domain OR d.domain IN ['general', 'cross-domain']
+                OPTIONAL MATCH (d)-[:CONTAINS]->(concept:Concept)
+                OPTIONAL MATCH (concept)-[:RELATED_TO]->(related_concept:Concept)
+                OPTIONAL MATCH (related_concept)<-[:CONTAINS]-(evidence_doc:Document)
+                RETURN DISTINCT evidence_doc.url as url, evidence_doc.title as title, 
+                       evidence_doc.content as content, evidence_doc.credibility as credibility,
+                       evidence_doc.domain as domain
+                LIMIT 20
+                """
+                
+                result = await session.run(query, {
+                    'claim_id': claim.claim_id,
+                    'domain': claim.domain
+                })
+                
+                async for record in result:
+                    if record['url']:
+                        evidence = Evidence(
+                            evidence_id=hashlib.md5(record['url'].encode()).hexdigest(),
+                            text=record['content'] or record['title'] or '',
+                            source_url=record['url'],
+                            credibility_score=record['credibility'] or 0.7,
+                            stance='neutral',  # Will be determined by analysis
+                            domain=record['domain'] or claim.domain,
+                            timestamp=datetime.now()
+                        )
+                        evidence_list.append(evidence)
         
-        # Example evidence - in production, this would use real search APIs
-        mock_evidence = await self._get_mock_evidence(claim)
-        evidence.extend(mock_evidence)
+        except Exception as e:
+            logger.error(f"Error searching graph evidence: {e}")
         
-        return evidence
+        return evidence_list
     
-    async def _search_fact_check_apis(self, claim: Claim) -> List[Dict[str, Any]]:
-        """Search fact-checking APIs"""
-        evidence = []
+    async def _search_vector_evidence(self, claim: Claim) -> List[Evidence]:
+        """Search for evidence using Qdrant vector similarity"""
+        evidence_list = []
         
-        # Google Fact Check Tools API integration would go here
-        # For demonstration, return relevant mock data based on common claims
+        try:
+            # Generate embedding for the claim
+            query_embedding = self.sentence_model.encode(claim.text)
+            
+            # Search in evidence collection
+            search_results = self.db_connector.qdrant_client.search(
+                collection_name='evidence',
+                query_vector=query_embedding.tolist(),
+                limit=15,
+                score_threshold=0.6
+            )
+            
+            for result in search_results:
+                evidence = Evidence(
+                    evidence_id=result.id,
+                    text=result.payload.get('text', ''),
+                    source_url=result.payload.get('source_url', ''),
+                    credibility_score=result.payload.get('credibility_score', 0.7),
+                    stance=result.payload.get('stance', 'neutral'),
+                    domain=result.payload.get('domain', claim.domain),
+                    timestamp=datetime.now()
+                )
+                evidence_list.append(evidence)
         
+        except Exception as e:
+            logger.error(f"Error searching vector evidence: {e}")
+        
+        return evidence_list
+    
+    async def _search_external_apis(self, claim: Claim) -> List[Evidence]:
+        """Search external fact-checking APIs"""
+        evidence_list = []
+        
+        # Rate limiting
+        await self._rate_limit('fact_check_api')
+        
+        # Mock external API responses based on common claims
         claim_lower = claim.text.lower()
         
-        if 'moon landing' in claim_lower and ('fake' in claim_lower or 'hoax' in claim_lower):
-            evidence.append({
-                'title': 'Moon Landing Fact Check - NASA',
-                'url': 'https://www.nasa.gov/mission_pages/apollo/apollo11.html',
-                'snippet': 'NASA provides extensive documentation of the Apollo moon landings with evidence including lunar rocks, photos, and independent verification.',
-                'credibility': 0.95,
-                'source_type': 'official',
-                'verdict': 'False'
-            })
+        if 'moon landing' in claim_lower and any(term in claim_lower for term in ['fake', 'hoax', 'staged']):
+            evidence = Evidence(
+                evidence_id='nasa_moon_landing_evidence',
+                text='NASA provides extensive documentation of Apollo moon landings including lunar rocks, photos, and independent verification by multiple countries.',
+                source_url='https://www.nasa.gov/mission_pages/apollo/apollo11.html',
+                credibility_score=0.95,
+                stance='refutes',
+                domain='science',
+                timestamp=datetime.now()
+            )
+            evidence_list.append(evidence)
         
         elif 'earth' in claim_lower and 'flat' in claim_lower:
-            evidence.append({
-                'title': 'Scientific Consensus on Earth\'s Shape',
-                'url': 'https://example.com/earth-shape',
-                'snippet': 'Scientific evidence from multiple sources confirms Earth is an oblate spheroid, including satellite imagery and physics.',
-                'credibility': 0.9,
-                'source_type': 'scientific',
-                'verdict': 'False'
-            })
+            evidence = Evidence(
+                evidence_id='earth_shape_evidence',
+                text='Scientific evidence from satellite imagery, physics, and multiple observation methods confirms Earth is an oblate spheroid.',
+                source_url='https://example.com/earth-shape-evidence',
+                credibility_score=0.9,
+                stance='refutes',
+                domain='science',
+                timestamp=datetime.now()
+            )
+            evidence_list.append(evidence)
         
-        elif 'vaccine' in claim_lower and 'autism' in claim_lower:
-            evidence.append({
-                'title': 'CDC Vaccine Safety Research',
-                'url': 'https://www.cdc.gov/vaccines/safety/',
-                'snippet': 'Multiple large-scale studies have found no link between vaccines and autism.',
-                'credibility': 0.95,
-                'source_type': 'medical',
-                'verdict': 'False'
-            })
-        
-        return evidence
+        return evidence_list
     
-    async def _search_cached_claims(self, claim: Claim) -> List[Dict[str, Any]]:
-        """Search previously cached fact-check results"""
-        # This would search the local database for similar claims
-        # For now, return empty list
-        return []
+    async def _analyze_cross_domain_patterns(self, claim: Claim) -> List[str]:
+        """Analyze cross-domain patterns related to the claim"""
+        patterns = []
+        
+        try:
+            async with self.db_connector.neo4j_driver.session() as session:
+                # Look for cross-domain concept relationships
+                query = """
+                MATCH (c:Claim {id: $claim_id})-[:MENTIONS]->(e:Entity)
+                MATCH (e)<-[:MENTIONS]-(d1:Document {domain: $domain})
+                MATCH (e)<-[:MENTIONS]-(d2:Document)
+                WHERE d2.domain <> $domain
+                MATCH (d1)-[:CONTAINS]->(concept1:Concept)
+                MATCH (d2)-[:CONTAINS]->(concept2:Concept)
+                WHERE concept1.name = concept2.name OR 
+                      EXISTS((concept1)-[:SIMILAR_TO]-(concept2))
+                RETURN DISTINCT concept1.name as pattern, 
+                       collect(DISTINCT d2.domain) as other_domains
+                LIMIT 10
+                """
+                
+                result = await session.run(query, {
+                    'claim_id': claim.claim_id,
+                    'domain': claim.domain
+                })
+                
+                async for record in result:
+                    pattern_desc = f"{record['pattern']} appears across {claim.domain} and {', '.join(record['other_domains'])}"
+                    patterns.append(pattern_desc)
+        
+        except Exception as e:
+            logger.error(f"Error analyzing cross-domain patterns: {e}")
+        
+        return patterns
     
-    async def _get_mock_evidence(self, claim: Claim) -> List[Dict[str, Any]]:
-        """Generate appropriate mock evidence based on claim content"""
-        evidence = []
-        claim_lower = claim.text.lower()
-        
-        # Generate contextually relevant mock evidence
-        if any(term in claim_lower for term in ['climate', 'global warming', 'temperature']):
-            evidence.append({
-                'title': 'Climate Research Findings',
-                'url': 'https://climate.nasa.gov/',
-                'snippet': 'NASA climate data shows consistent warming trends supported by multiple measurement methods.',
-                'credibility': 0.9,
-                'source_type': 'scientific'
-            })
-        
-        elif any(term in claim_lower for term in ['study', 'research', 'scientist']):
-            evidence.append({
-                'title': 'Peer-Reviewed Research',
-                'url': 'https://example.com/research',
-                'snippet': 'Scientific studies provide evidence regarding the claim with statistical analysis.',
-                'credibility': 0.85,
-                'source_type': 'academic'
-            })
-        
-        else:
-            evidence.append({
-                'title': 'General Information Source',
-                'url': 'https://example.com/info',
-                'snippet': 'Information available from credible sources regarding this topic.',
-                'credibility': 0.7,
-                'source_type': 'general'
-            })
-        
-        return evidence
-    
-    def _extract_search_terms(self, text: str) -> List[str]:
-        """Extract key search terms from claim text"""
-        # Simple keyword extraction - could be improved with NLP
-        words = re.findall(r'\b[A-Za-z]{3,}\b', text)
-        
-        # Remove common stop words
-        stop_words = {'the', 'and', 'are', 'was', 'were', 'been', 'have', 'has', 'had', 'that', 'this', 'with', 'for'}
-        keywords = [word for word in words if word.lower() not in stop_words]
-        
-        return keywords[:10]  # Return top 10 keywords
-    
-    def _analyze_evidence(self, claim: Claim, evidence: List[Dict[str, Any]]) -> Tuple[str, float, str]:
+    def _analyze_evidence(self, claim: Claim, evidence_list: List[Evidence], similar_claims: List[Dict]) -> Tuple[str, float, str]:
         """Analyze collected evidence to determine verdict"""
-        if not evidence:
+        if not evidence_list and not similar_claims:
             return "Unverified", 0.0, "No evidence found to verify this claim."
         
-        verdicts = []
-        reasoning_parts = []
-        total_credibility = 0
+        # Analyze evidence stances
+        support_score = 0.0
+        refute_score = 0.0
+        total_credibility = 0.0
         
-        for item in evidence:
-            snippet = item.get('snippet', '')
-            credibility = item.get('credibility', 0.5)
+        reasoning_parts = []
+        
+        # Analyze evidence
+        for evidence in evidence_list:
+            credibility = evidence.credibility_score
             total_credibility += credibility
             
-            # Determine stance of evidence
-            if any(term in snippet.lower() for term in ['false', 'debunked', 'incorrect', 'myth']):
-                verdicts.append(('False', credibility))
-            elif any(term in snippet.lower() for term in ['true', 'confirmed', 'verified', 'accurate']):
-                verdicts.append(('True', credibility))
-            elif any(term in snippet.lower() for term in ['partially', 'mixed', 'some truth']):
-                verdicts.append(('Partially True', credibility))
-            else:
-                verdicts.append(('Unverified', credibility * 0.5))
+            # Determine stance if not already set
+            if evidence.stance == 'neutral':
+                evidence.stance = self._determine_evidence_stance(claim.text, evidence.text)
             
-            reasoning_parts.append(f"Source: {item.get('title', 'Unknown')} - {snippet[:100]}...")
+            if evidence.stance == 'supports':
+                support_score += credibility
+            elif evidence.stance == 'refutes':
+                refute_score += credibility
+            
+            reasoning_parts.append(f"Source: {evidence.source_url[:50]}... - {evidence.stance} (credibility: {credibility:.2f})")
+        
+        # Consider similar claims
+        for similar_claim in similar_claims:
+            similarity_weight = similar_claim['similarity_score'] * 0.5  # Reduced weight for similar claims
+            # This would ideally look up the verdict of similar claims
+            # For now, assume neutral impact
         
         # Determine overall verdict
-        if not verdicts:
-            return "Unverified", 0.0, "Evidence found but stance unclear."
+        if not evidence_list:
+            verdict = "Unverified"
+            confidence = 0.0
+        elif refute_score > support_score * 1.5:  # Strong refutation threshold
+            verdict = "False"
+            confidence = min(refute_score / (support_score + refute_score + 0.1), 0.95)
+        elif support_score > refute_score * 1.5:  # Strong support threshold
+            verdict = "True"
+            confidence = min(support_score / (support_score + refute_score + 0.1), 0.95)
+        elif abs(support_score - refute_score) < 0.3:
+            verdict = "Partially True"
+            confidence = 0.6
+        else:
+            verdict = "Unverified"
+            confidence = 0.3
         
-        # Weight verdicts by credibility scores
-        verdict_scores = {}
-        for verdict, score in verdicts:
-            verdict_scores[verdict] = verdict_scores.get(verdict, 0) + score
+        # Adjust confidence based on evidence quality
+        if len(evidence_list) < 2:
+            confidence *= 0.7  # Reduce confidence with limited evidence
         
-        # Get the verdict with highest weighted score
-        final_verdict = max(verdict_scores.items(), key=lambda x: x[1])[0]
+        avg_credibility = total_credibility / len(evidence_list) if evidence_list else 0.0
+        confidence = min(confidence * avg_credibility, 1.0)
         
-        # Calculate overall confidence
-        max_score = max(verdict_scores.values())
-        total_scores = sum(verdict_scores.values())
-        confidence = max_score / total_scores if total_scores > 0 else 0.0
+        reasoning = f"Based on {len(evidence_list)} evidence sources and {len(similar_claims)} similar claims. " + "; ".join(reasoning_parts[:3])
         
-        # Adjust confidence based on number of sources and their credibility
-        avg_credibility = total_credibility / len(evidence) if evidence else 0.0
-        confidence = min(confidence * avg_credibility * min(len(evidence) / 3, 1.0), 1.0)
+        return verdict, confidence, reasoning
+    
+    def _determine_evidence_stance(self, claim_text: str, evidence_text: str) -> str:
+        """Determine if evidence supports, refutes, or is neutral to the claim"""
+        evidence_lower = evidence_text.lower()
+        claim_lower = claim_text.lower()
         
-        reasoning = f"Based on {len(evidence)} sources. " + " ".join(reasoning_parts[:3])
+        # Simple keyword-based stance detection
+        support_indicators = ['true', 'correct', 'accurate', 'confirmed', 'verified', 'proven']
+        refute_indicators = ['false', 'incorrect', 'debunked', 'disproven', 'myth', 'hoax']
         
-        return final_verdict, confidence, reasoning
+        support_count = sum(1 for indicator in support_indicators if indicator in evidence_lower)
+        refute_count = sum(1 for indicator in refute_indicators if indicator in evidence_lower)
+        
+        if refute_count > support_count:
+            return 'refutes'
+        elif support_count > refute_count:
+            return 'supports'
+        else:
+            return 'neutral'
+    
+    async def _store_fact_check_result(self, result: FactCheckResult):
+        """Store fact-check result in Neo4j"""
+        try:
+            async with self.db_connector.neo4j_driver.session() as session:
+                query = """
+                MATCH (c:Claim {id: $claim_id})
+                CREATE (fr:FactCheckResult {
+                    id: $result_id,
+                    verdict: $verdict,
+                    confidence: $confidence,
+                    reasoning: $reasoning,
+                    timestamp: $timestamp
+                })
+                CREATE (c)-[:HAS_FACT_CHECK]->(fr)
+                RETURN fr.id as result_id
+                """
+                
+                result_id = hashlib.md5(f"{result.claim.claim_id}{result.timestamp}".encode()).hexdigest()
+                
+                await session.run(query, {
+                    'claim_id': result.claim.claim_id,
+                    'result_id': result_id,
+                    'verdict': result.verdict,
+                    'confidence': result.confidence,
+                    'reasoning': result.reasoning,
+                    'timestamp': result.timestamp.isoformat()
+                })
+                
+                result.graph_node_id = result_id
+                logger.info(f"Stored fact-check result: {result_id}")
+        
+        except Exception as e:
+            logger.error(f"Error storing fact-check result: {e}")
+    
+    async def _rate_limit(self, api_type: str):
+        """Implement rate limiting for API calls"""
+        if api_type in self.last_api_call:
+            time_since_last = time.time() - self.last_api_call[api_type]
+            required_interval = self.api_call_intervals.get(api_type, 1.0)
+            
+            if time_since_last < required_interval:
+                sleep_time = required_interval - time_since_last
+                await asyncio.sleep(sleep_time)
+        
+        self.last_api_call[api_type] = time.time()
 
-class ClaimDatabase:
-    """Manages local database for caching claims and results"""
+class ClaimAnalyzerAgent:
+    """Main Claim Analyzer Agent for MCP Server"""
     
-    def __init__(self, db_path: str = "claims.db"):
-        self.db_path = db_path
-        self.init_database()
-    
-    def init_database(self):
-        """Initialize the SQLite database"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        # Create tables
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS claims (
-                id TEXT PRIMARY KEY,
-                text TEXT NOT NULL,
-                source TEXT,
-                timestamp TEXT,
-                confidence REAL,
-                context TEXT
-            )
-        ''')
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS fact_check_results (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                claim_id TEXT,
-                verdict TEXT,
-                confidence REAL,
-                reasoning TEXT,
-                evidence TEXT,
-                sources TEXT,
-                timestamp TEXT,
-                FOREIGN KEY (claim_id) REFERENCES claims (id)
-            )
-        ''')
-        
-        conn.commit()
-        conn.close()
-    
-    def store_claim(self, claim: Claim):
-        """Store a claim in the database"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            INSERT OR REPLACE INTO claims 
-            (id, text, source, timestamp, confidence, context)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (
-            claim.claim_id,
-            claim.text,
-            claim.source,
-            claim.timestamp.isoformat(),
-            claim.confidence,
-            claim.context
-        ))
-        
-        conn.commit()
-        conn.close()
-    
-    def store_result(self, result: FactCheckResult):
-        """Store a fact-check result"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        # First store the claim
-        self.store_claim(result.claim)
-        
-        # Then store the result
-        cursor.execute('''
-            INSERT INTO fact_check_results 
-            (claim_id, verdict, confidence, reasoning, evidence, sources, timestamp)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            result.claim.claim_id,
-            result.verdict,
-            result.confidence,
-            result.reasoning,
-            json.dumps(result.evidence),
-            json.dumps(result.sources),
-            result.timestamp.isoformat()
-        ))
-        
-        conn.commit()
-        conn.close()
-    
-    def get_recent_results(self, limit: int = 10) -> List[Dict]:
-        """Get recent fact-check results"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT c.text, r.verdict, r.confidence, r.reasoning, r.timestamp
-            FROM fact_check_results r
-            JOIN claims c ON r.claim_id = c.id
-            ORDER BY r.timestamp DESC
-            LIMIT ?
-        ''', (limit,))
-        
-        results = []
-        for row in cursor.fetchall():
-            results.append({
-                'claim_text': row[0],
-                'verdict': row[1],
-                'confidence': row[2],
-                'reasoning': row[3],
-                'timestamp': row[4]
-            })
-        
-        conn.close()
-        return results
-
-# MCP Server Implementation
-class ClaimAnalyzerMCPServer:
-    """MCP Server for Claim Analysis tools"""
-    
-    def __init__(self, config_path: str = "config.yml"):
+    def __init__(self, config_path: str = "agents/claim_analyzer/config.yaml"):
         self.config = self._load_config(config_path)
-        self.claim_extractor = ClaimExtractor()
-        self.fact_checker = FactChecker(self.config)
-        self.database = ClaimDatabase()
+        self.db_connector = DatabaseConnector(self.config)
+        self.claim_extractor = None
+        self.fact_checker = None
         
-        # Initialize MCP server
-        self.server = Server("claim-analyzer")
-        
-        # Register tools
-        self._register_tools()
-        self._register_resources()
+        # Agent state
+        self.is_running = False
+        self.processed_claims = 0
+        self.fact_checks_performed = 0
         
     def _load_config(self, config_path: str) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
+        """Load agent configuration"""
         default_config = {
-            'api_keys': {},
-            'trusted_sources': [
-                'wikipedia.org', 'snopes.com', 'factcheck.org',
-                'politifact.com', 'reuters.com', 'bbc.com'
-            ],
-            'max_results': 10,
-            'language': 'english',
-            'confidence_threshold': 0.5,
-            'cache_duration_hours': 24
+            'database': {
+                'neo4j': {
+                    'uri': 'bolt://localhost:7687',
+                    'user': 'neo4j',
+                    'password': 'password',
+                    'max_pool_size': 20
+                },
+                'qdrant': {
+                    'host': 'localhost',
+                    'port': 6333,
+                    'timeout': 30
+                },
+                'redis': {
+                    'url': 'redis://localhost:6379',
+                    'max_connections': 50
+                }
+            },
+            'agent': {
+                'max_results': 10,
+                'confidence_threshold': 0.5,
+                'batch_size': 50,
+                'processing_interval': 300  # 5 minutes
+            },
+            'source_credibility': {
+                'wikipedia.org': 0.8,
+                'snopes.com': 0.9,
+                'factcheck.org': 0.9,
+                'politifact.com': 0.9,
+                'reuters.com': 0.9,
+                'bbc.com': 0.8,
+                'nasa.gov': 0.95,
+                'cdc.gov': 0.95,
+            }
         }
         
         try:
-            with open(config_path, 'r') as f:
-                config = yaml.safe_load(f)
-                # Merge with defaults
-                for key, value in default_config.items():
-                    if key not in config:
-                        config[key] = value
-                return config
-        except FileNotFoundError:
-            logger.warning(f"Config file {config_path} not found, using defaults")
+            config_file = Path(config_path)
+            if config_file.exists():
+                with open(config_file, 'r') as f:
+                    user_config = yaml.safe_load(f)
+                # Deep merge with defaults
+                def deep_merge(default, user):
+                    for key, value in user.items():
+                        if key in default and isinstance(default[key], dict) and isinstance(value, dict):
+                            deep_merge(default[key], value)
+                        else:
+                            default[key] = value
+                    return default
+                
+                return deep_merge(default_config, user_config)
+            else:
+                logger.warning(f"Config file {config_path} not found, using defaults")
+                return default_config
+        except Exception as e:
+            logger.error(f"Error loading config: {e}")
             return default_config
     
-    def _register_tools(self):
-        """Register MCP tools"""
+    async def initialize(self):
+        """Initialize the agent and its components"""
+        logger.info("Initializing Claim Analyzer Agent...")
         
-        @self.server.list_tools()
-        async def handle_list_tools() -> list[Tool]:
-            return [
-                Tool(
-                    name="analyze_claims",
-                    description="Extract and analyze claims from text",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "text": {
-                                "type": "string",
-                                "description": "Text to analyze for claims"
-                            },
-                            "source": {
-                                "type": "string",
-                                "description": "Source identifier for the text",
-                                "default": "unknown"
-                            }
-                        },
-                        "required": ["text"]
-                    }
-                ),
-                Tool(
-                    name="fact_check_claim",
-                    description="Fact-check a specific claim",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "claim": {
-                                "type": "string",
-                                "description": "The claim to fact-check"
-                            },
-                            "detailed": {
-                                "type": "boolean",
-                                "description": "Whether to return detailed analysis",
-                                "default": True
-                            }
-                        },
-                        "required": ["claim"]
-                    }
-                ),
-                Tool(
-                    name="search_similar_claims",
-                    description="Search for similar claims in the database",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "claim": {
-                                "type": "string",
-                                "description": "Claim to find similar ones for"
-                            },
-                            "limit": {
-                                "type": "integer",
-                                "description": "Maximum number of results",
-                                "default": 5
-                            }
-                        },
-                        "required": ["claim"]
-                    }
-                ),
-                Tool(
-                    name="get_recent_fact_checks",
-                    description="Get recent fact-check results",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "limit": {
-                                "type": "integer",
-                                "description": "Number of results to return",
-                                "default": 10
-                            }
-                        }
-                    }
-                )
-            ]
+        # Initialize database connections
+        await self.db_connector.initialize()
         
-        @self.server.call_tool()
-        async def handle_call_tool(name: str, arguments: dict) -> list[types.TextContent]:
-            try:
-                if name == "analyze_claims":
-                    return await self._handle_analyze_claims(arguments)
-                elif name == "fact_check_claim":
-                    return await self._handle_fact_check_claim(arguments)
-                elif name == "search_similar_claims":
-                    return await self._handle_search_similar_claims(arguments)
-                elif name == "get_recent_fact_checks":
-                    return await self._handle_get_recent_fact_checks(arguments)
-                else:
-                    raise ValueError(f"Unknown tool: {name}")
-            except Exception as e:
-                logger.error(f"Error handling tool call {name}: {e}")
-                return [types.TextContent(
-                    type="text",
-                    text=f"Error: {str(e)}"
-                )]
+        # Initialize components
+        self.claim_extractor = ClaimExtractor(self.db_connector)
+        self.fact_checker = FactChecker(self.db_connector, self.config)
+        
+        self.is_running = True
+        logger.info("Claim Analyzer Agent initialized successfully")
     
-    async def _handle_analyze_claims(self, arguments: dict) -> list[types.TextContent]:
-        """Handle claim analysis requests"""
-        text = arguments.get("text", "")
-        source = arguments.get("source", "unknown")
-        
-        if not text.strip():
-            return [types.TextContent(
-                type="text",
-                text="Error: No text provided for analysis"
-            )]
+    async def process_text(self, text: str, source: str = "unknown", domain: str = "general") -> Dict[str, Any]:
+        """Process text to extract and fact-check claims"""
+        logger.info(f"Processing text from source: {source}")
         
         # Extract claims
-        claims = self.claim_extractor.extract_claims(text, source)
+        claims = await self.claim_extractor.extract_claims(text, source, domain)
+        self.processed_claims += len(claims)
         
-        if not claims:
-            return [types.TextContent(
-                type="text",
-                text="No verifiable claims found in the provided text."
-            )]
-        
-        # Format results
-        result = {
-            "total_claims": len(claims),
-            "claims": []
-        }
-        
+        # Fact-check each claim
+        results = []
         for claim in claims:
-            result["claims"].append({
-                "text": claim.text,
-                "confidence": claim.confidence,
-                "context": claim.context[:200] + "..." if len(claim.context) > 200 else claim.context,
-                "claim_id": claim.claim_id
-            })
+            result = await self.fact_checker.fact_check_claim(claim)
+            results.append(asdict(result))
+            self.fact_checks_performed += 1
         
-        return [types.TextContent(
-            type="text", 
-            text=json.dumps(result, indent=2, default=str)
-        )]
+        return {
+            'total_claims': len(claims),
+            'fact_check_results': results,
+            'processing_timestamp': datetime.now().isoformat()
+        }
     
-    async def _handle_fact_check_claim(self, arguments: dict) -> list[types.TextContent]:
-        """Handle fact-checking requests"""
-        claim_text = arguments.get("claim", "")
-        detailed = arguments.get("detailed", True)
-        
-        if not claim_text.strip():
-            return [types.TextContent(
-                type="text",
-                text="Error: No claim provided for fact-checking"
-            )]
-        
-        # Create claim object
+    async def fact_check_single_claim(self, claim_text: str, source: str = "manual", domain: str = "general") -> Dict[str, Any]:
+        """Fact-check a single claim"""
         claim = Claim(
+            claim_id="",
             text=claim_text,
-            source="mcp_request",
-            timestamp=datetime.now(),
-            claim_id=""
+            source=source,
+            domain=domain,
+            timestamp=datetime.now()
         )
         
-        # Perform fact-check
         result = await self.fact_checker.fact_check_claim(claim)
+        self.fact_checks_performed += 1
         
-        # Store result
-        self.database.store_result(result)
-        
-        # Format response
-        if detailed:
-            response = {
-                "claim": result.claim.text,
-                "verdict": result.verdict,
-                "confidence": result.confidence,
-                "reasoning": result.reasoning,
-                "sources": result.sources,
-                "evidence_count": len(result.evidence),
-                "timestamp": result.timestamp.isoformat()
-            }
-        else:
-            response = {
-                "claim": result.claim.text,
-                "verdict": result.verdict,
-                "confidence": result.confidence
-            }
-        
-        return [types.TextContent(
-            type="text",
-            text=json.dumps(response, indent=2, default=str)
-        )]
+        return asdict(result)
     
-    async def _handle_search_similar_claims(self, arguments: dict) -> list[types.TextContent]:
-        """Handle similar claim search requests"""
-        claim = arguments.get("claim", "")
-        limit = arguments.get("limit", 5)
-        
-        if not claim.strip():
-            return [types.TextContent(
-                type="text",
-                text="Error: No claim provided for similarity search"
-            )]
-        
-        # This is a simplified search - in production, you'd use vector similarity
-        similar_claims = self.database.get_recent_results(limit * 2)  # Get more to filter
-        
-        # Simple text matching for now
-        matching_claims = []
-        claim_words = set(claim.lower().split())
-        
-        for stored_claim in similar_claims:
-            stored_words = set(stored_claim['claim_text'].lower().split())
-            similarity = len(claim_words.intersection(stored_words)) / len(claim_words.union(stored_words))
+    async def get_similar_claims(self, claim_text: str, limit: int = 5) -> List[Dict]:
+        """Get similar claims from the database"""
+        try:
+            # Generate embedding
+            embedding = self.claim_extractor.sentence_model.encode(claim_text)
             
-            if similarity > 0.3:  # Similarity threshold
-                matching_claims.append({
-                    "claim": stored_claim['claim_text'],
-                    "verdict": stored_claim['verdict'],
-                    "confidence": stored_claim['confidence'],
-                    "similarity": similarity,
-                    "timestamp": stored_claim['timestamp']
+            # Search in Qdrant
+            search_results = self.db_connector.qdrant_client.search(
+                collection_name='claims',
+                query_vector=embedding.tolist(),
+                limit=limit,
+                score_threshold=0.6
+            )
+            
+            similar_claims = []
+            for result in search_results:
+                similar_claims.append({
+                    'claim_id': result.id,
+                    'text': result.payload.get('text', ''),
+                    'similarity_score': result.score,
+                    'domain': result.payload.get('domain', ''),
+                    'source': result.payload.get('source', ''),
+                    'timestamp': result.payload.get('timestamp', '')
                 })
+            
+            return similar_claims
         
-        # Sort by similarity and limit results
-        matching_claims.sort(key=lambda x: x['similarity'], reverse=True)
-        matching_claims = matching_claims[:limit]
-        
-        result = {
-            "query_claim": claim,
-            "similar_claims": matching_claims,
-            "total_found": len(matching_claims)
+        except Exception as e:
+            logger.error(f"Error getting similar claims: {e}")
+            return []
+    
+    async def get_agent_stats(self) -> Dict[str, Any]:
+        """Get agent statistics"""
+        return {
+            'is_running': self.is_running,
+            'processed_claims': self.processed_claims,
+            'fact_checks_performed': self.fact_checks_performed,
+            'database_status': await self._check_database_status()
         }
-        
-        return [types.TextContent(
-            type="text",
-            text=json.dumps(result, indent=2, default=str)
-        )]
     
-    async def _handle_get_recent_fact_checks(self, arguments: dict) -> list[types.TextContent]:
-        """Handle recent fact-checks requests"""
-        limit = arguments.get("limit", 10)
+    async def _check_database_status(self) -> Dict[str, bool]:
+        """Check status of all database connections"""
+        status = {}
         
-        recent_results = self.database.get_recent_results(limit)
+        try:
+            # Check Neo4j
+            async with self.db_connector.neo4j_driver.session() as session:
+                await session.run("RETURN 1")
+            status['neo4j'] = True
+        except Exception:
+            status['neo4j'] = False
         
-        result = {
-            "recent_fact_checks": recent_results,
-            "total_count": len(recent_results)
-        }
+        try:
+            # Check Qdrant
+            collections = self.db_connector.qdrant_client.get_collections()
+            status['qdrant'] = True
+        except Exception:
+            status['qdrant'] = False
         
-        return [types.TextContent(
-            type="text",
-            text=json.dumps(result, indent=2, default=str)
-        )]
+        try:
+            # Check Redis
+            await self.db_connector.redis_client.ping()
+            status['redis'] = True
+        except Exception:
+            status['redis'] = False
+        
+        return status
     
-    def _register_resources(self):
-        """Register MCP resources"""
-        
-        @self.server.list_resources()
-        async def handle_list_resources() -> list[Resource]:
-            return [
-                Resource(
-                    uri="claim://config",
-                    name="Claim Analyzer Configuration",
-                    description="Current configuration settings",
-                    mimeType="application/json"
-                ),
-                Resource(
-                    uri="claim://stats",
-                    name="Fact-Check Statistics",
-                    description="Statistics about fact-checking activity",
-                    mimeType="application/json"
-                )
-            ]
-        
-        @self.server.read_resource()
-        async def handle_read_resource(uri: str) -> str:
-            if uri == "claim://config":
-                return json.dumps(self.config, indent=2)
-            elif uri == "claim://stats":
-                recent = self.database.get_recent_results(100)
-                verdicts = {}
-                for result in recent:
-                    verdict = result['verdict']
-                    verdicts[verdict] = verdicts.get(verdict, 0) + 1
-                
-                stats = {
-                    "total_fact_checks": len(recent),
-                    "verdict_distribution": verdicts,
-                    "average_confidence": sum(r['confidence'] for r in recent) / len(recent) if recent else 0
-                }
-                return json.dumps(stats, indent=2)
-            else:
-                raise ValueError(f"Unknown resource: {uri}")
-    
-    async def run(self, transport_type: str = "stdio"):
-        """Run the MCP server"""
-        if transport_type == "stdio":
-            from mcp.server.stdio import stdio_server
-            async with stdio_server() as (read_stream, write_stream):
-                await self.server.run(
-                    read_stream,
-                    write_stream,
-                    InitializationOptions(
-                        server_name="claim-analyzer",
-                        server_version="1.0.0",
-                        capabilities=self.server.get_capabilities(
-                            notification_options=NotificationOptions(),
-                            experimental_capabilities={}
-                        )
-                    )
-                )
-        else:
-            raise ValueError(f"Unsupported transport type: {transport_type}")
+    async def shutdown(self):
+        """Shutdown the agent gracefully"""
+        logger.info("Shutting down Claim Analyzer Agent...")
+        self.is_running = False
+        await self.db_connector.close()
+        logger.info("Claim Analyzer Agent shutdown complete")
 
-# Main execution
+# Example usage and integration with MCP server
 async def main():
-    """Run the Claim Analyzer MCP Server"""
-    server = ClaimAnalyzerMCPServer()
-    await server.run()
+    """Example usage of the Claim Analyzer Agent"""
+    agent = ClaimAnalyzerAgent()
+    
+    try:
+        await agent.initialize()
+        
+        # Example 1: Process text with multiple claims
+        sample_text = """
+        The Earth is flat and NASA has been hiding this truth from us.
+        Climate change is a natural phenomenon that has nothing to do with human activity.
+        Vaccines are completely safe and have eliminated many deadly diseases.
+        The Great Wall of China is visible from space with the naked eye.
+        """
+        
+        print("Processing sample text...")
+        results = await agent.process_text(sample_text, "sample_document", "science")
+        print(f"Found {results['total_claims']} claims")
+        
+        for i, result in enumerate(results['fact_check_results'], 1):
+            print(f"\nClaim {i}: {result['claim']['text'][:80]}...")
+            print(f"Verdict: {result['verdict']} (confidence: {result['confidence']:.2f})")
+            print(f"Evidence sources: {len(result['evidence_list'])}")
+            if result['cross_domain_patterns']:
+                print(f"Cross-domain patterns: {', '.join(result['cross_domain_patterns'])}")
+        
+        # Example 2: Fact-check single claim
+        print("\n" + "="*80)
+        print("Fact-checking single claim...")
+        single_result = await agent.fact_check_single_claim(
+            "The moon landing was filmed in a Hollywood studio",
+            "user_input",
+            "history"
+        )
+        
+        print(f"Verdict: {single_result['verdict']}")
+        print(f"Confidence: {single_result['confidence']:.2f}")
+        print(f"Reasoning: {single_result['reasoning'][:200]}...")
+        
+        # Example 3: Find similar claims
+        print("\n" + "="*80)
+        print("Finding similar claims...")
+        similar = await agent.get_similar_claims("The Earth is not round", limit=3)
+        print(f"Found {len(similar)} similar claims:")
+        for claim in similar:
+            print(f"- {claim['text'][:60]}... (similarity: {claim['similarity_score']:.2f})")
+        
+        # Agent statistics
+        print("\n" + "="*80)
+        stats = await agent.get_agent_stats()
+        print("Agent Statistics:")
+        print(f"Claims processed: {stats['processed_claims']}")
+        print(f"Fact-checks performed: {stats['fact_checks_performed']}")
+        print(f"Database status: {stats['database_status']}")
+        
+    except Exception as e:
+        logger.error(f"Error in main: {e}")
+    
+    finally:
+        await agent.shutdown()
 
 if __name__ == "__main__":
     asyncio.run(main())
