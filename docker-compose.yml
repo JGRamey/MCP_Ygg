@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   neo4j:
     image: neo4j:5.15-community
@@ -16,6 +14,11 @@ services:
       - neo4j_data:/data
       - neo4j_logs:/logs
     restart: unless-stopped
+    labels:
+      - "com.docker.compose.service=neo4j"
+      - "traefik.enable=true"
+      - "traefik.http.routers.neo4j.rule=Host(`localhost`)"
+      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"
 
   qdrant:
     image: qdrant/qdrant:v1.7.3
