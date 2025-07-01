@@ -1,2 +1,78 @@
 source_id,target_id,relationship_type,strength,description,time_period
-LANG002,LANG001,BELONGS_TO,1.0,Written_Language belongs to Language,-3100
+LANG0019,LANG0008,BELONGS_TO,1.0,Written_Language belongs to Language,-3100
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Structure belongs to Language,-100000
+LANG0002,LANG0008,BELONGS_TO,1.0,Grammar belongs to Language Structure,-50000
+LANG0003,LANG0008,BELONGS_TO,1.0,Syntax belongs to Language Structure,-10000
+LANG0004,LANG0008,BELONGS_TO,1.0,Semantics belongs to Language Structure,-400
+LANG0005,LANG0008,BELONGS_TO,1.0,Phonetics belongs to Language Structure,-50000
+LANG0006,LANG0008,BELONGS_TO,1.0,Phonology belongs to Language Structure,-10000
+LANG0007,LANG0008,BELONGS_TO,1.0,Morphology belongs to Language Structure,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language in Context belongs to Language,-100000
+LANG0010,LANG0008,BELONGS_TO,1.0,Pragmatics belongs to Language in Context,-400
+LANG0011,LANG0008,BELONGS_TO,1.0,Sociolinguistics belongs to Language in Context,-10000
+LANG0013,LANG0010,BELONGS_TO,1.0,Discourse Analysis belongs to Language in Context,-10000
+LANG0013,LANG0008,BELONGS_TO,1.0,Stylistics belongs to Language in Context,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language History & Evolution belongs to Language,-100000
+LANG0016,LANG0015,BELONGS_TO,1.0,Historical Linguistics belongs to Language History & Evolution,-10000
+LANG0016,LANG0008,BELONGS_TO,1.0,Etymology belongs to Language History & Evolution,-3000
+LANG0018,LANG0015,BELONGS_TO,1.0,Comparative Linguistics belongs to Language History & Evolution,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Acquisition & Development belongs to Language,-100000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Acquisition belongs to Language Acquisition & Development,-10000
+LANG0021,LANG0008,BELONGS_TO,1.0,Psycholinguistics belongs to Language Acquisition & Development,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Development belongs to Language Acquisition & Development,-10000
+LANG0023,LANG0001,BELONGS_TO,1.0,Applied Language Studies belongs to Language,-100000
+LANG0024,LANG0023,BELONGS_TO,1.0,Applied Linguistics belongs to Applied Language Studies,1940
+LANG0025,LANG0023,BELONGS_TO,1.0,Computational Linguistics belongs to Applied Language Studies,1950
+LANG0026,LANG0023,BELONGS_TO,1.0,Forensic Linguistics belongs to Applied Language Studies,-10000
+LANG0027,LANG0023,BELONGS_TO,1.0,Translation Studies belongs to Applied Language Studies,-2000
+LANG0028,LANG0001,BELONGS_TO,1.0,Specific Languages & Language Families belongs to Language,-100000
+LANG0029,LANG0028,BELONGS_TO,1.0,Language-Specific Studies belongs to Specific Languages & Language Families,-10000
+LANG0030,LANG0028,BELONGS_TO,1.0,Language Family Studies belongs to Specific Languages & Language Families,-10000
+LANG0031,LANG0028,BELONGS_TO,1.0,Typology belongs to Specific Languages & Language Families,-10000
+LANG0032,LANG0001,BELONGS_TO,1.0,Interdisciplinary Language Studies belongs to Language,-100000
+LANG0033,LANG0032,BELONGS_TO,1.0,Linguistic Anthropology belongs to Interdisciplinary Language Studies,-10000
+LANG0034,LANG0032,BELONGS_TO,1.0,Neurolinguistics belongs to Interdisciplinary Language Studies,-10000
+LANG0035,LANG0032,BELONGS_TO,1.0,Cognitive Linguistics belongs to Interdisciplinary Language Studies,-10000
+LANG0036,LANG0032,BELONGS_TO,1.0,Philosophy of Language belongs to Interdisciplinary Language Studies,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language in Literature & Rhetoric belongs to Language,-100000
+LANG0038,LANG0037,BELONGS_TO,1.0,Literary Linguistics belongs to Language in Literature & Rhetoric,-10000
+LANG0039,LANG0008,BELONGS_TO,1.0,Rhetoric belongs to Language in Literature & Rhetoric,-10000
+LANG0040,LANG0008,BELONGS_TO,1.0,Semiotics belongs to Language in Literature & Rhetoric,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Structure belongs to Language,-100000
+LANG0002,LANG0008,BELONGS_TO,1.0,Grammar belongs to Language Structure,-50000
+LANG0003,LANG0008,BELONGS_TO,1.0,Syntax belongs to Language Structure,-10000
+LANG0004,LANG0008,BELONGS_TO,1.0,Semantics belongs to Language Structure,-400
+LANG0005,LANG0008,BELONGS_TO,1.0,Phonetics belongs to Language Structure,-50000
+LANG0006,LANG0008,BELONGS_TO,1.0,Phonology belongs to Language Structure,-10000
+LANG0007,LANG0008,BELONGS_TO,1.0,Morphology belongs to Language Structure,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language in Context belongs to Language,-100000
+LANG0010,LANG0008,BELONGS_TO,1.0,Pragmatics belongs to Language in Context,-400
+LANG0011,LANG0008,BELONGS_TO,1.0,Sociolinguistics belongs to Language in Context,-10000
+LANG0051,LANG0048,BELONGS_TO,1.0,Discourse Analysis belongs to Language in Context,-10000
+LANG0013,LANG0008,BELONGS_TO,1.0,Stylistics belongs to Language in Context,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language History & Evolution belongs to Language,-100000
+LANG0054,LANG0053,BELONGS_TO,1.0,Historical Linguistics belongs to Language History & Evolution,-10000
+LANG0016,LANG0008,BELONGS_TO,1.0,Etymology belongs to Language History & Evolution,-3000
+LANG0056,LANG0053,BELONGS_TO,1.0,Comparative Linguistics belongs to Language History & Evolution,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Acquisition & Development belongs to Language,-100000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Acquisition belongs to Language Acquisition & Development,-10000
+LANG0021,LANG0008,BELONGS_TO,1.0,Psycholinguistics belongs to Language Acquisition & Development,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language Development belongs to Language Acquisition & Development,-10000
+LANG0061,LANG0001,BELONGS_TO,1.0,Applied Language Studies belongs to Language,-100000
+LANG0062,LANG0061,BELONGS_TO,1.0,Applied Linguistics belongs to Applied Language Studies,1940
+LANG0063,LANG0061,BELONGS_TO,1.0,Computational Linguistics belongs to Applied Language Studies,1950
+LANG0064,LANG0061,BELONGS_TO,1.0,Forensic Linguistics belongs to Applied Language Studies,-10000
+LANG0065,LANG0061,BELONGS_TO,1.0,Translation Studies belongs to Applied Language Studies,-2000
+LANG0066,LANG0001,BELONGS_TO,1.0,Specific Languages & Language Families belongs to Language,-100000
+LANG0067,LANG0066,BELONGS_TO,1.0,Language-Specific Studies belongs to Specific Languages & Language Families,-10000
+LANG0068,LANG0066,BELONGS_TO,1.0,Language Family Studies belongs to Specific Languages & Language Families,-10000
+LANG0069,LANG0066,BELONGS_TO,1.0,Typology belongs to Specific Languages & Language Families,-10000
+LANG0070,LANG0001,BELONGS_TO,1.0,Interdisciplinary Language Studies belongs to Language,-100000
+LANG0071,LANG0070,BELONGS_TO,1.0,Linguistic Anthropology belongs to Interdisciplinary Language Studies,-10000
+LANG0072,LANG0070,BELONGS_TO,1.0,Neurolinguistics belongs to Interdisciplinary Language Studies,-10000
+LANG0073,LANG0070,BELONGS_TO,1.0,Cognitive Linguistics belongs to Interdisciplinary Language Studies,-10000
+LANG0074,LANG0070,BELONGS_TO,1.0,Philosophy of Language belongs to Interdisciplinary Language Studies,-10000
+LANG0008,LANG0008,BELONGS_TO,1.0,Language in Literature & Rhetoric belongs to Language,-100000
+LANG0076,LANG0075,BELONGS_TO,1.0,Literary Linguistics belongs to Language in Literature & Rhetoric,-10000
+LANG0039,LANG0008,BELONGS_TO,1.0,Rhetoric belongs to Language in Literature & Rhetoric,-10000
+LANG0040,LANG0008,BELONGS_TO,1.0,Semiotics belongs to Language in Literature & Rhetoric,-10000

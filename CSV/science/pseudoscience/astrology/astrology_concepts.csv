@@ -1,3 +1,17 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-ASTRO001,Astrology,root,1,Interpretation of celestial movements for earthly meaning,-2000,Tomb inscriptions,Global,Various,Root concept of celestial divination,confirmed
-ASTRO002,Mesopotamian_Astrology,sub_root,2,Babylonian and Assyrian astrological systems,-1800,Clay tablets,Babylon,Akkadian,Earliest systematic astrology,confirmed
+ASTRO0001,Astrology,root,1,Interpretation of celestial movements for earthly meaning,-2000,Tomb inscriptions,Global,Various,Root concept of celestial divination,confirmed
+ASTRO0002,Mesopotamian_Astrology,sub_root,2,Babylonian and Assyrian astrological systems,-1800,Clay tablets,Babylon,Akkadian,Earliest systematic astrology,confirmed
+ASTRO0003,Natal_Astrology,branch,3,Interpretation of celestial positions at birth to describe personality or life events.,-2000,Historical,Global,Various,Subcategory of Astrology,confirmed
+ASTRO0004,Horary_Astrology,branch,3,Answering specific questions based on the time a question is asked and celestial positions.,-2000,Historical,Global,Various,Subcategory of Astrology,confirmed
+ASTRO0005,Electional_Astrology,branch,3,Choosing optimal times for events based on celestial configurations.,-2000,Historical,Global,Various,Subcategory of Astrology,confirmed
+ASTRO0006,Mundane_Astrology,branch,3,Predicting world events or societal trends based on celestial movements.,-2000,Historical,Global,Various,Subcategory of Astrology,confirmed
+ASTRO0007,Medical_Astrology,branch,3,Linking celestial influences to health and medical conditions.,-2000,Historical,Global,Various,Subcategory of Astrology,confirmed
+ASTRO0008,Homeopathy,sub_root,2,Pseudoscience category: Homeopathy,1796,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0009,Phrenology,sub_root,2,Pseudoscience category: Phrenology,1796,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0010,Numerology,sub_root,2,Pseudoscience category: Numerology,-500,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0011,Graphology,sub_root,2,Pseudoscience category: Graphology,1622,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0012,Alchemy,sub_root,2,Pseudoscience category: Alchemy,-1000,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0013,Cryptozoology,sub_root,2,Pseudoscience category: Cryptozoology,-1000,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0014,Parapsychology,sub_root,2,Pseudoscience category: Parapsychology,-1000,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0015,Dowsing,sub_root,2,Pseudoscience category: Dowsing,-1000,Historical,Global,Various,Pseudoscience category,confirmed
+ASTRO0016,Perpetual_Motion,sub_root,2,Pseudoscience category: Perpetual Motion,-1000,Historical,Global,Various,Pseudoscience category,confirmed

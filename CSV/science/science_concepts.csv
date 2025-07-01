@@ -1,3 +1,66 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-SCI001,Science,root,1,Systematic study of natural world,-1800,Babylonian tablets,Global,Various,Root concept of natural investigation,confirmed
-SCI002,Early_Astronomy,sub_root,2,Observation and recording of celestial bodies,-1800,Babylonian tablets,Babylon,Akkadian,Systematic sky observation,confirmed
+SCI0001,Physics,sub_root,2,Major scientific discipline: Physics,-600,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0002,Classical_Mechanics,branch,3,Study of motion and forces on macroscopic objects.,-300,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0003,Quantum_Mechanics,branch,3,Study of matter and energy at atomic and subatomic scales.,-300,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0004,Thermodynamics,branch,3,"Study of heat, energy, and work.",1824,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0005,Electromagnetism,branch,3,Study of electric and magnetic fields and their interactions.,-1000,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0006,Optics,branch,3,Study of light and its interactions with matter.,-1000,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0007,Relativity,branch,3,"Study of spacetime and gravity, including special and general relativity.",1905,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0008,Science,root,1,Systematic study of natural world,-1800,Babylonian tablets,Global,Various,Root concept of natural investigation,confirmed
+SCI0009,Nuclear_Physics,branch,3,Study of atomic nuclei and their interactions.,-600,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0010,Particle_Physics,branch,3,Study of fundamental particles and forces.,-600,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0011,Condensed_Matter_Physics,branch,3,"Study of solids and liquids, including semiconductors and superconductors.",-600,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0012,Plasma_Physics,branch,3,Study of ionized gases and their properties.,-600,Scientific,Global,Scientific,Subcategory of Physics,confirmed
+SCI0013,Chemistry,sub_root,2,Major scientific discipline: Chemistry,-1500,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0014,Organic_Chemistry,branch,3,Study of carbon-containing compounds and their reactions.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0015,Inorganic_Chemistry,branch,3,"Study of non-carbon-based compounds, including metals and minerals.",-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0016,Physical_Chemistry,branch,3,Study of the physical principles underlying chemical systems.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0017,Analytical_Chemistry,branch,3,Study of techniques to analyze chemical composition.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0018,Biochemistry,branch,3,Study of chemical processes in living organisms.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0019,Early_Astronomy,sub_root,2,Observation and recording of celestial bodies,-1800,Babylonian tablets,Babylon,Akkadian,Systematic sky observation,confirmed
+SCI0020,Polymer_Chemistry,branch,3,Study of the structure and properties of polymers.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0021,Environmental_Chemistry,branch,3,Study of chemical processes in the environment.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0022,Theoretical_Chemistry,branch,3,Use of mathematical models to understand chemical behavior.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0023,Medicinal_Chemistry,branch,3,Design and development of pharmaceuticals.,-1500,Scientific,Global,Scientific,Subcategory of Chemistry,confirmed
+SCI0024,Biology,sub_root,2,Major scientific discipline: Biology,-400,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0025,Molecular_Biology,branch,3,Study of biological processes at the molecular level.,-400,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0026,Genetics,branch,3,Study of heredity and gene function.,1866,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0027,Cell_Biology,branch,3,Study of cell structure and function.,-400,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0028,Microbiology,branch,3,"Study of microorganisms, including bacteria and viruses.",-400,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0029,Zoology,branch,3,"Study of animals and their behavior, physiology, and classification.",-1000,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0030,Botany,branch,3,"Study of plants, including their physiology and ecology.",-1000,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0031,Ecology,branch,3,Study of interactions between organisms and their environment.,-1000,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0032,Evolutionary_Biology,branch,3,Study of the origins and changes in species over time.,-400,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0033,Physiology,branch,3,Study of the functions of living organisms and their parts.,-1000,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0034,Neuroscience,branch,3,Study of the nervous system and brain function.,-1000,Scientific,Global,Scientific,Subcategory of Biology,confirmed
+SCI0035,Earth_Sciences,sub_root,2,Major scientific discipline: Earth Sciences,-1000,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0036,Geology,branch,3,Study of the Earth’s physical structure and composition.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0037,Meteorology,branch,3,Study of weather and atmospheric phenomena.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0038,Oceanography,branch,3,"Study of the oceans, including their physical and biological properties.",-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0039,Paleontology,branch,3,Study of fossils and ancient life forms.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0040,Seismology,branch,3,Study of earthquakes and the Earth’s internal structure.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0041,Volcanology,branch,3,Study of volcanoes and volcanic processes.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0042,Hydrology,branch,3,"Study of water movement, distribution, and quality.",-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0043,Geochemistry,branch,3,Study of the chemical composition of the Earth.,-1500,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0044,Climatology,branch,3,Study of long-term weather patterns and climate change.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0045,Mineralogy,branch,3,Study of minerals and their properties.,-1000,Scientific,Global,Scientific,Subcategory of Earth Sciences,confirmed
+SCI0046,Astronomy,sub_root,2,Major scientific discipline: Astronomy,-1800,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0047,Astrophysics,branch,3,Study of the physical properties of celestial objects.,-600,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0048,Cosmology,branch,3,Study of the origin and evolution of the universe.,-1000,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0049,Planetary_Science,branch,3,"Study of planets, moons, and planetary systems.",-1000,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0050,Stellar_Astronomy,branch,3,"Study of stars, their formation, and evolution.",-1800,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0051,Galactic_Astronomy,branch,3,Study of galaxies and their structure.,-1800,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0052,Astrobiology,branch,3,Study of the potential for life in the universe.,-400,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0053,Astrometry,branch,3,Measurement of the positions and motions of celestial objects.,-1000,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0054,Radio_Astronomy,branch,3,Study of celestial objects using radio waves.,-1800,Scientific,Global,Scientific,Subcategory of Astronomy,confirmed
+SCI0055,Interdisciplinary/Applied_Sciences,sub_root,2,Major scientific discipline: Interdisciplinary/Applied Sciences,-1000,Scientific,Global,Scientific,Science discipline,confirmed
+SCI0056,Environmental_Science,branch,3,Study of the environment and solutions to environmental issues.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0057,Materials_Science,branch,3,Study of the properties and applications of materials.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0058,Biophysics,branch,3,Application of physics principles to biological systems.,-600,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0059,Bioinformatics,branch,3,Use of computational tools to analyze biological data.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0060,Nanotechnology,branch,3,Study and manipulation of matter at the nanoscale.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0061,Atmospheric_Science,branch,3,"Study of the atmosphere, overlapping with meteorology and climatology.",-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0062,Marine_Biology,branch,3,"Study of life in the oceans, overlapping with biology and oceanography.",-400,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0063,Geobiology,branch,3,Study of interactions between the Earth and life.,-400,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0064,Chemical_Engineering,branch,3,Application of chemistry to industrial processes.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed
+SCI0065,Computational_Science,branch,3,Use of computational methods across scientific disciplines.,-1000,Scientific,Global,Scientific,Subcategory of Interdisciplinary/Applied Sciences,confirmed

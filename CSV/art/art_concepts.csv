@@ -1,3 +1,51 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-ART001,Art,root,1,Creative expression through visual and auditory media,-40000,Cave paintings,Global,None,Root concept of artistic creation,confirmed
-ART002,Cave_Paintings,sub_root,2,Painted images on cave walls,-40000,Lascaux caves,France,None,Painted in France 40000 BC,confirmed
+ART0001,Visual_Arts,sub_root,2,Major category of visual arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0002,Paintings,branch,3,"Includes oil, acrylic, watercolor, fresco, and tempera paintings, spanning styles like realism, impressionism, abstract, and surrealism.",-40000,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0003,Sculpture,branch,3,"Encompasses three-dimensional works in materials like stone, metal, wood, clay, or mixed media, including styles like classical, modern, and kinetic.",-35000,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0004,Drawing,branch,3,"Covers techniques such as pencil, charcoal, ink, pastel, and digital drawing, including sketching, illustration, and technical drawing.",-40000,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0005,Printmaking,branch,3,"Includes methods like etching, lithography, screen printing, and woodblock printing for creating reproducible artworks.",200,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0006,Photography,branch,3,"Encompasses fine art photography, portraiture, landscape, street, and experimental photography, including analog and digital formats.",1826,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0007,Digital_Art,branch,3,"Includes digital painting, 3D modeling, animation, and generative art created using software or digital tools.",1960,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0008,Art,root,1,Creative expression through visual and auditory media,-40000,Cave paintings,Global,,Root concept of artistic creation,confirmed
+ART0009,Mixed_Media,branch,3,"Combines multiple materials or mediums, such as collage, assemblage, or installations, to create hybrid artworks.",-5000,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0010,Installation_Art,branch,3,"Large-scale, site-specific works that transform spaces, often interactive or immersive, using various materials and technologies.",1950,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0011,Video_Art,branch,3,"Artworks using video as a medium, including experimental films, video installations, and multimedia performances.",1960,Historical,Global,Various,Subcategory of Visual Arts,confirmed
+ART0012,Architecture,sub_root,2,Major category of architecture,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0013,Classical_Architecture,branch,3,"Encompasses Greek, Roman, and neoclassical styles, focusing on symmetry, columns, and proportion.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0014,Gothic_Architecture,branch,3,"Characterized by pointed arches, ribbed vaults, and flying buttresses, seen in medieval cathedrals.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0015,Renaissance_Architecture,branch,3,"Revives classical Greek and Roman principles, emphasizing harmony, perspective, and domes.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0016,Modern_Architecture,branch,3,"Includes styles like Bauhaus, International Style, and Brutalism, focusing on function, minimalism, and new materials.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0017,Postmodern_Architecture,branch,3,"Blends historical references with playful, eclectic designs, often incorporating irony or ornamentation.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0018,Sustainable_Architecture,branch,3,"Focuses on eco-friendly designs, using sustainable materials and energy-efficient systems.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0019,Cave_Paintings,sub_root,2,Painted images on cave walls,-40000,Lascaux caves,France,,Painted in France 40000 BC,confirmed
+ART0020,Landscape_Architecture,branch,3,"Designs outdoor spaces, including parks, gardens, and urban planning, integrating natural and built environments.",-10000,Historical,Global,Various,Subcategory of Architecture,confirmed
+ART0021,Performing_Arts,sub_root,2,Major category of performing arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0022,Music,branch,3,"Includes genres like classical, jazz, rock, pop, folk, electronic, and world music, covering composition, performance, and theory.",-40000,Historical,Global,Various,Subcategory of Performing Arts,confirmed
+ART0023,Dance,branch,3,"Encompasses ballet, contemporary, jazz, tap, hip-hop, folk, and cultural dances like flamenco or Bharatanatyam.",-30000,Historical,Global,Various,Subcategory of Performing Arts,confirmed
+ART0024,Theatre,branch,3,"Includes drama, comedy, musical theatre, experimental theatre, and forms like opera or puppetry.",-2500,Historical,Global,Various,Subcategory of Performing Arts,confirmed
+ART0025,Performance_Art,branch,3,"Live art combining elements of visual art, theatre, and music, often addressing social or political themes.",1950,Historical,Global,Various,Subcategory of Performing Arts,confirmed
+ART0026,Circus_Arts,branch,3,"Encompasses acrobatics, clowning, juggling, and aerial performances, blending physical skill and theatricality.",-5000,Historical,Global,Various,Subcategory of Performing Arts,confirmed
+ART0027,Literary_Arts,sub_root,2,Major category of literary arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0028,Poetry,branch,3,"Includes forms like sonnets, haikus, free verse, and narrative poetry, focusing on language and rhythm.",-5000,Historical,Global,Various,Subcategory of Literary Arts,confirmed
+ART0029,Prose,branch,3,"Encompasses novels, short stories, essays, and creative nonfiction, emphasizing narrative and style.",-5000,Historical,Global,Various,Subcategory of Literary Arts,confirmed
+ART0030,Playwriting,branch,3,"Writing for theatrical performance, including scripts for dramas, comedies, and experimental works.",-5000,Historical,Global,Various,Subcategory of Literary Arts,confirmed
+ART0031,Screenwriting,branch,3,"Scripts for film, television, or digital media, focusing on visual storytelling and dialogue.",-5000,Historical,Global,Various,Subcategory of Literary Arts,confirmed
+ART0032,Applied_Arts,sub_root,2,Major category of applied arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0033,Graphic_Design,branch,3,"Includes branding, typography, illustration, and digital design for advertising, media, or user interfaces.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0034,Fashion_Design,branch,3,"Encompasses clothing, accessories, and textile design, blending aesthetics with functionality.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0035,Industrial_Design,branch,3,"Designs functional products like furniture, appliances, or vehicles, prioritizing form and usability.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0036,Interior_Design,branch,3,"Focuses on designing interior spaces, combining aesthetics, ergonomics, and functionality.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0037,Ceramic_Arts,branch,3,"Includes pottery, porcelain, and clay-based sculptures, often combining functional and decorative elements.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0038,Jewelry_Design,branch,3,"Crafting wearable art using metals, gemstones, and other materials, emphasizing aesthetics and craftsmanship.",-5000,Historical,Global,Various,Subcategory of Applied Arts,confirmed
+ART0039,Cinematic_Arts,sub_root,2,Major category of cinematic arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0040,Film_Directing,branch,3,"Involves overseeing the artistic vision of a film, including storytelling, cinematography, and performance.",1890,Historical,Global,Various,Subcategory of Cinematic Arts,confirmed
+ART0041,Cinematography,branch,3,"Focuses on the art of capturing visuals through lighting, camera angles, and shot composition.",-5000,Historical,Global,Various,Subcategory of Cinematic Arts,confirmed
+ART0042,Film_Editing,branch,3,Involves assembling and refining footage to create cohesive narratives or experimental films.,1890,Historical,Global,Various,Subcategory of Cinematic Arts,confirmed
+ART0043,Animation,branch,3,"Includes traditional, stop-motion, 2D, 3D, and computer-generated animation for storytelling or art.",-5000,Historical,Global,Various,Subcategory of Cinematic Arts,confirmed
+ART0044,Sound_Design,branch,3,"Crafting audio elements like sound effects, music, and dialogue to enhance cinematic experiences.",-5000,Historical,Global,Various,Subcategory of Cinematic Arts,confirmed
+ART0045,Folk_and_Traditional_Arts,sub_root,2,Major category of folk and traditional arts,-40000,Archaeological,Global,Various,Major art form category,confirmed
+ART0046,Textile_Arts,branch,3,"Includes weaving, embroidery, quilting, and dyeing, often tied to cultural traditions.",-5000,Historical,Global,Various,Subcategory of Folk and Traditional Arts,confirmed
+ART0047,Calligraphy,branch,3,"The art of decorative handwriting, spanning styles like Western, Arabic, Chinese, or Japanese.",-5000,Historical,Global,Various,Subcategory of Folk and Traditional Arts,confirmed
+ART0048,Folk_Music,branch,3,"Traditional music passed down through generations, often tied to cultural or regional identities.",-40000,Historical,Global,Various,Subcategory of Folk and Traditional Arts,confirmed
+ART0049,Traditional_Dance,branch,3,"Cultural dances like Native American powwow, Irish step dance, or African tribal dances.",-30000,Historical,Global,Various,Subcategory of Folk and Traditional Arts,confirmed
+ART0050,Craft_Arts,branch,3,"Includes woodworking, metalworking, glassblowing, and basketry, emphasizing handmade techniques.",-5000,Historical,Global,Various,Subcategory of Folk and Traditional Arts,confirmed

@@ -1,6 +1,59 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-MATH001,Mathematics,root,1,Study of numbers patterns and structures,-20000,Ishango Bone,Global,Various,Root concept of mathematical thought,confirmed
-MATH002,Early_Arithmetic,sub_root,2,Basic counting and calculation,-20000,Ishango Bone,Africa,Symbolic,Earliest mathematical evidence,confirmed
-MATH003,Tally_Systems,branch,3,Early counting methods,-20000,Bone carvings,Africa,Symbolic,Carved in Africa 20000 BC,confirmed
-MATH004,Geometry,sub_root,2,Study of shapes space and measurement,-3000,Clay tablets,Mesopotamia,Cuneiform,Early geometric knowledge,confirmed
-MATH005,Euclidean_Geometry,branch,3,Systematic geometric principles,-300,Elements,Alexandria,Greek,Systematized by Euclid,confirmed
+MATH0001,Pure_Mathematics,sub_root,2,Major mathematical category: Pure Mathematics,-3000,Mathematical,Global,Mathematical,Mathematical category,confirmed
+MATH0002,Group_Theory,branch,3,Study of symmetry and group structures,-1000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0003,Ring_Theory,branch,3,"Properties of rings, a type of algebraic structure",-1000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0004,Field_Theory,branch,3,"Study of fields, extensions, and their applications",-1000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0005,Mathematics,root,1,Study of numbers patterns and structures,-20000,Ishango Bone,Global,Various,Root concept of mathematical thought,confirmed
+MATH0006,Linear_Algebra,branch,3,"Vectors, matrices, and linear transformations",-1800,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0007,Abstract_Algebra,branch,3,General study of algebraic structures,-1800,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0008,Calculus,branch,3,"Limits, derivatives, integrals, and series",1665,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0009,Real_Analysis,branch,3,Rigorous study of real numbers and functions,1821,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0010,Complex_Analysis,branch,3,Functions of complex variables,1821,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0011,Functional_Analysis,branch,3,Study of vector spaces with limits and operators,1821,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0012,Harmonic_Analysis,branch,3,Analysis of functions via Fourier series and transforms,1821,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0013,Differential_Geometry,branch,3,"Geometry using calculus, e.g., curves and surfaces",-3000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0014,Algebraic_Geometry,branch,3,Study of geometric structures defined by polynomial equations,-3000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0015,Early_Arithmetic,sub_root,2,Basic counting and calculation,-20000,Ishango Bone,Africa,Symbolic,Earliest mathematical evidence,confirmed
+MATH0016,Topology,branch,3,Properties of spaces preserved under continuous deformations,1736,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0017,Manifold_Theory,branch,3,Study of higher,-1000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0018,Analytic_Number_Theory,branch,3,Uses analysis to study integers,-500,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0019,Algebraic_Number_Theory,branch,3,Numbers in algebraic structures like rings,-1800,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0020,Arithmetic_Geometry,branch,3,Intersection of number theory and geometry,-20000,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0021,General_Topology,branch,3,"Basic properties of spaces (e.g., continuity)",1736,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0022,Algebraic_Topology,branch,3,Uses algebra to study topological spaces,-1800,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0023,Differential_Topology,branch,3,Topology with smooth structures,1736,Mathematical,Global,Mathematical,Subcategory of Pure Mathematics,confirmed
+MATH0024,Applied_Mathematics,sub_root,2,Major mathematical category: Applied Mathematics,-1000,Mathematical,Global,Mathematical,Mathematical category,confirmed
+MATH0025,Probability_Theory,branch,3,Mathematical study of randomness,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0026,Tally_Systems,branch,3,Early counting methods,-20000,Bone carvings,Africa,Symbolic,Carved in Africa 20000 BC,confirmed
+MATH0027,Statistical_Inference,branch,3,Drawing conclusions from data,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0028,Data_Analysis,branch,3,Techniques for interpreting and visualizing data,1821,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0029,Biostatistics,branch,3,Statistics applied to biological data,1663,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0030,Econometrics,branch,3,Statistics in economics and finance,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0031,Quantum_Mechanics,branch,3,Math of quantum systems,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0032,Relativity,branch,3,Mathematical models of spacetime,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0033,Statistical_Mechanics,branch,3,Probability in physical systems,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0034,Optimization,branch,3,Finding the best solutions,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0035,Linear_Programming,branch,3,Optimization with linear constraints,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0036,Queueing_Theory,branch,3,Modeling waiting lines,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0037,Geometry,sub_root,2,Study of shapes space and measurement,-3000,Clay tablets,Mesopotamia,Cuneiform,Early geometric knowledge,confirmed
+MATH0038,Decision_Theory,branch,3,Math of decision,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0039,Numerical_Methods,branch,3,Algorithms for approximations,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0040,Computational_Linear_Algebra,branch,3,Solving matrix problems numerically,-1800,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0041,Finite_Element_Methods,branch,3,Numerical solutions for physical systems,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0042,Population_Dynamics,branch,3,Modeling species growth,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0043,Epidemiology,branch,3,Math of disease spread,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0044,Systems_Biology,branch,3,Modeling biological networks,-1000,Mathematical,Global,Mathematical,Subcategory of Applied Mathematics,confirmed
+MATH0045,Interdisciplinary,sub_root,2,Major mathematical category: Interdisciplinary,-300,Mathematical,Global,Mathematical,Mathematical category,confirmed
+MATH0046,Set_Theory,branch,3,Foundations of mathematics,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0047,Model_Theory,branch,3,Study of mathematical structures,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0048,Euclidean_Geometry,branch,3,Systematic geometric principles,-300,Elements,Alexandria,Greek,Systematized by Euclid,confirmed
+MATH0049,Proof_Theory,branch,3,Analysis of proofs,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0050,Computability_Theory,branch,3,What can be computed,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0051,Enumerative_Combinatorics,branch,3,Counting methods,-300,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0052,Graph_Theory,branch,3,Study of graphs and networks,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0053,Design_Theory,branch,3,Arrangements with specific properties,-1000,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0054,Symmetric_Key_Cryptography,branch,3,Single,-400,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0055,Public_Key_Cryptography,branch,3,Two,-400,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0056,Cryptanalysis,branch,3,Breaking codes,1821,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0057,Cooperative_Game_Theory,branch,3,Collaboration strategies,1944,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed
+MATH0058,Evolutionary_Game_Theory,branch,3,Strategies in evolving populations,1944,Mathematical,Global,Mathematical,Subcategory of Interdisciplinary,confirmed

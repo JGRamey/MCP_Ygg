@@ -1,2 +1,128 @@
 source_id,target_id,relationship_type,strength,description,time_period
-SCI002,SCI001,BELONGS_TO,1.0,Early_Astronomy belongs to Science,-1800
+SCI0019,SCI0008,BELONGS_TO,1.0,Early_Astronomy belongs to Science,-1800
+SCI0001,SCI0008,BELONGS_TO,1.0,Physics belongs to Science,-600
+SCI0004,SCI0003,BELONGS_TO,1.0,Classical Mechanics belongs to Physics,-300
+SCI0005,SCI0003,BELONGS_TO,1.0,Quantum Mechanics belongs to Physics,-300
+SCI0004,SCI0001,BELONGS_TO,1.0,Thermodynamics belongs to Physics,1824
+SCI0005,SCI0001,BELONGS_TO,1.0,Electromagnetism belongs to Physics,-1000
+SCI0006,SCI0001,BELONGS_TO,1.0,Optics belongs to Physics,-1000
+SCI0007,SCI0001,BELONGS_TO,1.0,Relativity belongs to Physics,1905
+SCI0010,SCI0003,BELONGS_TO,1.0,Nuclear Physics belongs to Physics,-600
+SCI0011,SCI0003,BELONGS_TO,1.0,Particle Physics belongs to Physics,-600
+SCI0012,SCI0003,BELONGS_TO,1.0,Condensed Matter Physics belongs to Physics,-600
+SCI0013,SCI0003,BELONGS_TO,1.0,Plasma Physics belongs to Physics,-600
+SCI0013,SCI0008,BELONGS_TO,1.0,Chemistry belongs to Science,-1500
+SCI0015,SCI0014,BELONGS_TO,1.0,Organic Chemistry belongs to Chemistry,-1500
+SCI0016,SCI0014,BELONGS_TO,1.0,Inorganic Chemistry belongs to Chemistry,-1500
+SCI0017,SCI0014,BELONGS_TO,1.0,Physical Chemistry belongs to Chemistry,-1500
+SCI0018,SCI0014,BELONGS_TO,1.0,Analytical Chemistry belongs to Chemistry,-1500
+SCI0018,SCI0013,BELONGS_TO,1.0,Biochemistry belongs to Chemistry,-1500
+SCI0020,SCI0014,BELONGS_TO,1.0,Polymer Chemistry belongs to Chemistry,-1500
+SCI0021,SCI0014,BELONGS_TO,1.0,Environmental Chemistry belongs to Chemistry,-1500
+SCI0022,SCI0014,BELONGS_TO,1.0,Theoretical Chemistry belongs to Chemistry,-1500
+SCI0023,SCI0014,BELONGS_TO,1.0,Medicinal Chemistry belongs to Chemistry,-1500
+SCI0024,SCI0008,BELONGS_TO,1.0,Biology belongs to Science,-400
+SCI0025,SCI0024,BELONGS_TO,1.0,Molecular Biology belongs to Biology,-400
+SCI0026,SCI0024,BELONGS_TO,1.0,Genetics belongs to Biology,1866
+SCI0027,SCI0024,BELONGS_TO,1.0,Cell Biology belongs to Biology,-400
+SCI0028,SCI0024,BELONGS_TO,1.0,Microbiology belongs to Biology,-400
+SCI0029,SCI0024,BELONGS_TO,1.0,Zoology belongs to Biology,-1000
+SCI0030,SCI0024,BELONGS_TO,1.0,Botany belongs to Biology,-1000
+SCI0031,SCI0024,BELONGS_TO,1.0,Ecology belongs to Biology,-1000
+SCI0032,SCI0024,BELONGS_TO,1.0,Evolutionary Biology belongs to Biology,-400
+SCI0033,SCI0024,BELONGS_TO,1.0,Physiology belongs to Biology,-1000
+SCI0034,SCI0024,BELONGS_TO,1.0,Neuroscience belongs to Biology,-1000
+SCI0035,SCI0001,BELONGS_TO,1.0,Earth Sciences belongs to Science,-1000
+SCI0036,SCI0035,BELONGS_TO,1.0,Geology belongs to Earth Sciences,-1000
+SCI0037,SCI0035,BELONGS_TO,1.0,Meteorology belongs to Earth Sciences,-1000
+SCI0038,SCI0035,BELONGS_TO,1.0,Oceanography belongs to Earth Sciences,-1000
+SCI0039,SCI0035,BELONGS_TO,1.0,Paleontology belongs to Earth Sciences,-1000
+SCI0040,SCI0035,BELONGS_TO,1.0,Seismology belongs to Earth Sciences,-1000
+SCI0041,SCI0035,BELONGS_TO,1.0,Volcanology belongs to Earth Sciences,-1000
+SCI0042,SCI0035,BELONGS_TO,1.0,Hydrology belongs to Earth Sciences,-1000
+SCI0043,SCI0035,BELONGS_TO,1.0,Geochemistry belongs to Earth Sciences,-1500
+SCI0044,SCI0035,BELONGS_TO,1.0,Climatology belongs to Earth Sciences,-1000
+SCI0045,SCI0035,BELONGS_TO,1.0,Mineralogy belongs to Earth Sciences,-1000
+SCI0046,SCI0008,BELONGS_TO,1.0,Astronomy belongs to Science,-1800
+SCI0047,SCI0046,BELONGS_TO,1.0,Astrophysics belongs to Astronomy,-600
+SCI0048,SCI0046,BELONGS_TO,1.0,Cosmology belongs to Astronomy,-1000
+SCI0049,SCI0046,BELONGS_TO,1.0,Planetary Science belongs to Astronomy,-1000
+SCI0050,SCI0046,BELONGS_TO,1.0,Stellar Astronomy belongs to Astronomy,-1800
+SCI0051,SCI0046,BELONGS_TO,1.0,Galactic Astronomy belongs to Astronomy,-1800
+SCI0052,SCI0046,BELONGS_TO,1.0,Astrobiology belongs to Astronomy,-400
+SCI0053,SCI0046,BELONGS_TO,1.0,Astrometry belongs to Astronomy,-1000
+SCI0054,SCI0046,BELONGS_TO,1.0,Radio Astronomy belongs to Astronomy,-1800
+SCI0055,SCI0001,BELONGS_TO,1.0,Interdisciplinary/Applied Sciences belongs to Science,-1000
+SCI0056,SCI0055,BELONGS_TO,1.0,Environmental Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0057,SCI0055,BELONGS_TO,1.0,Materials Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0058,SCI0055,BELONGS_TO,1.0,Biophysics belongs to Interdisciplinary/Applied Sciences,-600
+SCI0059,SCI0055,BELONGS_TO,1.0,Bioinformatics belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0060,SCI0055,BELONGS_TO,1.0,Nanotechnology belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0061,SCI0055,BELONGS_TO,1.0,Atmospheric Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0062,SCI0055,BELONGS_TO,1.0,Marine Biology belongs to Interdisciplinary/Applied Sciences,-400
+SCI0063,SCI0055,BELONGS_TO,1.0,Geobiology belongs to Interdisciplinary/Applied Sciences,-400
+SCI0064,SCI0055,BELONGS_TO,1.0,Chemical Engineering belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0065,SCI0055,BELONGS_TO,1.0,Computational Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0001,SCI0008,BELONGS_TO,1.0,Physics belongs to Science,-600
+SCI0067,SCI0066,BELONGS_TO,1.0,Classical Mechanics belongs to Physics,-300
+SCI0068,SCI0066,BELONGS_TO,1.0,Quantum Mechanics belongs to Physics,-300
+SCI0004,SCI0001,BELONGS_TO,1.0,Thermodynamics belongs to Physics,1824
+SCI0005,SCI0001,BELONGS_TO,1.0,Electromagnetism belongs to Physics,-1000
+SCI0006,SCI0001,BELONGS_TO,1.0,Optics belongs to Physics,-1000
+SCI0007,SCI0001,BELONGS_TO,1.0,Relativity belongs to Physics,1905
+SCI0073,SCI0066,BELONGS_TO,1.0,Nuclear Physics belongs to Physics,-600
+SCI0074,SCI0066,BELONGS_TO,1.0,Particle Physics belongs to Physics,-600
+SCI0075,SCI0066,BELONGS_TO,1.0,Condensed Matter Physics belongs to Physics,-600
+SCI0076,SCI0066,BELONGS_TO,1.0,Plasma Physics belongs to Physics,-600
+SCI0013,SCI0008,BELONGS_TO,1.0,Chemistry belongs to Science,-1500
+SCI0078,SCI0077,BELONGS_TO,1.0,Organic Chemistry belongs to Chemistry,-1500
+SCI0079,SCI0077,BELONGS_TO,1.0,Inorganic Chemistry belongs to Chemistry,-1500
+SCI0080,SCI0077,BELONGS_TO,1.0,Physical Chemistry belongs to Chemistry,-1500
+SCI0081,SCI0077,BELONGS_TO,1.0,Analytical Chemistry belongs to Chemistry,-1500
+SCI0018,SCI0013,BELONGS_TO,1.0,Biochemistry belongs to Chemistry,-1500
+SCI0083,SCI0077,BELONGS_TO,1.0,Polymer Chemistry belongs to Chemistry,-1500
+SCI0084,SCI0077,BELONGS_TO,1.0,Environmental Chemistry belongs to Chemistry,-1500
+SCI0085,SCI0077,BELONGS_TO,1.0,Theoretical Chemistry belongs to Chemistry,-1500
+SCI0086,SCI0077,BELONGS_TO,1.0,Medicinal Chemistry belongs to Chemistry,-1500
+SCI0024,SCI0008,BELONGS_TO,1.0,Biology belongs to Science,-400
+SCI0088,SCI0087,BELONGS_TO,1.0,Molecular Biology belongs to Biology,-400
+SCI0026,SCI0024,BELONGS_TO,1.0,Genetics belongs to Biology,1866
+SCI0090,SCI0087,BELONGS_TO,1.0,Cell Biology belongs to Biology,-400
+SCI0028,SCI0024,BELONGS_TO,1.0,Microbiology belongs to Biology,-400
+SCI0029,SCI0024,BELONGS_TO,1.0,Zoology belongs to Biology,-1000
+SCI0030,SCI0024,BELONGS_TO,1.0,Botany belongs to Biology,-1000
+SCI0031,SCI0024,BELONGS_TO,1.0,Ecology belongs to Biology,-1000
+SCI0095,SCI0087,BELONGS_TO,1.0,Evolutionary Biology belongs to Biology,-400
+SCI0033,SCI0024,BELONGS_TO,1.0,Physiology belongs to Biology,-1000
+SCI0034,SCI0024,BELONGS_TO,1.0,Neuroscience belongs to Biology,-1000
+SCI0098,SCI0001,BELONGS_TO,1.0,Earth Sciences belongs to Science,-1000
+SCI0099,SCI0098,BELONGS_TO,1.0,Geology belongs to Earth Sciences,-1000
+SCI0100,SCI0098,BELONGS_TO,1.0,Meteorology belongs to Earth Sciences,-1000
+SCI0101,SCI0098,BELONGS_TO,1.0,Oceanography belongs to Earth Sciences,-1000
+SCI0102,SCI0098,BELONGS_TO,1.0,Paleontology belongs to Earth Sciences,-1000
+SCI0103,SCI0098,BELONGS_TO,1.0,Seismology belongs to Earth Sciences,-1000
+SCI0104,SCI0098,BELONGS_TO,1.0,Volcanology belongs to Earth Sciences,-1000
+SCI0105,SCI0098,BELONGS_TO,1.0,Hydrology belongs to Earth Sciences,-1000
+SCI0106,SCI0098,BELONGS_TO,1.0,Geochemistry belongs to Earth Sciences,-1500
+SCI0107,SCI0098,BELONGS_TO,1.0,Climatology belongs to Earth Sciences,-1000
+SCI0108,SCI0098,BELONGS_TO,1.0,Mineralogy belongs to Earth Sciences,-1000
+SCI0046,SCI0008,BELONGS_TO,1.0,Astronomy belongs to Science,-1800
+SCI0047,SCI0046,BELONGS_TO,1.0,Astrophysics belongs to Astronomy,-600
+SCI0048,SCI0046,BELONGS_TO,1.0,Cosmology belongs to Astronomy,-1000
+SCI0112,SCI0109,BELONGS_TO,1.0,Planetary Science belongs to Astronomy,-1000
+SCI0113,SCI0109,BELONGS_TO,1.0,Stellar Astronomy belongs to Astronomy,-1800
+SCI0114,SCI0109,BELONGS_TO,1.0,Galactic Astronomy belongs to Astronomy,-1800
+SCI0052,SCI0046,BELONGS_TO,1.0,Astrobiology belongs to Astronomy,-400
+SCI0053,SCI0046,BELONGS_TO,1.0,Astrometry belongs to Astronomy,-1000
+SCI0117,SCI0109,BELONGS_TO,1.0,Radio Astronomy belongs to Astronomy,-1800
+SCI0118,SCI0001,BELONGS_TO,1.0,Interdisciplinary/Applied Sciences belongs to Science,-1000
+SCI0119,SCI0118,BELONGS_TO,1.0,Environmental Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0120,SCI0118,BELONGS_TO,1.0,Materials Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0121,SCI0118,BELONGS_TO,1.0,Biophysics belongs to Interdisciplinary/Applied Sciences,-600
+SCI0122,SCI0118,BELONGS_TO,1.0,Bioinformatics belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0123,SCI0118,BELONGS_TO,1.0,Nanotechnology belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0124,SCI0118,BELONGS_TO,1.0,Atmospheric Science belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0125,SCI0118,BELONGS_TO,1.0,Marine Biology belongs to Interdisciplinary/Applied Sciences,-400
+SCI0126,SCI0118,BELONGS_TO,1.0,Geobiology belongs to Interdisciplinary/Applied Sciences,-400
+SCI0127,SCI0118,BELONGS_TO,1.0,Chemical Engineering belongs to Interdisciplinary/Applied Sciences,-1000
+SCI0128,SCI0118,BELONGS_TO,1.0,Computational Science belongs to Interdisciplinary/Applied Sciences,-1000

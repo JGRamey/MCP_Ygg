@@ -1,13 +1,105 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-RELIG001,Religion,root,1,Spiritual and religious beliefs and practices,-2500,animist artifacts,Global,Various,Root concept of spiritual practices,confirmed
-RELIG002,Monotheism,sub_root,2,Belief in single deity,-1300,Torah scrolls,Middle East,Hebrew,Early monotheistic traditions,confirmed
-RELIG003,Judaism,branch,3,Abrahamic monotheistic religion,-1300,Torah scrolls,Middle East,Hebrew,Written in Hebrew 1300 BC,confirmed
-RELIG004,Christianity,branch,3,Christian faith based on Jesus Christ,30,Gospel texts,Middle East,Greek/Aramaic,Founded in 1st century AD,confirmed
-RELIG005,Islam,branch,3,Islamic faith founded by Muhammad,610,Quran,Arabian Peninsula,Arabic,Founded in 7th century AD,confirmed
-RELIG006,Polytheism,sub_root,2,Belief in multiple deities,-2000,Vedas,India,Sanskrit,Multiple deity worship systems,confirmed
-RELIG007,Greek_Mythology,branch,3,Greek polytheistic beliefs,-800,Homer texts,Greece,Greek,Composed in Greek 800 BC,confirmed
-RELIG008,Hinduism,branch,3,Major world religion from India,-1500,Vedas,India,Sanskrit,Composed in Sanskrit 1500 BC,confirmed
-RELIG009,Egyptian_Religion,branch,3,Ancient Egyptian religious practices,-2000,Religious texts,Egypt,Hieroglyphic,Found in Egypt 2000 BC,confirmed
-RELIG010,Non_Theistic_Beliefs,sub_root,2,Spiritual systems without deities,-2500,animist artifacts,Global,Various,Non-deity based spiritual practices,confirmed
-RELIG011,Animism,branch,3,Belief in spirit beings and forces,-2500,animist artifacts,Indus Valley,Various,Practiced in Indus Valley 2500 BC,confirmed
-RELIG012,Buddhism,branch,3,Buddhist teachings and practices,-500,Buddhist texts,India,Pali/Sanskrit,Founded in 5th century BC,confirmed
+RELIG0001,Religion,root,1,Spiritual and religious beliefs and practices,-2500,animist artifacts,Global,Various,Root concept of spiritual practices,confirmed
+RELIG0002,Monotheism,sub_root,2,Belief in single deity,-1300,Torah scrolls,Middle East,Hebrew,Early monotheistic traditions,confirmed
+RELIG0003,Judaism,branch,3,Abrahamic monotheistic religion,-1300,Torah scrolls,Middle East,Hebrew,Written in Hebrew 1300 BC,confirmed
+RELIG0004,Christianity,branch,3,Christian faith based on Jesus Christ,30,Gospel texts,Middle East,Greek/Aramaic,Founded in 1st century AD,confirmed
+RELIG0005,Islam,branch,3,Islamic faith founded by Muhammad,610,Quran,Arabian Peninsula,Arabic,Founded in 7th century AD,confirmed
+RELIG0006,Polytheism,sub_root,2,Belief in multiple deities,-2000,Vedas,India,Sanskrit,Multiple deity worship systems,confirmed
+RELIG0007,Greek_Mythology,branch,3,Greek polytheistic beliefs,-800,Homer texts,Greece,Greek,Composed in Greek 800 BC,confirmed
+RELIG0008,Hinduism,branch,3,Major world religion from India,-1500,Vedas,India,Sanskrit,Composed in Sanskrit 1500 BC,confirmed
+RELIG0009,Egyptian_Religion,branch,3,Ancient Egyptian religious practices,-2000,Religious texts,Egypt,Hieroglyphic,Found in Egypt 2000 BC,confirmed
+RELIG0010,Non_Theistic_Beliefs,sub_root,2,Spiritual systems without deities,-2500,animist artifacts,Global,Various,Non-deity based spiritual practices,confirmed
+RELIG0011,Animism,branch,3,Belief in spirit beings and forces,-2500,animist artifacts,Indus Valley,Various,Practiced in Indus Valley 2500 BC,confirmed
+RELIG0012,Buddhism,branch,3,Buddhist teachings and practices,-500,Buddhist texts,India,Pali/Sanskrit,Founded in 5th century BC,confirmed
+RELIG0013,Monotheistic_Religions,sub_root,2,Major religious category: Monotheistic Religions,-1300,Religious,Global,Various,Religion category,confirmed
+RELIG0014,Zoroastrianism,branch,3,Religious tradition: Zoroastrianism,-600,Religious,Global,Various,Subcategory of Monotheistic Religions,confirmed
+RELIG0015,Sikhism,branch,3,Religious tradition: Sikhism,-2000,Religious,Global,Various,Subcategory of Monotheistic Religions,confirmed
+RELIG0016,Bahá'í_Faith,branch,3,Religious tradition: Bahá'í Faith,-2000,Religious,Global,Various,Subcategory of Monotheistic Religions,confirmed
+RELIG0017,Polytheistic_Religions,sub_root,2,Major religious category: Polytheistic Religions,-3000,Religious,Global,Various,Religion category,confirmed
+RELIG0018,Greek_Religion/Mythology,branch,3,"Greek Religion/Mythology (e.g., Olympian gods, heroic tales)",-800,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0019,Roman_Religion/Mythology,branch,3,"Roman Religion/Mythology (e.g., Jupiter, Mars, adapted Greek myths)",-700,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0020,Norse_Religion/Mythology,branch,3,"Norse Religion/Mythology (e.g., Odin, Thor, Ragnarök)",-200,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0021,Egyptian_Religion/Mythology,branch,3,"Egyptian Religion/Mythology (e.g., Ra, Osiris, afterlife beliefs)",-3100,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0022,Shinto,branch,3,"Shinto (e.g., kami worship, rituals)",-2000,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0023,Indigenous_Polytheistic_Traditions,branch,3,"Indigenous Polytheistic Traditions (e.g., Polynesian, Aztec, Mayan)",-3000,Religious,Global,Various,Subcategory of Polytheistic Religions,confirmed
+RELIG0024,Non-Theistic_Traditions,sub_root,2,Major religious category: Non-Theistic Traditions,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0025,Jainism,branch,3,Religious tradition: Jainism,-2000,Religious,Global,Various,Subcategory of Non-Theistic Traditions,confirmed
+RELIG0026,Confucianism,branch,3,Religious tradition: Confucianism,-2000,Religious,Global,Various,Subcategory of Non-Theistic Traditions,confirmed
+RELIG0027,Taoism,branch,3,Religious tradition: Taoism,-2000,Religious,Global,Various,Subcategory of Non-Theistic Traditions,confirmed
+RELIG0028,Secular_Humanism,branch,3,Religious tradition: Secular Humanism,-2000,Religious,Global,Various,Subcategory of Non-Theistic Traditions,confirmed
+RELIG0029,Atheism_and_Agnosticism,branch,3,Religious tradition: Atheism and Agnosticism,-2000,Religious,Global,Various,Subcategory of Non-Theistic Traditions,confirmed
+RELIG0030,Religious_and_Mythological_Narratives,sub_root,2,Major religious category: Religious and Mythological Narratives,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0031,Creation_Stories,branch,3,"Creation Stories (e.g., Genesis, Hindu Puranas, Aboriginal Dreamtime)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0032,Heroic_Tales,branch,3,"Heroic Tales (e.g., Heracles, Arjuna, Beowulf in Norse Mythology)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0033,Etiological_Stories,branch,3,"Etiological Stories (e.g., explaining natural phenomena, cultural practices)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0034,Eschatological_Stories,branch,3,"Eschatological Stories (e.g., Christian Apocalypse, Norse Ragnarök)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0035,Trickster_Stories,branch,3,"Trickster Stories (e.g., Loki, Anansi, Coyote in Native American traditions)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0036,Flood_Stories,branch,3,"Flood Stories (e.g., Noah’s Ark, Mesopotamian Gilgamesh)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0037,Cosmological_Stories,branch,3,"Cosmological Stories (e.g., structure of universe in Vedic or Greek myths)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Narratives,confirmed
+RELIG0038,Religious_Practices,sub_root,2,Major religious category: Religious Practices,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0039,Prayer,branch,3,"Prayer (e.g., Christian Lord’s Prayer, Islamic Salah)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0040,Meditation,branch,3,"Meditation (e.g., Buddhist mindfulness, Hindu yoga)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0041,Rituals,branch,3,"Rituals (e.g., baptism, Hindu puja, Shinto purification)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0042,Festivals_and_Holy_Days,branch,3,"Festivals and Holy Days (e.g., Diwali, Christmas, Yom Kippur)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0043,Dietary_Laws_and_Fasting,branch,3,"Dietary Laws and Fasting (e.g., kosher, Ramadan, Jain ahimsa)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0044,Rites_of_Passage,branch,3,"Rites of Passage (e.g., bar mitzvah, Hindu samskaras, Greek funerary rites)",-2000,Religious,Global,Various,Subcategory of Religious Practices,confirmed
+RELIG0045,Religious_Texts,sub_root,2,Major religious category: Religious Texts,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0046,Bible,branch,3,"Bible (Old Testament, New Testament)",-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0047,Quran,branch,3,Religious tradition: Quran,-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0048,"Vedas,_Upanishads,_Bhagavad_Gita",branch,3,"Vedas, Upanishads, Bhagavad Gita (Hinduism)",-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0049,Tripitaka,branch,3,Tripitaka (Buddhism),-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0050,"Torah,_Talmud",branch,3,"Torah, Talmud (Judaism)",-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0051,Avesta,branch,3,Avesta (Zoroastrianism),-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0052,Guru_Granth_Sahib,branch,3,Guru Granth Sahib (Sikhism),-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0053,"Homeric_Epics,_Theogony",branch,3,"Homeric Epics, Theogony (Greek Religion/Mythology)",-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0054,Eddas,branch,3,Eddas (Norse Religion/Mythology),-2000,Religious,Global,Various,Subcategory of Religious Texts,confirmed
+RELIG0055,Religious_History,sub_root,2,Major religious category: Religious History,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0056,Origins_of_Traditions,branch,3,"Origins of Traditions (e.g., Vedic period, early Christianity)",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0057,Historical_Development_and_Schisms,branch,3,"Historical Development and Schisms (e.g., Sunni",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0058,"Shia_split,_Protestant_Reformation)",branch,3,"Religious tradition: Shia split, Protestant Reformation)",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0059,Spread_and_Missionary_Activities,branch,3,"Spread and Missionary Activities (e.g., Buddhist missions, Christian Crusades)",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0060,Religious_Conflicts,branch,3,"Religious Conflicts (e.g., Thirty Years’ War, Hindu",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0061,Muslim_tensions),branch,3,Religious tradition: Muslim tensions),-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0062,Revival_Movements,branch,3,"Revival Movements (e.g., Bhakti movement, Great Awakenings)",-2000,Religious,Global,Various,Subcategory of Religious History,confirmed
+RELIG0063,Philosophy_and_Theology,sub_root,2,Major religious category: Philosophy and Theology,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0064,Theology,branch,3,"Theology (study of the divine, e.g., Christian Trinity, Islamic Tawhid)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0065,Theodicy,branch,3,"Theodicy (problem of evil, e.g., Augustine, Hindu karma)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0066,Eschatology,branch,3,"Eschatology (end times, e.g., Islamic Qiyamah, Buddhist Maitreya)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0067,Soteriology,branch,3,"Soteriology (salvation, e.g., Christian grace, Buddhist nirvana)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0068,Ethics_and_Morality,branch,3,"Ethics and Morality (e.g., Confucian virtues, Ten Commandments)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0069,Comparative_Religion,branch,3,Comparative Religion (cross,-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0070,cultural_analysis_of_beliefs),branch,3,Religious tradition: cultural analysis of beliefs),-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0071,Metaphysics,branch,3,"Metaphysics (e.g., Taoist Wu Wei, Platonic influence in Greek thought)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0072,Epistemology,branch,3,"Epistemology (e.g., knowledge in Vedanta, Buddhist skepticism)",-2000,Religious,Global,Various,Subcategory of Philosophy and Theology,confirmed
+RELIG0073,Religious_and_Mythological_Themes,sub_root,2,Major religious category: Religious and Mythological Themes,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0074,Hero’s_Journey,branch,3,"Hero’s Journey (e.g., Odysseus, Rama, Christian pilgrimage)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Themes,confirmed
+RELIG0075,Good_vs._Evil,branch,3,"Good vs. Evil (e.g., Satan vs. God, Ahura Mazda vs. Angra Mainyu)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Themes,confirmed
+RELIG0076,"Life,_Death,_Rebirth",branch,3,"Life, Death, Rebirth (e.g., Osiris, Hindu reincarnation)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Themes,confirmed
+RELIG0077,Fate_and_Destiny,branch,3,"Fate and Destiny (e.g., Greek Moirai, Islamic Qadar)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Themes,confirmed
+RELIG0078,Transformation,branch,3,"Transformation (e.g., Ovid’s Metamorphoses, Buddhist bodhisattva path)",-2000,Religious,Global,Various,Subcategory of Religious and Mythological Themes,confirmed
+RELIG0079,Cultural_Expressions,sub_root,2,Major religious category: Cultural Expressions,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0080,Religious_Architecture,branch,3,"Religious Architecture (e.g., mosques, temples, Norse hofs)",-2000,Religious,Global,Various,Subcategory of Cultural Expressions,confirmed
+RELIG0081,Sacred_Art,branch,3,"Sacred Art (e.g., Christian icons, Hindu mandalas, Egyptian tomb paintings)",-2000,Religious,Global,Various,Subcategory of Cultural Expressions,confirmed
+RELIG0082,Music_and_Chants,branch,3,"Music and Chants (e.g., Gregorian chants, Vedic hymns, Shinto kagura)",-2000,Religious,Global,Various,Subcategory of Cultural Expressions,confirmed
+RELIG0083,Literature_and_Poetry,branch,3,"Literature and Poetry (e.g., Dante, Rumi, Epic of Gilgamesh)",-2000,Religious,Global,Various,Subcategory of Cultural Expressions,confirmed
+RELIG0084,Dance_and_Drama,branch,3,"Dance and Drama (e.g., Kathakali, Greek tragedy, Passion plays)",-2000,Religious,Global,Various,Subcategory of Cultural Expressions,confirmed
+RELIG0085,Societal_Roles,sub_root,2,Major religious category: Societal Roles,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0086,Explanation_of_Phenomena,branch,3,"Explanation of Phenomena (e.g., thunder as Thor’s hammer, Vedic Agni)",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0087,Moral_Instruction,branch,3,"Moral Instruction (e.g., Aesop",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0088,"like_myths,_Buddhist_Jatakas)",branch,3,"Religious tradition: like myths, Buddhist Jatakas)",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0089,Cultural_Identity,branch,3,"Cultural Identity (e.g., Aboriginal myths, Jewish covenant)",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0090,Social_Cohesion,branch,3,"Social Cohesion (e.g., shared rituals, communal storytelling)",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0091,Legitimization_of_Power,branch,3,"Legitimization of Power (e.g., divine kingship in Egypt, Mandate of Heaven)",-2000,Religious,Global,Various,Subcategory of Societal Roles,confirmed
+RELIG0092,Explanation_of_Categories,sub_root,2,Major religious category: Explanation of Categories,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0093,"Monotheistic_Religions:_Belief_systems_centered_on_a_single_deity,_with_major_denominations_included.",sub_root,2,"Major religious category: Monotheistic Religions: Belief systems centered on a single deity, with major denominations included.",-1300,Religious,Global,Various,Religion category,confirmed
+RELIG0094,"Polytheistic_Religions:_Traditions_with_multiple_deities,_integrating_cultural_mythologies_(e.g.,_Greek,_Norse)_as_religious_systems.",sub_root,2,"Major religious category: Polytheistic Religions: Traditions with multiple deities, integrating cultural mythologies (e.g., Greek, Norse) as religious systems.",-800,Religious,Global,Various,Religion category,confirmed
+RELIG0095,"Non-Theistic_Traditions:_Philosophies_and_belief_systems_without_a_deity_focus,_including_secular_ideologies.",sub_root,2,"Major religious category: Non-Theistic Traditions: Philosophies and belief systems without a deity focus, including secular ideologies.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0096,"Religious_and_Mythological_Narratives:_Stories_explaining_origins,_heroes,_or_natural_phenomena,_drawn_from_both_religious_and_mythological_traditions.",sub_root,2,"Major religious category: Religious and Mythological Narratives: Stories explaining origins, heroes, or natural phenomena, drawn from both religious and mythological traditions.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0097,"Religious_Practices:_Practical_expressions_of_faith,_applicable_across_religions_and_myth-based_rituals.",sub_root,2,"Major religious category: Religious Practices: Practical expressions of faith, applicable across religions and myth-based rituals.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0098,"Religious_Texts:_Sacred_writings,_including_mythological_epics_(e.g.,_Eddas)_alongside_canonical_scriptures.",sub_root,2,"Major religious category: Religious Texts: Sacred writings, including mythological epics (e.g., Eddas) alongside canonical scriptures.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0099,"Religious_History:_Historical_evolution,_conflicts,_and_spread_of_religious_and_mythological_traditions.",sub_root,2,"Major religious category: Religious History: Historical evolution, conflicts, and spread of religious and mythological traditions.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0100,"Philosophy_and_Theology:_Intellectual_exploration_of_religious_and_mythological_concepts,_incorporating_philosophical_disciplines.",sub_root,2,"Major religious category: Philosophy and Theology: Intellectual exploration of religious and mythological concepts, incorporating philosophical disciplines.",-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0101,Religious_and_Mythological_Themes:_Universal_motifs_found_in_both_religious_doctrines_and_mythological_stories.,sub_root,2,Major religious category: Religious and Mythological Themes: Universal motifs found in both religious doctrines and mythological stories.,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0102,Cultural_Expressions:_Artistic_and_cultural_outputs_inspired_by_religion_and_mythology.,sub_root,2,Major religious category: Cultural Expressions: Artistic and cultural outputs inspired by religion and mythology.,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0103,Societal_Roles:_Functions_of_religious_and_mythological_narratives_in_shaping_societies_and_cultures.,sub_root,2,Major religious category: Societal Roles: Functions of religious and mythological narratives in shaping societies and cultures.,-2000,Religious,Global,Various,Religion category,confirmed
+RELIG0104,"This_table_consolidates_Religion_and_Mythology_into_a_unified_framework_under_Religion,_ensuring_no_overlap_and_incorporating_philosophical_dimensions_for_a_comprehensive_database_structure.",sub_root,2,"Major religious category: This table consolidates Religion and Mythology into a unified framework under Religion, ensuring no overlap and incorporating philosophical dimensions for a comprehensive database structure.",-2000,Religious,Global,Various,Religion category,confirmed

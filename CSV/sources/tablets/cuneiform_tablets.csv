@@ -1,0 +1,5 @@
+tablet_id,collection_name,museum_number,script_type,language,material,creation_year,excavation_site,current_location,content_type,neo4j_concept_ids,qdrant_collection,qdrant_document_id,translation_status,research_priority
+TAB001,Enuma Elish,K.3473,Cuneiform,Akkadian,Clay,-1100,Nineveh,British Museum,creation_myth,"RELIG006,PHIL002",cuneiform_texts,uuid_placeholder,translated,high
+TAB002,Code of Hammurabi,Sb 8,Cuneiform,Akkadian,Basalt,-1750,Susa,Louvre,legal_code,"PHIL003,PHIL002",cuneiform_texts,uuid_placeholder,translated,high
+TAB003,Epic of Gilgamesh,K.3375,Cuneiform,Akkadian,Clay,-2100,Nineveh,British Museum,epic_literature,"LANG001,RELIG006",cuneiform_texts,uuid_placeholder,translated,high
+TAB004,Mathematical Tablet,YBC 7289,Cuneiform,Akkadian,Clay,-1800,Sippar,Yale,mathematical,"MATH002,MATH005",cuneiform_texts,uuid_placeholder,translated,medium

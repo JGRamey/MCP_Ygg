@@ -1,0 +1,4 @@
+article_id,title,authors,journal,publication_year,volume,issue,pages,doi,neo4j_concept_ids,qdrant_collection,qdrant_document_id,access_status,research_priority
+ART001,The Silurian Hypothesis,Adam Frank; Gavin Schmidt,International Journal of Astrobiology,2018,17,2,112-119,10.1017/S1473550417000362,"TECH002,SCI001",modern_research,uuid_placeholder,open_access,high
+ART002,Decipherment of Linear B,Michael Ventris,Journal of Hellenic Studies,1953,73,,,,"LANG002,PHIL001",modern_research,uuid_placeholder,academic,medium
+ART003,Quantum Mechanics Foundations,Werner Heisenberg,Zeitschrift für Physik,1925,33,8-9,879-893,,"SCI001,MATH001",modern_research,uuid_placeholder,academic,high

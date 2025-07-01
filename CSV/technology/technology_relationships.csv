@@ -1,2 +1,8 @@
 source_id,target_id,relationship_type,strength,description,time_period
-TECH002,TECH001,BELONGS_TO,1.0,Early_Tool_Use belongs to Technology,-2600000
+TECH0008,TECH0007,BELONGS_TO,1.0,Early_Tool_Use belongs to Technology,-2600000
+TECH0003,TECH0001,BELONGS_TO,1.0,Silurian Hypothesis belongs to Technology,-65000000
+TECH0004,TECH0001,BELONGS_TO,1.0,"Abusir, Egypt (Drill Holes) belongs to Technology",-2500
+TECH0005,TECH0001,BELONGS_TO,1.0,"Puma Punku, Bolivia belongs to Technology",600
+TECH0006,TECH0001,BELONGS_TO,1.0,"Göbekli Tepe, Turkey belongs to Technology",-9600
+TECH0007,TECH0001,BELONGS_TO,1.0,Antikythera Mechanism belongs to Technology,-100
+TECH0008,TECH0001,BELONGS_TO,1.0,Roman Concrete belongs to Technology,-753

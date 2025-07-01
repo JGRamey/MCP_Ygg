@@ -1,0 +1,5 @@
+sync_id,neo4j_concept_id,qdrant_collection,qdrant_document_id,source_type,source_id,sync_status,last_updated,vector_dimensions,embedding_model,content_hash
+SYNC001,PHIL004,classical_texts,uuid_plato_republic,book,BOOK001,synced,2025-01-01T00:00:00Z,768,text-embedding-ada-002,sha256_placeholder
+SYNC002,RELIG003,ancient_texts,uuid_dead_sea_scrolls,manuscript,MAN001,synced,2025-01-01T00:00:00Z,768,text-embedding-ada-002,sha256_placeholder
+SYNC003,MATH005,mathematical_texts,uuid_euclid_elements,book,BOOK003,pending,2025-01-01T00:00:00Z,768,text-embedding-ada-002,sha256_placeholder
+SYNC004,TECH002,cuneiform_texts,uuid_hammurabi_code,tablet,TAB002,synced,2025-01-01T00:00:00Z,768,text-embedding-ada-002,sha256_placeholder

@@ -1,2 +1,98 @@
 source_id,target_id,relationship_type,strength,description,time_period
-ART002,ART001,BELONGS_TO,1.0,Cave_Paintings belongs to Art,-40000
+ART0019,ART0008,BELONGS_TO,1.0,Cave_Paintings belongs to Art,-40000
+ART0003,ART0001,BELONGS_TO,1.0,Visual Arts belongs to Art,-40000
+ART0004,ART0003,BELONGS_TO,1.0,Paintings belongs to Visual Arts,-40000
+ART0005,ART0003,BELONGS_TO,1.0,Sculpture belongs to Visual Arts,-35000
+ART0006,ART0003,BELONGS_TO,1.0,Drawing belongs to Visual Arts,-40000
+ART0007,ART0003,BELONGS_TO,1.0,Printmaking belongs to Visual Arts,200
+ART0008,ART0003,BELONGS_TO,1.0,Photography belongs to Visual Arts,1826
+ART0009,ART0003,BELONGS_TO,1.0,Digital Art belongs to Visual Arts,1960
+ART0010,ART0003,BELONGS_TO,1.0,Mixed Media belongs to Visual Arts,-5000
+ART0011,ART0003,BELONGS_TO,1.0,Installation Art belongs to Visual Arts,1950
+ART0012,ART0003,BELONGS_TO,1.0,Video Art belongs to Visual Arts,1960
+ART0012,ART0008,BELONGS_TO,1.0,Architecture belongs to Art,-40000
+ART0014,ART0013,BELONGS_TO,1.0,Classical Architecture belongs to Architecture,-10000
+ART0015,ART0013,BELONGS_TO,1.0,Gothic Architecture belongs to Architecture,-10000
+ART0016,ART0013,BELONGS_TO,1.0,Renaissance Architecture belongs to Architecture,-10000
+ART0017,ART0013,BELONGS_TO,1.0,Modern Architecture belongs to Architecture,-10000
+ART0018,ART0013,BELONGS_TO,1.0,Postmodern Architecture belongs to Architecture,-10000
+ART0019,ART0013,BELONGS_TO,1.0,Sustainable Architecture belongs to Architecture,-10000
+ART0020,ART0013,BELONGS_TO,1.0,Landscape Architecture belongs to Architecture,-10000
+ART0021,ART0001,BELONGS_TO,1.0,Performing Arts belongs to Art,-40000
+ART0022,ART0021,BELONGS_TO,1.0,Music belongs to Performing Arts,-40000
+ART0023,ART0021,BELONGS_TO,1.0,Dance belongs to Performing Arts,-30000
+ART0024,ART0021,BELONGS_TO,1.0,Theatre belongs to Performing Arts,-2500
+ART0025,ART0021,BELONGS_TO,1.0,Performance Art belongs to Performing Arts,1950
+ART0026,ART0021,BELONGS_TO,1.0,Circus Arts belongs to Performing Arts,-5000
+ART0027,ART0001,BELONGS_TO,1.0,Literary Arts belongs to Art,-40000
+ART0028,ART0027,BELONGS_TO,1.0,Poetry belongs to Literary Arts,-5000
+ART0029,ART0027,BELONGS_TO,1.0,Prose belongs to Literary Arts,-5000
+ART0030,ART0027,BELONGS_TO,1.0,Playwriting belongs to Literary Arts,-5000
+ART0031,ART0027,BELONGS_TO,1.0,Screenwriting belongs to Literary Arts,-5000
+ART0032,ART0001,BELONGS_TO,1.0,Applied Arts belongs to Art,-40000
+ART0033,ART0032,BELONGS_TO,1.0,Graphic Design belongs to Applied Arts,-5000
+ART0034,ART0032,BELONGS_TO,1.0,Fashion Design belongs to Applied Arts,-5000
+ART0035,ART0032,BELONGS_TO,1.0,Industrial Design belongs to Applied Arts,-5000
+ART0036,ART0032,BELONGS_TO,1.0,Interior Design belongs to Applied Arts,-5000
+ART0037,ART0032,BELONGS_TO,1.0,Ceramic Arts belongs to Applied Arts,-5000
+ART0038,ART0032,BELONGS_TO,1.0,Jewelry Design belongs to Applied Arts,-5000
+ART0039,ART0001,BELONGS_TO,1.0,Cinematic Arts belongs to Art,-40000
+ART0040,ART0039,BELONGS_TO,1.0,Film Directing belongs to Cinematic Arts,1890
+ART0041,ART0039,BELONGS_TO,1.0,Cinematography belongs to Cinematic Arts,-5000
+ART0042,ART0039,BELONGS_TO,1.0,Film Editing belongs to Cinematic Arts,1890
+ART0043,ART0039,BELONGS_TO,1.0,Animation belongs to Cinematic Arts,-5000
+ART0044,ART0039,BELONGS_TO,1.0,Sound Design belongs to Cinematic Arts,-5000
+ART0045,ART0001,BELONGS_TO,1.0,Folk and Traditional Arts belongs to Art,-40000
+ART0046,ART0045,BELONGS_TO,1.0,Textile Arts belongs to Folk and Traditional Arts,-5000
+ART0047,ART0045,BELONGS_TO,1.0,Calligraphy belongs to Folk and Traditional Arts,-5000
+ART0048,ART0045,BELONGS_TO,1.0,Folk Music belongs to Folk and Traditional Arts,-40000
+ART0049,ART0045,BELONGS_TO,1.0,Traditional Dance belongs to Folk and Traditional Arts,-30000
+ART0050,ART0045,BELONGS_TO,1.0,Craft Arts belongs to Folk and Traditional Arts,-5000
+ART0051,ART0001,BELONGS_TO,1.0,Visual Arts belongs to Art,-40000
+ART0052,ART0051,BELONGS_TO,1.0,Paintings belongs to Visual Arts,-40000
+ART0053,ART0051,BELONGS_TO,1.0,Sculpture belongs to Visual Arts,-35000
+ART0054,ART0051,BELONGS_TO,1.0,Drawing belongs to Visual Arts,-40000
+ART0055,ART0051,BELONGS_TO,1.0,Printmaking belongs to Visual Arts,200
+ART0056,ART0051,BELONGS_TO,1.0,Photography belongs to Visual Arts,1826
+ART0057,ART0051,BELONGS_TO,1.0,Digital Art belongs to Visual Arts,1960
+ART0058,ART0051,BELONGS_TO,1.0,Mixed Media belongs to Visual Arts,-5000
+ART0059,ART0051,BELONGS_TO,1.0,Installation Art belongs to Visual Arts,1950
+ART0060,ART0051,BELONGS_TO,1.0,Video Art belongs to Visual Arts,1960
+ART0012,ART0008,BELONGS_TO,1.0,Architecture belongs to Art,-40000
+ART0062,ART0061,BELONGS_TO,1.0,Classical Architecture belongs to Architecture,-10000
+ART0063,ART0061,BELONGS_TO,1.0,Gothic Architecture belongs to Architecture,-10000
+ART0064,ART0061,BELONGS_TO,1.0,Renaissance Architecture belongs to Architecture,-10000
+ART0065,ART0061,BELONGS_TO,1.0,Modern Architecture belongs to Architecture,-10000
+ART0066,ART0061,BELONGS_TO,1.0,Postmodern Architecture belongs to Architecture,-10000
+ART0067,ART0061,BELONGS_TO,1.0,Sustainable Architecture belongs to Architecture,-10000
+ART0068,ART0061,BELONGS_TO,1.0,Landscape Architecture belongs to Architecture,-10000
+ART0069,ART0001,BELONGS_TO,1.0,Performing Arts belongs to Art,-40000
+ART0070,ART0069,BELONGS_TO,1.0,Music belongs to Performing Arts,-40000
+ART0071,ART0069,BELONGS_TO,1.0,Dance belongs to Performing Arts,-30000
+ART0072,ART0069,BELONGS_TO,1.0,Theatre belongs to Performing Arts,-2500
+ART0073,ART0069,BELONGS_TO,1.0,Performance Art belongs to Performing Arts,1950
+ART0074,ART0069,BELONGS_TO,1.0,Circus Arts belongs to Performing Arts,-5000
+ART0075,ART0001,BELONGS_TO,1.0,Literary Arts belongs to Art,-40000
+ART0076,ART0075,BELONGS_TO,1.0,Poetry belongs to Literary Arts,-5000
+ART0077,ART0075,BELONGS_TO,1.0,Prose belongs to Literary Arts,-5000
+ART0078,ART0075,BELONGS_TO,1.0,Playwriting belongs to Literary Arts,-5000
+ART0079,ART0075,BELONGS_TO,1.0,Screenwriting belongs to Literary Arts,-5000
+ART0080,ART0001,BELONGS_TO,1.0,Applied Arts belongs to Art,-40000
+ART0081,ART0080,BELONGS_TO,1.0,Graphic Design belongs to Applied Arts,-5000
+ART0082,ART0080,BELONGS_TO,1.0,Fashion Design belongs to Applied Arts,-5000
+ART0083,ART0080,BELONGS_TO,1.0,Industrial Design belongs to Applied Arts,-5000
+ART0084,ART0080,BELONGS_TO,1.0,Interior Design belongs to Applied Arts,-5000
+ART0085,ART0080,BELONGS_TO,1.0,Ceramic Arts belongs to Applied Arts,-5000
+ART0086,ART0080,BELONGS_TO,1.0,Jewelry Design belongs to Applied Arts,-5000
+ART0087,ART0001,BELONGS_TO,1.0,Cinematic Arts belongs to Art,-40000
+ART0088,ART0087,BELONGS_TO,1.0,Film Directing belongs to Cinematic Arts,1890
+ART0089,ART0087,BELONGS_TO,1.0,Cinematography belongs to Cinematic Arts,-5000
+ART0090,ART0087,BELONGS_TO,1.0,Film Editing belongs to Cinematic Arts,1890
+ART0091,ART0087,BELONGS_TO,1.0,Animation belongs to Cinematic Arts,-5000
+ART0092,ART0087,BELONGS_TO,1.0,Sound Design belongs to Cinematic Arts,-5000
+ART0093,ART0001,BELONGS_TO,1.0,Folk and Traditional Arts belongs to Art,-40000
+ART0094,ART0093,BELONGS_TO,1.0,Textile Arts belongs to Folk and Traditional Arts,-5000
+ART0095,ART0093,BELONGS_TO,1.0,Calligraphy belongs to Folk and Traditional Arts,-5000
+ART0096,ART0093,BELONGS_TO,1.0,Folk Music belongs to Folk and Traditional Arts,-40000
+ART0097,ART0093,BELONGS_TO,1.0,Traditional Dance belongs to Folk and Traditional Arts,-30000
+ART0098,ART0093,BELONGS_TO,1.0,Craft Arts belongs to Folk and Traditional Arts,-5000

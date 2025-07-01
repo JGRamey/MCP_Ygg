@@ -2,3 +2,113 @@ source_id,target_id,relationship_type,strength,description,time_period
 MATH002,MATH001,BELONGS_TO,1.0,Early Arithmetic belongs to Mathematics,-20000
 MATH003,MATH002,BELONGS_TO,1.0,Tally Systems belong to Early Arithmetic,-20000
 MATH_PERS002,MATH005,DEVELOPED,1.0,Euclid developed systematic geometry,-300
+MATH0006,MATH0001,BELONGS_TO,1.0,Pure Mathematics belongs to Mathematics,-3000
+MATH0007,MATH0006,BELONGS_TO,1.0,Group Theory belongs to Pure Mathematics,-1000
+MATH0008,MATH0006,BELONGS_TO,1.0,Ring Theory belongs to Pure Mathematics,-1000
+MATH0009,MATH0006,BELONGS_TO,1.0,Field Theory belongs to Pure Mathematics,-1000
+MATH0010,MATH0006,BELONGS_TO,1.0,Linear Algebra belongs to Pure Mathematics,-1800
+MATH0011,MATH0006,BELONGS_TO,1.0,Abstract Algebra belongs to Pure Mathematics,-1800
+MATH0012,MATH0006,BELONGS_TO,1.0,Calculus belongs to Pure Mathematics,1665
+MATH0013,MATH0006,BELONGS_TO,1.0,Real Analysis belongs to Pure Mathematics,1821
+MATH0014,MATH0006,BELONGS_TO,1.0,Complex Analysis belongs to Pure Mathematics,1821
+MATH0015,MATH0006,BELONGS_TO,1.0,Functional Analysis belongs to Pure Mathematics,1821
+MATH0016,MATH0006,BELONGS_TO,1.0,Harmonic Analysis belongs to Pure Mathematics,1821
+MATH0017,MATH0006,BELONGS_TO,1.0,Euclidean Geometry belongs to Pure Mathematics,-3000
+MATH0018,MATH0006,BELONGS_TO,1.0,Differential Geometry belongs to Pure Mathematics,-3000
+MATH0019,MATH0006,BELONGS_TO,1.0,Algebraic Geometry belongs to Pure Mathematics,-3000
+MATH0020,MATH0006,BELONGS_TO,1.0,Topology belongs to Pure Mathematics,1736
+MATH0021,MATH0006,BELONGS_TO,1.0,Manifold Theory belongs to Pure Mathematics,-1000
+MATH0022,MATH0006,BELONGS_TO,1.0,Analytic Number Theory belongs to Pure Mathematics,-500
+MATH0023,MATH0006,BELONGS_TO,1.0,Algebraic Number Theory belongs to Pure Mathematics,-1800
+MATH0024,MATH0006,BELONGS_TO,1.0,Arithmetic Geometry belongs to Pure Mathematics,-20000
+MATH0025,MATH0006,BELONGS_TO,1.0,General Topology belongs to Pure Mathematics,1736
+MATH0026,MATH0006,BELONGS_TO,1.0,Algebraic Topology belongs to Pure Mathematics,-1800
+MATH0027,MATH0006,BELONGS_TO,1.0,Differential Topology belongs to Pure Mathematics,1736
+MATH0028,MATH0001,BELONGS_TO,1.0,Applied Mathematics belongs to Mathematics,-1000
+MATH0029,MATH0028,BELONGS_TO,1.0,Probability Theory belongs to Applied Mathematics,-1000
+MATH0030,MATH0028,BELONGS_TO,1.0,Statistical Inference belongs to Applied Mathematics,-1000
+MATH0031,MATH0028,BELONGS_TO,1.0,Data Analysis belongs to Applied Mathematics,1821
+MATH0032,MATH0028,BELONGS_TO,1.0,Biostatistics belongs to Applied Mathematics,1663
+MATH0033,MATH0028,BELONGS_TO,1.0,Econometrics belongs to Applied Mathematics,-1000
+MATH0034,MATH0028,BELONGS_TO,1.0,Quantum Mechanics belongs to Applied Mathematics,-1000
+MATH0035,MATH0028,BELONGS_TO,1.0,Relativity belongs to Applied Mathematics,-1000
+MATH0036,MATH0028,BELONGS_TO,1.0,Statistical Mechanics belongs to Applied Mathematics,-1000
+MATH0037,MATH0028,BELONGS_TO,1.0,Optimization belongs to Applied Mathematics,-1000
+MATH0038,MATH0028,BELONGS_TO,1.0,Linear Programming belongs to Applied Mathematics,-1000
+MATH0039,MATH0028,BELONGS_TO,1.0,Queueing Theory belongs to Applied Mathematics,-1000
+MATH0040,MATH0028,BELONGS_TO,1.0,Decision Theory belongs to Applied Mathematics,-1000
+MATH0041,MATH0028,BELONGS_TO,1.0,Numerical Methods belongs to Applied Mathematics,-1000
+MATH0042,MATH0028,BELONGS_TO,1.0,Computational Linear Algebra belongs to Applied Mathematics,-1800
+MATH0043,MATH0028,BELONGS_TO,1.0,Finite Element Methods belongs to Applied Mathematics,-1000
+MATH0044,MATH0028,BELONGS_TO,1.0,Population Dynamics belongs to Applied Mathematics,-1000
+MATH0045,MATH0028,BELONGS_TO,1.0,Epidemiology belongs to Applied Mathematics,-1000
+MATH0046,MATH0028,BELONGS_TO,1.0,Systems Biology belongs to Applied Mathematics,-1000
+MATH0045,MATH0005,BELONGS_TO,1.0,Interdisciplinary belongs to Mathematics,-300
+MATH0048,MATH0047,BELONGS_TO,1.0,Set Theory belongs to Interdisciplinary,-1000
+MATH0049,MATH0047,BELONGS_TO,1.0,Model Theory belongs to Interdisciplinary,-1000
+MATH0050,MATH0047,BELONGS_TO,1.0,Proof Theory belongs to Interdisciplinary,-1000
+MATH0051,MATH0047,BELONGS_TO,1.0,Computability Theory belongs to Interdisciplinary,-1000
+MATH0052,MATH0047,BELONGS_TO,1.0,Enumerative Combinatorics belongs to Interdisciplinary,-300
+MATH0053,MATH0047,BELONGS_TO,1.0,Graph Theory belongs to Interdisciplinary,-1000
+MATH0054,MATH0047,BELONGS_TO,1.0,Design Theory belongs to Interdisciplinary,-1000
+MATH0055,MATH0047,BELONGS_TO,1.0,Symmetric Key Cryptography belongs to Interdisciplinary,-400
+MATH0056,MATH0047,BELONGS_TO,1.0,Public Key Cryptography belongs to Interdisciplinary,-400
+MATH0056,MATH0045,BELONGS_TO,1.0,Cryptanalysis belongs to Interdisciplinary,1821
+MATH0058,MATH0047,BELONGS_TO,1.0,Cooperative Game Theory belongs to Interdisciplinary,1944
+MATH0059,MATH0047,BELONGS_TO,1.0,Cooperative Game Theory belongs to Interdisciplinary,1944
+MATH0060,MATH0047,BELONGS_TO,1.0,Evolutionary Game Theory belongs to Interdisciplinary,1944
+MATH0061,MATH0001,BELONGS_TO,1.0,Pure Mathematics belongs to Mathematics,-3000
+MATH0062,MATH0061,BELONGS_TO,1.0,Group Theory belongs to Pure Mathematics,-1000
+MATH0063,MATH0061,BELONGS_TO,1.0,Ring Theory belongs to Pure Mathematics,-1000
+MATH0064,MATH0061,BELONGS_TO,1.0,Field Theory belongs to Pure Mathematics,-1000
+MATH0065,MATH0061,BELONGS_TO,1.0,Linear Algebra belongs to Pure Mathematics,-1800
+MATH0066,MATH0061,BELONGS_TO,1.0,Abstract Algebra belongs to Pure Mathematics,-1800
+MATH0067,MATH0061,BELONGS_TO,1.0,Calculus belongs to Pure Mathematics,1665
+MATH0068,MATH0061,BELONGS_TO,1.0,Real Analysis belongs to Pure Mathematics,1821
+MATH0069,MATH0061,BELONGS_TO,1.0,Complex Analysis belongs to Pure Mathematics,1821
+MATH0070,MATH0061,BELONGS_TO,1.0,Functional Analysis belongs to Pure Mathematics,1821
+MATH0071,MATH0061,BELONGS_TO,1.0,Harmonic Analysis belongs to Pure Mathematics,1821
+MATH0072,MATH0061,BELONGS_TO,1.0,Euclidean Geometry belongs to Pure Mathematics,-3000
+MATH0073,MATH0061,BELONGS_TO,1.0,Differential Geometry belongs to Pure Mathematics,-3000
+MATH0074,MATH0061,BELONGS_TO,1.0,Algebraic Geometry belongs to Pure Mathematics,-3000
+MATH0075,MATH0061,BELONGS_TO,1.0,Topology belongs to Pure Mathematics,1736
+MATH0076,MATH0061,BELONGS_TO,1.0,Manifold Theory belongs to Pure Mathematics,-1000
+MATH0077,MATH0061,BELONGS_TO,1.0,Analytic Number Theory belongs to Pure Mathematics,-500
+MATH0078,MATH0061,BELONGS_TO,1.0,Algebraic Number Theory belongs to Pure Mathematics,-1800
+MATH0079,MATH0061,BELONGS_TO,1.0,Arithmetic Geometry belongs to Pure Mathematics,-20000
+MATH0080,MATH0061,BELONGS_TO,1.0,General Topology belongs to Pure Mathematics,1736
+MATH0081,MATH0061,BELONGS_TO,1.0,Algebraic Topology belongs to Pure Mathematics,-1800
+MATH0082,MATH0061,BELONGS_TO,1.0,Differential Topology belongs to Pure Mathematics,1736
+MATH0083,MATH0001,BELONGS_TO,1.0,Applied Mathematics belongs to Mathematics,-1000
+MATH0084,MATH0083,BELONGS_TO,1.0,Probability Theory belongs to Applied Mathematics,-1000
+MATH0085,MATH0083,BELONGS_TO,1.0,Statistical Inference belongs to Applied Mathematics,-1000
+MATH0086,MATH0083,BELONGS_TO,1.0,Data Analysis belongs to Applied Mathematics,1821
+MATH0087,MATH0083,BELONGS_TO,1.0,Biostatistics belongs to Applied Mathematics,1663
+MATH0088,MATH0083,BELONGS_TO,1.0,Econometrics belongs to Applied Mathematics,-1000
+MATH0089,MATH0083,BELONGS_TO,1.0,Quantum Mechanics belongs to Applied Mathematics,-1000
+MATH0090,MATH0083,BELONGS_TO,1.0,Relativity belongs to Applied Mathematics,-1000
+MATH0091,MATH0083,BELONGS_TO,1.0,Statistical Mechanics belongs to Applied Mathematics,-1000
+MATH0092,MATH0083,BELONGS_TO,1.0,Optimization belongs to Applied Mathematics,-1000
+MATH0093,MATH0083,BELONGS_TO,1.0,Linear Programming belongs to Applied Mathematics,-1000
+MATH0094,MATH0083,BELONGS_TO,1.0,Queueing Theory belongs to Applied Mathematics,-1000
+MATH0095,MATH0083,BELONGS_TO,1.0,Decision Theory belongs to Applied Mathematics,-1000
+MATH0096,MATH0083,BELONGS_TO,1.0,Numerical Methods belongs to Applied Mathematics,-1000
+MATH0097,MATH0083,BELONGS_TO,1.0,Computational Linear Algebra belongs to Applied Mathematics,-1800
+MATH0098,MATH0083,BELONGS_TO,1.0,Finite Element Methods belongs to Applied Mathematics,-1000
+MATH0099,MATH0083,BELONGS_TO,1.0,Population Dynamics belongs to Applied Mathematics,-1000
+MATH0100,MATH0083,BELONGS_TO,1.0,Epidemiology belongs to Applied Mathematics,-1000
+MATH0101,MATH0083,BELONGS_TO,1.0,Systems Biology belongs to Applied Mathematics,-1000
+MATH0045,MATH0005,BELONGS_TO,1.0,Interdisciplinary belongs to Mathematics,-300
+MATH0103,MATH0102,BELONGS_TO,1.0,Set Theory belongs to Interdisciplinary,-1000
+MATH0104,MATH0102,BELONGS_TO,1.0,Model Theory belongs to Interdisciplinary,-1000
+MATH0105,MATH0102,BELONGS_TO,1.0,Proof Theory belongs to Interdisciplinary,-1000
+MATH0106,MATH0102,BELONGS_TO,1.0,Computability Theory belongs to Interdisciplinary,-1000
+MATH0107,MATH0102,BELONGS_TO,1.0,Enumerative Combinatorics belongs to Interdisciplinary,-300
+MATH0108,MATH0102,BELONGS_TO,1.0,Graph Theory belongs to Interdisciplinary,-1000
+MATH0109,MATH0102,BELONGS_TO,1.0,Design Theory belongs to Interdisciplinary,-1000
+MATH0110,MATH0102,BELONGS_TO,1.0,Symmetric Key Cryptography belongs to Interdisciplinary,-400
+MATH0111,MATH0102,BELONGS_TO,1.0,Public Key Cryptography belongs to Interdisciplinary,-400
+MATH0056,MATH0045,BELONGS_TO,1.0,Cryptanalysis belongs to Interdisciplinary,1821
+MATH0113,MATH0102,BELONGS_TO,1.0,Cooperative Game Theory belongs to Interdisciplinary,1944
+MATH0114,MATH0102,BELONGS_TO,1.0,Cooperative Game Theory belongs to Interdisciplinary,1944
+MATH0115,MATH0102,BELONGS_TO,1.0,Evolutionary Game Theory belongs to Interdisciplinary,1944

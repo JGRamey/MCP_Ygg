@@ -1,0 +1,5 @@
+book_id,title,author,language,publication_year,publisher,isbn,edition,page_count,neo4j_concept_ids,qdrant_collection,qdrant_document_id,digitization_status,copyright_status,research_priority
+BOOK001,The Republic,Plato,Greek,-380,Ancient,none,original,unknown,"PHIL004,PHIL008",classical_texts,uuid_placeholder,public_domain,public_domain,high
+BOOK002,Nicomachean Ethics,Aristotle,Greek,-340,Ancient,none,original,unknown,"PHIL005,PHIL008",classical_texts,uuid_placeholder,public_domain,public_domain,high
+BOOK003,Euclid's Elements,Euclid,Greek,-300,Ancient,none,original,unknown,"MATH005,MATH001",mathematical_texts,uuid_placeholder,public_domain,public_domain,high
+BOOK004,Natural History,Pliny the Elder,Latin,77,Ancient,none,original,unknown,"SCI001,SCI002",scientific_texts,uuid_placeholder,public_domain,public_domain,medium

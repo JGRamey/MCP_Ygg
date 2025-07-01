@@ -4,3 +4,49 @@ PHIL003,PHIL002,BELONGS_TO,1.0,Moral Guidelines belong to Early Wisdom,-2600
 PHIL004,PHIL003,BELONGS_TO,1.0,Ptahhotep Instructions are Moral Guidelines,-2400
 PHIL_PERS004,PHIL_PERS003,STUDENT_OF,1.0,Plato was student of Socrates,-400
 PHIL_PERS005,PHIL_PERS004,STUDENT_OF,1.0,Aristotle was student of Plato,-350
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy belongs to Philosophy,-600
+PHIL0029,PHIL0001,BELONGS_TO,1.0,Metaphysics belongs to Philosophy,-350
+PHIL0013,PHIL0011,BELONGS_TO,1.0,- Ontology belongs to Philosophy,-600
+PHIL0003,PHIL0001,BELONGS_TO,1.0,Epistemology belongs to Philosophy,-400
+PHIL0028,PHIL0001,BELONGS_TO,1.0,Ethics belongs to Philosophy,-2400
+PHIL0016,PHIL0011,BELONGS_TO,1.0,- Philosophy of Law belongs to Philosophy,-600
+PHIL0005,PHIL0001,BELONGS_TO,1.0,Aesthetics belongs to Philosophy,-600
+PHIL0006,PHIL0001,BELONGS_TO,1.0,Logic belongs to Philosophy,-350
+PHIL0019,PHIL0011,BELONGS_TO,1.0,Political Philosophy belongs to Philosophy,-400
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Mind belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Science belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Language belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Religion belongs to Philosophy,-2500
+PHIL0013,PHIL0001,BELONGS_TO,1.0,Mythology belongs to Philosophy,-600
+PHIL0014,PHIL0001,BELONGS_TO,1.0,Existentialism belongs to Philosophy,1841
+PHIL0015,PHIL0001,BELONGS_TO,1.0,Phenomenology belongs to Philosophy,-600
+PHIL0016,PHIL0001,BELONGS_TO,1.0,Pragmatism belongs to Philosophy,-600
+PHIL0017,PHIL0001,BELONGS_TO,1.0,Notes belongs to Philosophy,-600
+PHIL0029,PHIL0001,BELONGS_TO,1.0,"Metaphysics includes Ontology as a nested subfield, as it specifically addresses the nature of being and existence. belongs to Philosophy",-350
+PHIL0028,PHIL0001,BELONGS_TO,1.0,"Ethics encompasses Philosophy of Law, which explores the philosophical foundations of legal systems and justice, distinct from but related to broader ethical study. belongs to Philosophy",-2400
+PHIL0001,PHIL0001,BELONGS_TO,1.0,"Philosophy of Religion incorporates the philosophical aspects of religion, while Mythology is listed separately to highlight its focus on myths and their cultural or philosophical implications. belongs to Philosophy",-2500
+PHIL0014,PHIL0001,BELONGS_TO,1.0,"Existentialism, Phenomenology, and Pragmatism are included as notable schools of thought or movements within philosophy, each with a unique approach. belongs to Philosophy",1841
+PHIL0033,PHIL0001,BELONGS_TO,1.0,This table provides a solid foundation for your Philosophy database. You can further expand it by adding subfields like Philosophy of History or Philosophy of Mathematics if needed. belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy belongs to Philosophy,-600
+PHIL0029,PHIL0001,BELONGS_TO,1.0,Metaphysics belongs to Philosophy,-350
+PHIL0036,PHIL0034,BELONGS_TO,1.0,- Ontology belongs to Philosophy,-600
+PHIL0003,PHIL0001,BELONGS_TO,1.0,Epistemology belongs to Philosophy,-400
+PHIL0028,PHIL0001,BELONGS_TO,1.0,Ethics belongs to Philosophy,-2400
+PHIL0039,PHIL0034,BELONGS_TO,1.0,- Philosophy of Law belongs to Philosophy,-600
+PHIL0005,PHIL0001,BELONGS_TO,1.0,Aesthetics belongs to Philosophy,-600
+PHIL0006,PHIL0001,BELONGS_TO,1.0,Logic belongs to Philosophy,-350
+PHIL0042,PHIL0034,BELONGS_TO,1.0,Political Philosophy belongs to Philosophy,-400
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Mind belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Science belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Language belongs to Philosophy,-600
+PHIL0001,PHIL0001,BELONGS_TO,1.0,Philosophy of Religion belongs to Philosophy,-2500
+PHIL0013,PHIL0001,BELONGS_TO,1.0,Mythology belongs to Philosophy,-600
+PHIL0014,PHIL0001,BELONGS_TO,1.0,Existentialism belongs to Philosophy,1841
+PHIL0015,PHIL0001,BELONGS_TO,1.0,Phenomenology belongs to Philosophy,-600
+PHIL0016,PHIL0001,BELONGS_TO,1.0,Pragmatism belongs to Philosophy,-600
+PHIL0017,PHIL0001,BELONGS_TO,1.0,Notes belongs to Philosophy,-600
+PHIL0029,PHIL0001,BELONGS_TO,1.0,"Metaphysics includes Ontology as a nested subfield, as it specifically addresses the nature of being and existence. belongs to Philosophy",-350
+PHIL0028,PHIL0001,BELONGS_TO,1.0,"Ethics encompasses Philosophy of Law, which explores the philosophical foundations of legal systems and justice, distinct from but related to broader ethical study. belongs to Philosophy",-2400
+PHIL0001,PHIL0001,BELONGS_TO,1.0,"Philosophy of Religion incorporates the philosophical aspects of religion, while Mythology is listed separately to highlight its focus on myths and their cultural or philosophical implications. belongs to Philosophy",-2500
+PHIL0014,PHIL0001,BELONGS_TO,1.0,"Existentialism, Phenomenology, and Pragmatism are included as notable schools of thought or movements within philosophy, each with a unique approach. belongs to Philosophy",1841
+PHIL0056,PHIL0001,BELONGS_TO,1.0,This table provides a solid foundation for your Philosophy database. You can further expand it by adding subfields like Philosophy of History or Philosophy of Mathematics if needed. belongs to Philosophy,-600

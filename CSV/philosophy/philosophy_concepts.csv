@@ -1,11 +1,31 @@
 concept_id,name,type,level,description,earliest_evidence_date,earliest_evidence_type,location,language,properties,research_status
-PHIL001,Philosophy,root,1,Love of wisdom and rational inquiry,-2600,Sumerian tablets,Global,Various,Root concept of rational thought,confirmed
-PHIL002,Early_Wisdom_Traditions,sub_root,2,Ancient moral and ethical teachings,-2600,Sumerian tablets,Mesopotamia,Cuneiform,Earliest philosophical writings,confirmed
-PHIL003,Moral_Guidelines,branch,3,Early ethical instructions,-2600,Ptahhotep Instructions,Egypt/Mesopotamia,Hieratic/Cuneiform,Ancient moral teachings,confirmed
-PHIL004,Ptahhotep_Instructions,sub_branch,4,Ancient Egyptian wisdom literature,-2400,Papyrus texts,Egypt,Hieratic,Written in hieratic 2400 BC,confirmed
-PHIL005,Shuruppak_Wisdom,sub_branch,4,Sumerian wisdom literature,-2600,Clay tablets,Mesopotamia,Cuneiform,Written in cuneiform 2600 BC,confirmed
-PHIL006,Pre_Socratic_Thought,sub_root,2,Early Greek philosophical inquiry,-600,Fragments,Greece,Greek,Foundation of Western philosophy,confirmed
-PHIL007,Classical_Philosophy,sub_root,2,Systematic philosophical systems,-400,Plato's writings,Athens,Greek,Peak of ancient Greek philosophy,confirmed
-PHIL008,Ethics,branch,3,Study of moral principles and values,-400,Plato's Apology,Athens,Greek,Developed in Athens 400 BC,confirmed
-PHIL009,Metaphysics,branch,3,Study of fundamental reality,-350,Aristotle's works,Athens,Greek,Systematized by Aristotle,confirmed
-PHIL010,Logic_and_Reason,sub_root,2,Systematic reasoning methods,-350,Aristotle's Organon,Athens,Greek,Formal logic development,confirmed
+PHIL0001,Philosophy,root,1,Love of wisdom and rational inquiry,-2600,Sumerian tablets,Global,Various,Root concept of rational thought,confirmed
+PHIL0002,-_Ontology,branch,3,Branch of Metaphysics focusing on being and existence,-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0003,Epistemology,branch,3,"Study of knowledge, belief, and justification",-400,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0004,-_Philosophy_of_Law,branch,3,"Study of legal systems, justice, and moral law",-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0005,Aesthetics,branch,3,"Study of beauty, art, and taste",-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0006,Logic,branch,3,Study of reasoning and argumentation,-350,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0007,Political_Philosophy,branch,3,"Study of government, society, and political systems",-400,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0008,Early_Wisdom_Traditions,sub_root,2,Ancient moral and ethical teachings,-2600,Sumerian tablets,Mesopotamia,Cuneiform,Earliest philosophical writings,confirmed
+PHIL0009,Philosophy_of_Mind,branch,3,"Study of consciousness, mental states, and the mind",-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0010,Philosophy_of_Science,branch,3,Study of scientific inquiry and methodology,-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0011,Philosophy_of_Language,branch,3,"Study of meaning, communication, and language",-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0012,Philosophy_of_Religion,branch,3,"Study of religious beliefs, gods, and spirituality",-2500,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0013,Mythology,branch,3,Study of myths and their philosophical significance,-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0014,Existentialism,branch,3,Movement focusing on individual existence and freedom,1841,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0015,Phenomenology,branch,3,Study of structures of consciousness and experience,-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0016,Pragmatism,branch,3,Tradition emphasizing practical consequences and utility,-600,Philosophical,Global,Various,Subcategory of Philosophy,confirmed
+PHIL0017,Notes,sub_root,2,Major philosophical category: Notes,-600,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0018,Ontology_Note,note,4,"Major philosophical category: Metaphysics includes Ontology as a nested subfield, as it specifically addresses the nature of being and existence.",-350,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0019,Moral_Guidelines,branch,3,Early ethical instructions,-2600,Ptahhotep Instructions,Egypt/Mesopotamia,Hieratic/Cuneiform,Ancient moral teachings,confirmed
+PHIL0020,Philosophy_of_Law_Note,note,4,"Major philosophical category: Ethics encompasses Philosophy of Law, which explores the philosophical foundations of legal systems and justice, distinct from but related to broader ethical study.",-2400,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0021,Religion_Mythology_Note,note,4,"Major philosophical category: Philosophy of Religion incorporates the philosophical aspects of religion, while Mythology is listed separately to highlight its focus on myths and their cultural or philosophical implications.",-2500,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0022,Modern_Philosophy_Note,note,4,"Major philosophical category: Existentialism, Phenomenology, and Pragmatism are included as notable schools of thought or movements within philosophy, each with a unique approach.",1841,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0023,Database_Expansion_Note,note,4,Major philosophical category: This table provides a solid foundation for your Philosophy database. You can further expand it by adding subfields like Philosophy of History or Philosophy of Mathematics if needed.,-600,Philosophical,Global,Various,Philosophy category,confirmed
+PHIL0024,Ptahhotep_Instructions,sub_branch,4,Ancient Egyptian wisdom literature,-2400,Papyrus texts,Egypt,Hieratic,Written in hieratic 2400 BC,confirmed
+PHIL0025,Shuruppak_Wisdom,sub_branch,4,Sumerian wisdom literature,-2600,Clay tablets,Mesopotamia,Cuneiform,Written in cuneiform 2600 BC,confirmed
+PHIL0026,Pre_Socratic_Thought,sub_root,2,Early Greek philosophical inquiry,-600,Fragments,Greece,Greek,Foundation of Western philosophy,confirmed
+PHIL0027,Classical_Philosophy,sub_root,2,Systematic philosophical systems,-400,Plato's writings,Athens,Greek,Peak of ancient Greek philosophy,confirmed
+PHIL0028,Ethics,branch,3,Study of moral principles and values,-400,Plato's Apology,Athens,Greek,Developed in Athens 400 BC,confirmed
+PHIL0029,Metaphysics,branch,3,Study of fundamental reality,-350,Aristotle's works,Athens,Greek,Systematized by Aristotle,confirmed
+PHIL0030,Logic_and_Reason,sub_root,2,Systematic reasoning methods,-350,Aristotle's Organon,Athens,Greek,Formal logic development,confirmed

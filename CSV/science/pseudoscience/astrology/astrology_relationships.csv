@@ -1,2 +1,17 @@
 source_id,target_id,relationship_type,strength,description,time_period
-ASTRO002,ASTRO001,BELONGS_TO,1.0,Mesopotamian_Astrology belongs to Astrology,-1800
+ASTRO0002,ASTRO0001,BELONGS_TO,1.0,Mesopotamian_Astrology belongs to Astrology,-1800
+ASTRO0001,ASTRO0001,BELONGS_TO,1.0,Astrology belongs to Astrology,-2000
+ASTRO0004,ASTRO0003,BELONGS_TO,1.0,Natal Astrology belongs to Astrology,-2000
+ASTRO0005,ASTRO0003,BELONGS_TO,1.0,Horary Astrology belongs to Astrology,-2000
+ASTRO0006,ASTRO0003,BELONGS_TO,1.0,Electional Astrology belongs to Astrology,-2000
+ASTRO0007,ASTRO0003,BELONGS_TO,1.0,Mundane Astrology belongs to Astrology,-2000
+ASTRO0008,ASTRO0003,BELONGS_TO,1.0,Medical Astrology belongs to Astrology,-2000
+ASTRO0008,ASTRO0001,BELONGS_TO,1.0,Homeopathy belongs to Astrology,1796
+ASTRO0009,ASTRO0001,BELONGS_TO,1.0,Phrenology belongs to Astrology,1796
+ASTRO0010,ASTRO0001,BELONGS_TO,1.0,Numerology belongs to Astrology,-500
+ASTRO0011,ASTRO0001,BELONGS_TO,1.0,Graphology belongs to Astrology,1622
+ASTRO0012,ASTRO0001,BELONGS_TO,1.0,Alchemy belongs to Astrology,-1000
+ASTRO0013,ASTRO0001,BELONGS_TO,1.0,Cryptozoology belongs to Astrology,-1000
+ASTRO0014,ASTRO0001,BELONGS_TO,1.0,Parapsychology belongs to Astrology,-1000
+ASTRO0015,ASTRO0001,BELONGS_TO,1.0,Dowsing belongs to Astrology,-1000
+ASTRO0017,ASTRO0001,BELONGS_TO,1.0,Perpetual Motion belongs to Astrology,-1000

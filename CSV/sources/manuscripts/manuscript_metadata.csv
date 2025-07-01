@@ -1,0 +1,4 @@
+manuscript_id,title,original_title,language,script_type,material,creation_year,location_found,current_location,preservation_status,neo4j_concept_ids,qdrant_collection,qdrant_document_id,digitization_status,research_priority
+MAN001,Dead Sea Scrolls - Isaiah,מגילת ישעיהו,Hebrew,Hebrew Script,Parchment,-100,Qumran,Israel Museum,fragmentary,"RELIG003,PHIL004",ancient_texts,uuid_placeholder,digitized,high
+MAN002,Nag Hammadi Codices,Κώδικες Ναγ Χαμμάδι,Coptic,Coptic Script,Papyrus,350,Nag Hammadi,Various Museums,good,"RELIG004,PHIL008",ancient_texts,uuid_placeholder,digitized,high
+MAN003,Book of Kells,Leabhar Cheanannais,Latin,Insular Script,Vellum,800,Kells Ireland,Trinity College Dublin,excellent,"RELIG004,ART002,LANG002",illuminated_manuscripts,uuid_placeholder,digitized,medium

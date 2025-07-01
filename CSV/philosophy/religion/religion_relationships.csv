@@ -1,11 +1,11 @@
 source_id,target_id,relationship_type,strength,description,time_period
 RELIG002,RELIG001,BELONGS_TO,1.0,Monotheism is a sub-category of Religion,-1300
-RELIG003,RELIG002,BELONGS_TO,1.0,Judaism belongs to Monotheism,-1300
-RELIG004,RELIG002,BELONGS_TO,0.9,Christianity belongs to Monotheism,30
-RELIG005,RELIG002,BELONGS_TO,0.9,Islam belongs to Monotheism,610
-RELIG006,RELIG001,BELONGS_TO,1.0,Polytheism belongs to Religion,-2000
+RELIG0003,RELIG0002,BELONGS_TO,1.0,Judaism belongs to Monotheism,-1300
+RELIG0004,RELIG0002,BELONGS_TO,0.9,Christianity belongs to Monotheism,30
+RELIG0005,RELIG0002,BELONGS_TO,0.9,Islam belongs to Monotheism,610
+RELIG0006,RELIG0001,BELONGS_TO,1.0,Polytheism belongs to Religion,-2000
 RELIG007,RELIG006,BELONGS_TO,1.0,Greek Mythology belongs to Polytheism,-800
-RELIG008,RELIG006,BELONGS_TO,1.0,Hinduism belongs to Polytheism,-1500
+RELIG0008,RELIG0006,BELONGS_TO,1.0,Hinduism belongs to Polytheism,-1500
 RELIG009,RELIG006,BELONGS_TO,1.0,Egyptian Religion belongs to Polytheism,-2000
 RELIG010,RELIG001,BELONGS_TO,1.0,Non-Theistic Beliefs belong to Religion,-2500
 RELIG011,RELIG010,BELONGS_TO,1.0,Animism belongs to Non-Theistic Beliefs,-2500
@@ -24,3 +24,100 @@ RELIG005,RELIG003,INFLUENCED_BY,0.7,Islam influenced by Judaism,610
 RELIG005,RELIG004,INFLUENCED_BY,0.6,Islam influenced by Christianity,610
 RELIG_PERS003,RELIG_PERS001,INFLUENCED_BY,0.6,Muhammad influenced by Moses,610
 RELIG_PERS003,RELIG_PERS002,INFLUENCED_BY,0.5,Muhammad influenced by Jesus,610
+RELIG0013,RELIG0001,BELONGS_TO,1.0,Monotheistic Religions belongs to Religion,-1300
+RELIG0014,RELIG0013,BELONGS_TO,1.0,Christianity belongs to Monotheistic Religions,30
+RELIG0015,RELIG0013,BELONGS_TO,1.0,Islam belongs to Monotheistic Religions,610
+RELIG0016,RELIG0013,BELONGS_TO,1.0,Judaism belongs to Monotheistic Religions,-1300
+RELIG0017,RELIG0013,BELONGS_TO,1.0,Zoroastrianism belongs to Monotheistic Religions,-600
+RELIG0018,RELIG0013,BELONGS_TO,1.0,Sikhism belongs to Monotheistic Religions,-2000
+RELIG0019,RELIG0013,BELONGS_TO,1.0,Bahá'í Faith belongs to Monotheistic Religions,-2000
+RELIG0020,RELIG0001,BELONGS_TO,1.0,Polytheistic Religions belongs to Religion,-3000
+RELIG0021,RELIG0020,BELONGS_TO,1.0,Hinduism belongs to Polytheistic Religions,-1500
+RELIG0022,RELIG0020,BELONGS_TO,1.0,Greek Religion/Mythology belongs to Polytheistic Religions,-800
+RELIG0023,RELIG0020,BELONGS_TO,1.0,Roman Religion/Mythology belongs to Polytheistic Religions,-700
+RELIG0024,RELIG0020,BELONGS_TO,1.0,Norse Religion/Mythology belongs to Polytheistic Religions,-200
+RELIG0025,RELIG0020,BELONGS_TO,1.0,Egyptian Religion/Mythology belongs to Polytheistic Religions,-3100
+RELIG0026,RELIG0020,BELONGS_TO,1.0,Shinto belongs to Polytheistic Religions,-2000
+RELIG0027,RELIG0020,BELONGS_TO,1.0,Indigenous Polytheistic Traditions belongs to Polytheistic Religions,-3000
+RELIG0028,RELIG0001,BELONGS_TO,1.0,Non-Theistic Traditions belongs to Religion,-2000
+RELIG0029,RELIG0028,BELONGS_TO,1.0,Buddhism belongs to Non-Theistic Traditions,-500
+RELIG0030,RELIG0028,BELONGS_TO,1.0,Jainism belongs to Non-Theistic Traditions,-2000
+RELIG0031,RELIG0028,BELONGS_TO,1.0,Confucianism belongs to Non-Theistic Traditions,-2000
+RELIG0032,RELIG0028,BELONGS_TO,1.0,Taoism belongs to Non-Theistic Traditions,-2000
+RELIG0033,RELIG0028,BELONGS_TO,1.0,Secular Humanism belongs to Non-Theistic Traditions,-2000
+RELIG0034,RELIG0028,BELONGS_TO,1.0,Atheism and Agnosticism belongs to Non-Theistic Traditions,-2000
+RELIG0035,RELIG0001,BELONGS_TO,1.0,Religious and Mythological Narratives belongs to Religion,-2000
+RELIG0036,RELIG0035,BELONGS_TO,1.0,Creation Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0037,RELIG0035,BELONGS_TO,1.0,Heroic Tales belongs to Religious and Mythological Narratives,-2000
+RELIG0038,RELIG0035,BELONGS_TO,1.0,Etiological Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0039,RELIG0035,BELONGS_TO,1.0,Eschatological Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0040,RELIG0035,BELONGS_TO,1.0,Trickster Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0041,RELIG0035,BELONGS_TO,1.0,Flood Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0042,RELIG0035,BELONGS_TO,1.0,Cosmological Stories belongs to Religious and Mythological Narratives,-2000
+RELIG0043,RELIG0001,BELONGS_TO,1.0,Religious Practices belongs to Religion,-2000
+RELIG0044,RELIG0043,BELONGS_TO,1.0,Prayer belongs to Religious Practices,-2000
+RELIG0045,RELIG0043,BELONGS_TO,1.0,Meditation belongs to Religious Practices,-2000
+RELIG0046,RELIG0043,BELONGS_TO,1.0,Rituals belongs to Religious Practices,-2000
+RELIG0047,RELIG0043,BELONGS_TO,1.0,Festivals and Holy Days belongs to Religious Practices,-2000
+RELIG0048,RELIG0043,BELONGS_TO,1.0,Dietary Laws and Fasting belongs to Religious Practices,-2000
+RELIG0049,RELIG0043,BELONGS_TO,1.0,Rites of Passage belongs to Religious Practices,-2000
+RELIG0050,RELIG0001,BELONGS_TO,1.0,Religious Texts belongs to Religion,-2000
+RELIG0051,RELIG0050,BELONGS_TO,1.0,Bible belongs to Religious Texts,-2000
+RELIG0052,RELIG0050,BELONGS_TO,1.0,Quran belongs to Religious Texts,-2000
+RELIG0053,RELIG0050,BELONGS_TO,1.0,"Vedas, Upanishads, Bhagavad Gita belongs to Religious Texts",-2000
+RELIG0054,RELIG0050,BELONGS_TO,1.0,Tripitaka belongs to Religious Texts,-2000
+RELIG0055,RELIG0050,BELONGS_TO,1.0,"Torah, Talmud belongs to Religious Texts",-2000
+RELIG0056,RELIG0050,BELONGS_TO,1.0,Avesta belongs to Religious Texts,-2000
+RELIG0057,RELIG0050,BELONGS_TO,1.0,Guru Granth Sahib belongs to Religious Texts,-2000
+RELIG0058,RELIG0050,BELONGS_TO,1.0,"Homeric Epics, Theogony belongs to Religious Texts",-2000
+RELIG0059,RELIG0050,BELONGS_TO,1.0,Eddas belongs to Religious Texts,-2000
+RELIG0060,RELIG0001,BELONGS_TO,1.0,Religious History belongs to Religion,-2000
+RELIG0061,RELIG0060,BELONGS_TO,1.0,Origins of Traditions belongs to Religious History,-2000
+RELIG0062,RELIG0060,BELONGS_TO,1.0,Historical Development and Schisms belongs to Religious History,-2000
+RELIG0063,RELIG0060,BELONGS_TO,1.0,"Shia split, Protestant Reformation) belongs to Religious History",-2000
+RELIG0064,RELIG0060,BELONGS_TO,1.0,Spread and Missionary Activities belongs to Religious History,-2000
+RELIG0065,RELIG0060,BELONGS_TO,1.0,Religious Conflicts belongs to Religious History,-2000
+RELIG0066,RELIG0060,BELONGS_TO,1.0,Muslim tensions) belongs to Religious History,-2000
+RELIG0067,RELIG0060,BELONGS_TO,1.0,Revival Movements belongs to Religious History,-2000
+RELIG0068,RELIG0001,BELONGS_TO,1.0,Philosophy and Theology belongs to Religion,-2000
+RELIG0069,RELIG0068,BELONGS_TO,1.0,Theology belongs to Philosophy and Theology,-2000
+RELIG0070,RELIG0068,BELONGS_TO,1.0,Theodicy belongs to Philosophy and Theology,-2000
+RELIG0071,RELIG0068,BELONGS_TO,1.0,Eschatology belongs to Philosophy and Theology,-2000
+RELIG0072,RELIG0068,BELONGS_TO,1.0,Soteriology belongs to Philosophy and Theology,-2000
+RELIG0073,RELIG0068,BELONGS_TO,1.0,Ethics and Morality belongs to Philosophy and Theology,-2000
+RELIG0074,RELIG0068,BELONGS_TO,1.0,Comparative Religion belongs to Philosophy and Theology,-2000
+RELIG0075,RELIG0068,BELONGS_TO,1.0,cultural analysis of beliefs) belongs to Philosophy and Theology,-2000
+RELIG0076,RELIG0068,BELONGS_TO,1.0,Metaphysics belongs to Philosophy and Theology,-2000
+RELIG0077,RELIG0068,BELONGS_TO,1.0,Epistemology belongs to Philosophy and Theology,-2000
+RELIG0078,RELIG0001,BELONGS_TO,1.0,Religious and Mythological Themes belongs to Religion,-2000
+RELIG0079,RELIG0078,BELONGS_TO,1.0,Hero’s Journey belongs to Religious and Mythological Themes,-2000
+RELIG0080,RELIG0078,BELONGS_TO,1.0,Good vs. Evil belongs to Religious and Mythological Themes,-2000
+RELIG0081,RELIG0078,BELONGS_TO,1.0,"Life, Death, Rebirth belongs to Religious and Mythological Themes",-2000
+RELIG0082,RELIG0078,BELONGS_TO,1.0,Fate and Destiny belongs to Religious and Mythological Themes,-2000
+RELIG0083,RELIG0078,BELONGS_TO,1.0,Transformation belongs to Religious and Mythological Themes,-2000
+RELIG0084,RELIG0001,BELONGS_TO,1.0,Cultural Expressions belongs to Religion,-2000
+RELIG0085,RELIG0084,BELONGS_TO,1.0,Religious Architecture belongs to Cultural Expressions,-2000
+RELIG0086,RELIG0084,BELONGS_TO,1.0,Sacred Art belongs to Cultural Expressions,-2000
+RELIG0087,RELIG0084,BELONGS_TO,1.0,Music and Chants belongs to Cultural Expressions,-2000
+RELIG0088,RELIG0084,BELONGS_TO,1.0,Literature and Poetry belongs to Cultural Expressions,-2000
+RELIG0089,RELIG0084,BELONGS_TO,1.0,Dance and Drama belongs to Cultural Expressions,-2000
+RELIG0090,RELIG0001,BELONGS_TO,1.0,Societal Roles belongs to Religion,-2000
+RELIG0091,RELIG0090,BELONGS_TO,1.0,Explanation of Phenomena belongs to Societal Roles,-2000
+RELIG0092,RELIG0090,BELONGS_TO,1.0,Moral Instruction belongs to Societal Roles,-2000
+RELIG0093,RELIG0090,BELONGS_TO,1.0,"like myths, Buddhist Jatakas) belongs to Societal Roles",-2000
+RELIG0094,RELIG0090,BELONGS_TO,1.0,Cultural Identity belongs to Societal Roles,-2000
+RELIG0095,RELIG0090,BELONGS_TO,1.0,Social Cohesion belongs to Societal Roles,-2000
+RELIG0096,RELIG0090,BELONGS_TO,1.0,Legitimization of Power belongs to Societal Roles,-2000
+RELIG0097,RELIG0001,BELONGS_TO,1.0,Explanation of Categories belongs to Religion,-2000
+RELIG0098,RELIG0001,BELONGS_TO,1.0,"Monotheistic Religions: Belief systems centered on a single deity, with major denominations included. belongs to Religion",-1300
+RELIG0099,RELIG0001,BELONGS_TO,1.0,"Polytheistic Religions: Traditions with multiple deities, integrating cultural mythologies (e.g., Greek, Norse) as religious systems. belongs to Religion",-800
+RELIG0100,RELIG0001,BELONGS_TO,1.0,"Non-Theistic Traditions: Philosophies and belief systems without a deity focus, including secular ideologies. belongs to Religion",-2000
+RELIG0101,RELIG0001,BELONGS_TO,1.0,"Religious and Mythological Narratives: Stories explaining origins, heroes, or natural phenomena, drawn from both religious and mythological traditions. belongs to Religion",-2000
+RELIG0102,RELIG0001,BELONGS_TO,1.0,"Religious Practices: Practical expressions of faith, applicable across religions and myth-based rituals. belongs to Religion",-2000
+RELIG0103,RELIG0001,BELONGS_TO,1.0,"Religious Texts: Sacred writings, including mythological epics (e.g., Eddas) alongside canonical scriptures. belongs to Religion",-2000
+RELIG0104,RELIG0001,BELONGS_TO,1.0,"Religious History: Historical evolution, conflicts, and spread of religious and mythological traditions. belongs to Religion",-2000
+RELIG0105,RELIG0001,BELONGS_TO,1.0,"Philosophy and Theology: Intellectual exploration of religious and mythological concepts, incorporating philosophical disciplines. belongs to Religion",-2000
+RELIG0106,RELIG0001,BELONGS_TO,1.0,Religious and Mythological Themes: Universal motifs found in both religious doctrines and mythological stories. belongs to Religion,-2000
+RELIG0107,RELIG0001,BELONGS_TO,1.0,Cultural Expressions: Artistic and cultural outputs inspired by religion and mythology. belongs to Religion,-2000
+RELIG0108,RELIG0001,BELONGS_TO,1.0,Societal Roles: Functions of religious and mythological narratives in shaping societies and cultures. belongs to Religion,-2000
+RELIG0109,RELIG0001,BELONGS_TO,1.0,"This table consolidates Religion and Mythology into a unified framework under Religion, ensuring no overlap and incorporating philosophical dimensions for a comprehensive database structure. belongs to Religion",-2000
