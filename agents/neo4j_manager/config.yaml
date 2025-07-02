@@ -1,0 +1,39 @@
+neo4j_agent:
+  connection:
+    uri: "bolt://localhost:7687"
+    user: "neo4j"
+    password: "${NEO4J_PASSWORD}"
+    max_pool_size: 50
+    connection_timeout: 30
+    max_transaction_retry_time: 30
+    
+  performance:
+    batch_size: 100
+    query_timeout: 60
+    cache_size: 1000
+    enable_query_cache: true
+    
+  schema:
+    enforce_yggdrasil_structure: true
+    auto_create_indexes: true
+    auto_create_constraints: true
+    validate_node_types: true
+    
+  monitoring:
+    enable_metrics: true
+    log_slow_queries: true
+    slow_query_threshold: 5.0
+    log_level: "INFO"
+    
+  events:
+    enable_publishing: true
+    event_queue: "neo4j_events"
+    batch_events: true
+    event_batch_size: 50
+    
+  yggdrasil:
+    temporal_weight_decay: 0.9
+    max_depth: 10
+    connection_strength_threshold: 0.5
+    ancient_knowledge_threshold: -1000  # BCE
+    modern_knowledge_threshold: 1500    # CE

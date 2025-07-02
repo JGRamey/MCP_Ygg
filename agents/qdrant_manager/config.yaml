@@ -1,0 +1,120 @@
+qdrant_agent:
+  connection:
+    host: "localhost"
+    port: 6333
+    timeout: 30
+    prefer_grpc: false
+    api_key: "${QDRANT_API_KEY}"
+    
+  collections:
+    auto_create: true
+    optimization_threshold: 10000
+    default_vector_size: 384
+    default_distance: "Cosine"
+    
+    # Domain-specific collection configurations
+    domain_collections:
+      documents_art:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+          full_scan_threshold: 10000
+      documents_language:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      documents_mathematics:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 24
+          ef_construct: 300
+      documents_philosophy:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      documents_science:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 20
+          ef_construct: 250
+      documents_technology:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      documents_religion:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      documents_astrology:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      documents_general:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      entities:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+      concepts:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 20
+          ef_construct: 250
+      claims:
+        vector_size: 384
+        distance: "Cosine"
+        hnsw_config:
+          m: 16
+          ef_construct: 200
+          
+  performance:
+    batch_size: 100
+    max_retries: 3
+    retry_delay: 1.0
+    search_timeout: 30
+    parallel_uploads: 4
+    
+  optimization:
+    enable_quantization: true
+    quantization_type: "scalar"
+    enable_compression: true
+    memory_optimization: true
+    auto_optimize_threshold: 50000
+    
+  monitoring:
+    enable_metrics: true
+    log_slow_operations: true
+    slow_operation_threshold: 5.0
+    log_level: "INFO"
+    
+  sync:
+    enable_sync_tracking: true
+    sync_metadata_collection: "sync_metadata"
+    track_changes: true
+    change_log_size: 10000
+    
+  backup:
+    enable_snapshots: false
+    snapshot_interval: 3600  # seconds
+    retention_days: 30

@@ -17,7 +17,8 @@
       "Bash(ls:*)",
       "Bash(rm:*)",
       "Bash(python:*)",
-      "Bash(streamlit run:*)"
+      "Bash(streamlit run:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }
