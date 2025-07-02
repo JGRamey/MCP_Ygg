@@ -6,7 +6,18 @@
       "Bash(curl:*)",
       "Bash(python3:*)",
       "Bash(pip3 install:*)",
-      "Bash(pip3 show:*)"
+      "Bash(pip3 show:*)",
+      "Bash(pip install:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(grep:*)",
+      "Bash(pkill:*)",
+      "Bash(kill:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(python:*)",
+      "Bash(streamlit run:*)"
     ],
     "deny": []
   }
