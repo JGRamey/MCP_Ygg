@@ -1,0 +1,37 @@
+{
+  "submission_id": "example-youtube-001",
+  "source_type": "youtube",
+  "source_url": "https://www.youtube.com/watch?v=example123",
+  "metadata": {
+    "title": "The Philosophy of Ancient Greek Mathematics",
+    "author": "Academic Channel",
+    "date": "2024-01-15",
+    "domain": "mathematics",
+    "language": "en",
+    "priority": "high",
+    "submitted_by": "user001",
+    "file_size": null,
+    "content_type": "video"
+  },
+  "raw_content": "[00:00] Welcome to today's lecture on ancient Greek mathematics. We'll explore how philosophical concepts influenced mathematical thinking in classical antiquity. [00:30] Pythagoras and his followers believed that numbers were the fundamental essence of reality...",
+  "processing_status": "pending",
+  "analysis_results": null,
+  "agent_pipeline": {
+    "selected_agents": ["text_processor", "claim_analyzer", "concept_explorer"],
+    "processing_order": "sequential",
+    "agent_parameters": {
+      "text_processor": {"extract_entities": true, "language": "en"},
+      "claim_analyzer": {"confidence_threshold": 0.8},
+      "concept_explorer": {"depth": 2, "cross_domain": true}
+    },
+    "completion_status": {}
+  },
+  "timestamps": {
+    "submitted": "2024-01-15T10:30:00Z",
+    "analysis_started": null,
+    "analysis_completed": null,
+    "reviewed": null,
+    "approved_rejected": null
+  },
+  "review_data": null
+}

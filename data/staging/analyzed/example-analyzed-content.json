@@ -1,0 +1,76 @@
+{
+  "submission_id": "example-analyzed-001",
+  "source_type": "website",
+  "source_url": "https://plato.stanford.edu/entries/aristotle-ethics/",
+  "metadata": {
+    "title": "Aristotle's Ethics - Stanford Encyclopedia of Philosophy",
+    "author": "Richard Kraut",
+    "date": "2023-08-15",
+    "domain": "philosophy",
+    "language": "en",
+    "priority": "high",
+    "submitted_by": "user002",
+    "file_size": 45678,
+    "content_type": "article"
+  },
+  "raw_content": "Aristotle's Nicomachean Ethics is one of the most influential works in moral philosophy. The treatise examines the nature of virtue, the good life, and practical wisdom...",
+  "processing_status": "analyzed",
+  "analysis_results": {
+    "concepts_extracted": [
+      "virtue ethics",
+      "eudaimonia",
+      "practical wisdom",
+      "moral character",
+      "aristotelian ethics",
+      "nicomachean ethics",
+      "golden mean",
+      "virtue theory"
+    ],
+    "claims_identified": [
+      "Virtue is a disposition to act in ways that promote human flourishing",
+      "The good life consists in the exercise of virtue in accordance with reason",
+      "Moral virtues are acquired through habituation and practice"
+    ],
+    "connections_discovered": [
+      {
+        "type": "historical_influence",
+        "connection": "Aristotelian virtue ethics influenced medieval Christian philosophy",
+        "confidence": 0.9
+      },
+      {
+        "type": "cross_domain",
+        "connection": "Virtue ethics principles apply to modern psychology and well-being research",
+        "confidence": 0.75
+      }
+    ],
+    "agent_recommendations": {
+      "text_processor": "High-quality academic content with clear structure",
+      "claim_analyzer": "All claims verified against primary sources",
+      "concept_explorer": "Rich connections to both historical and contemporary philosophy"
+    },
+    "quality_score": 0.92,
+    "confidence_level": "high"
+  },
+  "agent_pipeline": {
+    "selected_agents": ["text_processor", "claim_analyzer", "concept_explorer"],
+    "processing_order": "sequential",
+    "agent_parameters": {
+      "text_processor": {"extract_entities": true, "language": "en"},
+      "claim_analyzer": {"confidence_threshold": 0.8},
+      "concept_explorer": {"depth": 3, "cross_domain": true}
+    },
+    "completion_status": {
+      "text_processor": "completed",
+      "claim_analyzer": "completed", 
+      "concept_explorer": "completed"
+    }
+  },
+  "timestamps": {
+    "submitted": "2024-01-15T09:00:00Z",
+    "analysis_started": "2024-01-15T09:01:00Z",
+    "analysis_completed": "2024-01-15T09:05:30Z",
+    "reviewed": null,
+    "approved_rejected": null
+  },
+  "review_data": null
+}

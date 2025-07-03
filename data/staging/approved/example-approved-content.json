@@ -1,0 +1,88 @@
+{
+  "submission_id": "example-approved-001",
+  "source_type": "pdf",
+  "source_url": "upload://scientific-paper-quantum-mechanics.pdf",
+  "metadata": {
+    "title": "Quantum Entanglement in Many-Body Systems",
+    "author": "Dr. Sarah Chen, Dr. Michael Rodriguez",
+    "date": "2024-01-10",
+    "domain": "science",
+    "language": "en",
+    "priority": "high",
+    "submitted_by": "user003",
+    "file_size": 2457600,
+    "content_type": "research_paper"
+  },
+  "raw_content": "Abstract: We investigate quantum entanglement properties in many-body quantum systems using tensor network methods. Our results demonstrate novel scaling behaviors in entanglement entropy...",
+  "processing_status": "approved",
+  "analysis_results": {
+    "concepts_extracted": [
+      "quantum entanglement",
+      "many-body systems",
+      "tensor networks",
+      "entanglement entropy",
+      "quantum mechanics",
+      "condensed matter physics",
+      "quantum information",
+      "scaling laws"
+    ],
+    "claims_identified": [
+      "Entanglement entropy follows area law scaling in ground states",
+      "Tensor network methods efficiently capture entanglement structure",
+      "Critical systems exhibit logarithmic corrections to area law"
+    ],
+    "connections_discovered": [
+      {
+        "type": "interdisciplinary",
+        "connection": "Quantum entanglement research connects physics to information theory",
+        "confidence": 0.95
+      },
+      {
+        "type": "historical_development",
+        "connection": "Builds upon Einstein-Podolsky-Rosen paradox and Bell's theorem",
+        "confidence": 0.88
+      },
+      {
+        "type": "technological_application",
+        "connection": "Fundamental for quantum computing and quantum communication",
+        "confidence": 0.92
+      }
+    ],
+    "agent_recommendations": {
+      "text_processor": "Excellent technical content with clear mathematical exposition",
+      "claim_analyzer": "All claims supported by rigorous mathematical proofs",
+      "concept_explorer": "Rich connections across physics, mathematics, and computer science"
+    },
+    "quality_score": 0.96,
+    "confidence_level": "high"
+  },
+  "agent_pipeline": {
+    "selected_agents": ["text_processor", "claim_analyzer", "concept_explorer", "vector_indexer"],
+    "processing_order": "sequential",
+    "agent_parameters": {
+      "text_processor": {"extract_entities": true, "extract_math": true, "language": "en"},
+      "claim_analyzer": {"confidence_threshold": 0.85, "verify_citations": true},
+      "concept_explorer": {"depth": 3, "cross_domain": true, "mathematical_focus": true},
+      "vector_indexer": {"embedding_model": "scientific", "chunk_size": 512}
+    },
+    "completion_status": {
+      "text_processor": "completed",
+      "claim_analyzer": "completed",
+      "concept_explorer": "completed",
+      "vector_indexer": "completed"
+    }
+  },
+  "timestamps": {
+    "submitted": "2024-01-14T14:20:00Z",
+    "analysis_started": "2024-01-14T14:22:00Z",
+    "analysis_completed": "2024-01-14T14:28:45Z",
+    "reviewed": "2024-01-15T08:15:00Z",
+    "approved_rejected": "2024-01-15T08:15:00Z"
+  },
+  "review_data": {
+    "reviewer": "dr_wilson",
+    "review_notes": "Excellent quality research paper with novel contributions to quantum many-body theory. Mathematical rigor is high and connections to broader physics are well established.",
+    "approval_reason": "High-quality academic content suitable for knowledge graph integration. Adds significant value to science domain with verified claims and clear conceptual connections.",
+    "rejection_reason": ""
+  }
+}

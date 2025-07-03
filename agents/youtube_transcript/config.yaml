@@ -1,0 +1,57 @@
+youtube_agent:
+  api:
+    key: "${YOUTUBE_API_KEY}"
+    max_results: 50
+    quota_limit: 10000  # Daily quota limit
+    
+  processing:
+    max_transcript_length: 50000  # Maximum transcript characters
+    supported_languages: 
+      - "en"    # English
+      - "es"    # Spanish
+      - "fr"    # French
+      - "de"    # German
+      - "it"    # Italian
+      - "pt"    # Portuguese
+      - "ru"    # Russian
+      - "ja"    # Japanese
+      - "ko"    # Korean
+      - "zh"    # Chinese
+    
+    default_language: "en"
+    auto_translate: true
+    preserve_timestamps: true
+    
+  video:
+    max_duration: 14400  # 4 hours in seconds
+    min_duration: 30     # 30 seconds minimum
+    quality_preference: ["auto", "manual", "generated"]
+    
+  playlist:
+    max_videos: 100
+    batch_size: 10
+    delay_between_requests: 1  # seconds
+    
+  output:
+    format: "json"
+    include_metadata: true
+    include_chapters: true
+    include_speaker_info: true
+    segment_duration: 60  # seconds for segment breakdown
+    
+  cache:
+    enabled: true
+    ttl: 86400  # 24 hours
+    max_size: 1000  # Maximum cached items
+    
+  rate_limiting:
+    requests_per_minute: 100
+    burst_limit: 10
+    backoff_factor: 2
+    max_retries: 3
+    
+  error_handling:
+    skip_private_videos: true
+    skip_age_restricted: false
+    continue_on_error: true
+    log_errors: true
