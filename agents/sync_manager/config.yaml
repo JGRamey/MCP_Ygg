@@ -1,0 +1,263 @@
+# Database Synchronization Manager Configuration
+
+# Database Connection Settings
+databases:
+  neo4j:
+    uri: "bolt://localhost:7687"
+    user: "neo4j"
+    password: "${NEO4J_PASSWORD}"
+    pool_size: 50
+    connection_timeout: 30
+    max_retry_time: 300
+    
+  qdrant:
+    host: "localhost"
+    port: 6333
+    timeout: 30
+    retries: 3
+    
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: "${REDIS_PASSWORD}"
+    connection_pool_size: 10
+
+# Synchronization Settings
+sync:
+  # Event processing
+  event_processing:
+    batch_size: 100
+    max_retries: 3
+    retry_delay: 5  # seconds
+    queue_timeout: 30  # seconds
+    
+  # Sync intervals
+  intervals:
+    sync_check: 30      # seconds
+    consistency_check: 300  # seconds (5 minutes)
+    cleanup: 3600       # seconds (1 hour)
+    health_check: 60    # seconds
+    
+  # Data retention
+  retention:
+    events_days: 7
+    transactions_days: 30
+    logs_days: 14
+    
+  # Performance tuning
+  performance:
+    max_concurrent_events: 50
+    transaction_timeout: 120  # seconds
+    bulk_operation_size: 1000
+
+# Event Types Configuration
+events:
+  neo4j_to_qdrant:
+    - "node_created"
+    - "node_updated"
+    - "node_deleted"
+    - "relationship_created"
+    - "relationship_updated"
+    - "relationship_deleted"
+    
+  qdrant_to_neo4j:
+    - "point_created"
+    - "point_updated"
+    - "point_deleted"
+    - "collection_created"
+    - "collection_updated"
+    - "collection_deleted"
+
+# Consistency Check Settings
+consistency:
+  # Check types
+  checks:
+    basic:
+      enabled: true
+      frequency: 300  # seconds
+      tolerance: 0.05  # 5% difference allowed
+      
+    detailed:
+      enabled: true
+      frequency: 1800  # seconds (30 minutes)
+      sample_size: 1000
+      
+    deep:
+      enabled: false
+      frequency: 86400  # seconds (daily)
+      full_scan: true
+  
+  # Inconsistency handling
+  resolution:
+    auto_fix: false
+    notification: true
+    max_auto_fixes: 10
+    
+  # Metrics thresholds
+  thresholds:
+    entity_count_difference: 100
+    missing_entities_percent: 5.0
+    metadata_mismatch_percent: 2.0
+
+# Conflict Resolution Settings
+conflict_resolution:
+  strategy: "timestamp"  # timestamp, source_priority, manual
+  
+  # Source priorities (higher number = higher priority)
+  source_priorities:
+    neo4j: 1
+    qdrant: 1
+    manual: 10
+    
+  # Resolution policies
+  policies:
+    duplicate_entities: "merge"
+    conflicting_metadata: "newest_wins"
+    missing_references: "recreate"
+    orphaned_entities: "mark_for_review"
+
+# Transaction Settings
+transactions:
+  # ACID properties
+  isolation_level: "read_committed"
+  timeout: 120  # seconds
+  max_operations: 1000
+  
+  # Rollback settings
+  rollback:
+    enabled: true
+    max_rollback_time: 300  # seconds
+    preserve_logs: true
+    
+  # Compensation patterns
+  compensation:
+    enabled: true
+    max_compensation_attempts: 3
+    compensation_delay: 10  # seconds
+
+# Error Handling Settings
+error_handling:
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    base_delay: 1  # seconds
+    max_delay: 60  # seconds
+    exponential_backoff: true
+    jitter: true
+    
+  # Circuit breaker
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout: 300  # seconds
+    half_open_max_calls: 3
+    
+  # Dead letter queue
+  dead_letter:
+    enabled: true
+    max_size: 1000
+    retention_days: 7
+
+# Monitoring Settings
+monitoring:
+  # Metrics collection
+  metrics:
+    enabled: true
+    collection_interval: 30  # seconds
+    retention_days: 30
+    
+  # Health checks
+  health_checks:
+    connection_check: 60    # seconds
+    performance_check: 300  # seconds
+    data_integrity_check: 600  # seconds
+    
+  # Alerting
+  alerts:
+    enabled: true
+    channels:
+      - "log"
+      - "redis"
+    thresholds:
+      sync_lag_seconds: 300
+      error_rate_percent: 5.0
+      consistency_failures: 3
+
+# Security Settings
+security:
+  # Encryption
+  encryption:
+    in_transit: true
+    at_rest: false
+    algorithm: "AES-256-GCM"
+    
+  # Authentication
+  authentication:
+    required: true
+    token_expiry: 3600  # seconds
+    
+  # Authorization
+  authorization:
+    enabled: true
+    roles:
+      - "sync_admin"
+      - "sync_read"
+      - "sync_write"
+
+# Logging Settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # File logging
+  file:
+    enabled: true
+    path: "logs/sync_manager.log"
+    max_size: "100MB"
+    backup_count: 10
+    
+  # Structured logging
+  structured:
+    enabled: true
+    format: "json"
+    include_context: true
+    
+  # Audit logging
+  audit:
+    enabled: true
+    file: "logs/sync_audit.log"
+    level: "INFO"
+
+# Development Settings
+development:
+  debug_mode: false
+  mock_operations: false
+  test_mode: false
+  
+  # Development overrides
+  overrides:
+    consistency_check_interval: 60
+    cleanup_interval: 300
+    max_retries: 1
+
+# Production Settings
+production:
+  # High availability
+  ha:
+    enabled: false
+    cluster_size: 3
+    leader_election: "redis"
+    
+  # Performance optimization
+  optimization:
+    connection_pooling: true
+    query_caching: true
+    batch_processing: true
+    parallel_execution: true
+    
+  # Resource limits
+  limits:
+    max_memory: "2GB"
+    max_cpu_percent: 80
+    max_connections: 1000

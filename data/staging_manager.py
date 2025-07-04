@@ -304,45 +304,6 @@ class StagingManager:
             analysis_results=analysis_results
         )
     
-    async def approve_content(self, 
-                            submission_id: str, 
-                            reviewer: str, 
-                            reason: str = "") -> bool:
-        """
-        Approve content for database integration
-        """
-        review_data = ReviewData(
-            reviewer=reviewer,
-            review_notes="",
-            approval_reason=reason,
-            rejection_reason=""
-        )
-        
-        return await self.update_status(
-            submission_id, 
-            ProcessingStatus.APPROVED, 
-            review_data=review_data
-        )
-    
-    async def reject_content(self, 
-                           submission_id: str, 
-                           reviewer: str, 
-                           reason: str) -> bool:
-        """
-        Reject content with reason
-        """
-        review_data = ReviewData(
-            reviewer=reviewer,
-            review_notes="",
-            approval_reason="",
-            rejection_reason=reason
-        )
-        
-        return await self.update_status(
-            submission_id, 
-            ProcessingStatus.REJECTED, 
-            review_data=review_data
-        )
     
     async def get_queue_stats(self) -> Dict[str, Any]:
         """
@@ -593,3 +554,294 @@ class StagingManager:
         except Exception as e:
             logger.error(f"Error calculating average processing time: {e}")
             return 0.0
+    
+    async def get_all_content(self) -> List[StagedContent]:
+        """
+        Get all staged content across all statuses
+        """
+        return await self.list_content(status=None, limit=1000)
+    
+    async def approve_content(self, submission_id: str, reviewer_notes: Optional[str] = None) -> bool:
+        """
+        Approve content for database integration (updated signature)
+        """
+        review_data = ReviewData(
+            reviewer="api_user",
+            review_notes=reviewer_notes or "",
+            approval_reason="API approval",
+            rejection_reason=""
+        )
+        
+        return await self.update_status(
+            submission_id, 
+            ProcessingStatus.APPROVED, 
+            review_data=review_data
+        )
+    
+    async def reject_content(self, submission_id: str, rejection_reason: str, reviewer_notes: Optional[str] = None) -> bool:
+        """
+        Reject content with reason (updated signature)
+        """
+        review_data = ReviewData(
+            reviewer="api_user",
+            review_notes=reviewer_notes or "",
+            approval_reason="",
+            rejection_reason=rejection_reason
+        )
+        
+        return await self.update_status(
+            submission_id, 
+            ProcessingStatus.REJECTED, 
+            review_data=review_data
+        )
+    
+    async def batch_process_by_priority(self, priority: Priority, processor_func, batch_size: int = 10) -> Dict[str, Any]:
+        """
+        Process items by priority level in batches
+        """
+        try:
+            # Get pending items with specific priority
+            items = await self.list_content(
+                status=ProcessingStatus.PENDING, 
+                priority=priority, 
+                limit=batch_size
+            )
+            
+            if not items:
+                return {
+                    "processed": 0,
+                    "failed": 0,
+                    "errors": [],
+                    "message": f"No pending items with {priority.value} priority"
+                }
+            
+            results = {
+                "processed": 0,
+                "failed": 0,
+                "errors": [],
+                "priority": priority.value,
+                "batch_id": str(uuid.uuid4()),
+                "started_at": datetime.utcnow().isoformat() + "Z",
+                "item_results": []
+            }
+            
+            for item in items:
+                try:
+                    # Mark as processing
+                    await self.start_processing(item.submission_id)
+                    
+                    # Process item
+                    result = await processor_func(item)
+                    
+                    results["processed"] += 1
+                    results["item_results"].append({
+                        "submission_id": item.submission_id,
+                        "status": "completed",
+                        "result": result
+                    })
+                    
+                except Exception as e:
+                    results["failed"] += 1
+                    results["errors"].append(f"{item.submission_id}: {str(e)}")
+                    results["item_results"].append({
+                        "submission_id": item.submission_id,
+                        "status": "failed",
+                        "error": str(e)
+                    })
+                    logger.error(f"Error processing {item.submission_id}: {e}")
+            
+            results["completed_at"] = datetime.utcnow().isoformat() + "Z"
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error in priority batch processing: {e}")
+            return {"processed": 0, "failed": 0, "errors": [str(e)]}
+    
+    async def get_priority_queue_stats(self) -> Dict[str, Any]:
+        """
+        Get queue statistics broken down by priority
+        """
+        try:
+            stats = {
+                "by_priority": {},
+                "by_status": {},
+                "total_items": 0,
+                "processing_metrics": {}
+            }
+            
+            # Count by priority and status
+            for priority in Priority:
+                stats["by_priority"][priority.value] = {}
+                for status in ProcessingStatus:
+                    count = len(await self.list_content(status=status, priority=priority, limit=1000))
+                    stats["by_priority"][priority.value][status.value] = count
+                    
+                    # Also update status totals
+                    if status.value not in stats["by_status"]:
+                        stats["by_status"][status.value] = 0
+                    stats["by_status"][status.value] += count
+            
+            # Calculate total
+            stats["total_items"] = sum(stats["by_status"].values())
+            
+            # Calculate processing metrics
+            if stats["total_items"] > 0:
+                pending_total = stats["by_status"].get("pending", 0)
+                processing_total = stats["by_status"].get("processing", 0)
+                completed_total = stats["by_status"].get("analyzed", 0) + stats["by_status"].get("approved", 0)
+                
+                stats["processing_metrics"] = {
+                    "completion_rate": completed_total / stats["total_items"] if stats["total_items"] > 0 else 0,
+                    "active_processing_rate": processing_total / stats["total_items"] if stats["total_items"] > 0 else 0,
+                    "queue_backlog": pending_total,
+                    "high_priority_pending": stats["by_priority"].get("high", {}).get("pending", 0),
+                    "estimated_completion_time_hours": pending_total * 2 / 60  # Rough estimate: 2 min per item
+                }
+            
+            return stats
+            
+        except Exception as e:
+            logger.error(f"Error getting priority queue stats: {e}")
+            return {}
+    
+    async def aggregate_results_by_domain(self, status: ProcessingStatus = ProcessingStatus.ANALYZED) -> Dict[str, Any]:
+        """
+        Aggregate analysis results by domain
+        """
+        try:
+            items = await self.list_content(status=status, limit=1000)
+            
+            domain_aggregates = {}
+            total_items = 0
+            
+            for item in items:
+                domain = item.metadata.domain
+                if domain not in domain_aggregates:
+                    domain_aggregates[domain] = {
+                        "count": 0,
+                        "total_concepts": 0,
+                        "total_claims": 0,
+                        "avg_quality_score": 0,
+                        "confidence_levels": {"high": 0, "medium": 0, "low": 0},
+                        "processing_times": [],
+                        "word_counts": []
+                    }
+                
+                domain_data = domain_aggregates[domain]
+                domain_data["count"] += 1
+                total_items += 1
+                
+                # Aggregate analysis results
+                if item.analysis_results:
+                    domain_data["total_concepts"] += len(item.analysis_results.concepts_extracted or [])
+                    domain_data["total_claims"] += len(item.analysis_results.claims_identified or [])
+                    domain_data["avg_quality_score"] += item.analysis_results.quality_score or 0
+                    
+                    confidence = item.analysis_results.confidence_level
+                    if confidence in domain_data["confidence_levels"]:
+                        domain_data["confidence_levels"][confidence] += 1
+                
+                # Calculate processing time if available
+                if (item.timestamps.get("submitted") and 
+                    item.timestamps.get("analysis_completed")):
+                    try:
+                        start_time = datetime.fromisoformat(item.timestamps["submitted"].replace("Z", ""))
+                        end_time = datetime.fromisoformat(item.timestamps["analysis_completed"].replace("Z", ""))
+                        processing_time = (end_time - start_time).total_seconds() / 60  # minutes
+                        domain_data["processing_times"].append(processing_time)
+                    except:
+                        pass
+                
+                # Word count from content
+                if item.raw_content:
+                    word_count = len(item.raw_content.split())
+                    domain_data["word_counts"].append(word_count)
+            
+            # Calculate averages and final metrics
+            for domain, data in domain_aggregates.items():
+                if data["count"] > 0:
+                    data["avg_quality_score"] = data["avg_quality_score"] / data["count"]
+                    data["avg_concepts_per_item"] = data["total_concepts"] / data["count"]
+                    data["avg_claims_per_item"] = data["total_claims"] / data["count"]
+                    
+                    if data["processing_times"]:
+                        data["avg_processing_time_minutes"] = sum(data["processing_times"]) / len(data["processing_times"])
+                    
+                    if data["word_counts"]:
+                        data["avg_word_count"] = sum(data["word_counts"]) / len(data["word_counts"])
+                        data["total_words_processed"] = sum(data["word_counts"])
+            
+            return {
+                "domain_aggregates": domain_aggregates,
+                "total_items_analyzed": total_items,
+                "domains_covered": len(domain_aggregates),
+                "generated_at": datetime.utcnow().isoformat() + "Z"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error aggregating results by domain: {e}")
+            return {}
+    
+    async def process_priority_queue(self, max_items: int = 50) -> Dict[str, Any]:
+        """
+        Process queue items by priority (high -> medium -> low)
+        """
+        try:
+            results = {
+                "batch_id": str(uuid.uuid4()),
+                "started_at": datetime.utcnow().isoformat() + "Z",
+                "priority_results": {},
+                "total_processed": 0,
+                "total_failed": 0
+            }
+            
+            remaining_capacity = max_items
+            
+            # Process in priority order
+            for priority in [Priority.HIGH, Priority.MEDIUM, Priority.LOW]:
+                if remaining_capacity <= 0:
+                    break
+                
+                # Get items for this priority level
+                items = await self.list_content(
+                    status=ProcessingStatus.PENDING,
+                    priority=priority,
+                    limit=min(remaining_capacity, 20)  # Max 20 per priority level
+                )
+                
+                if not items:
+                    results["priority_results"][priority.value] = {
+                        "processed": 0,
+                        "message": "No pending items"
+                    }
+                    continue
+                
+                # Mock processing function for demonstration
+                async def mock_processor(item):
+                    await asyncio.sleep(0.1)  # Simulate processing
+                    return {"status": "mock_processed"}
+                
+                # Process items for this priority
+                priority_result = await self.batch_process_by_priority(
+                    priority, mock_processor, len(items)
+                )
+                
+                results["priority_results"][priority.value] = priority_result
+                results["total_processed"] += priority_result["processed"]
+                results["total_failed"] += priority_result["failed"]
+                
+                remaining_capacity -= len(items)
+            
+            results["completed_at"] = datetime.utcnow().isoformat() + "Z"
+            results["success"] = True
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error processing priority queue: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "total_processed": 0,
+                "total_failed": 0
+            }

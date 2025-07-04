@@ -1,0 +1,246 @@
+# Concept Explorer Agent Configuration
+
+# Model Configuration
+models:
+  spacy_model: "en_core_web_sm"
+  sentence_transformer: "all-MiniLM-L6-v2"
+  
+# Concept Extraction Settings
+extraction:
+  max_concepts_per_document: 100
+  min_concept_length: 3
+  max_concept_length: 50
+  confidence_threshold: 0.5
+  
+  # Entity types to extract
+  entity_types:
+    - "PERSON"
+    - "ORG"
+    - "EVENT" 
+    - "WORK_OF_ART"
+    - "LAW"
+    - "LANGUAGE"
+    - "NORP"  # Nationalities, religious groups
+    - "FAC"   # Buildings, airports, highways
+    - "GPE"   # Countries, cities, states
+    
+  # Noun phrase filtering
+  noun_phrase:
+    max_words: 3
+    exclude_determiners: true
+    exclude_pronouns: true
+
+# Relationship Discovery Settings
+relationships:
+  semantic_similarity_threshold: 0.7
+  cooccurrence_window_size: 50
+  max_relationships_per_concept: 20
+  
+  # Relationship types and their patterns
+  patterns:
+    causal:
+      - "causes"
+      - "leads to"
+      - "results in"
+      - "produces"
+      - "generates"
+      - "brings about"
+    
+    temporal:
+      - "before"
+      - "after"
+      - "during"
+      - "precedes"
+      - "follows"
+      - "concurrent with"
+    
+    similarity:
+      - "similar to"
+      - "like"
+      - "resembles"
+      - "analogous"
+      - "comparable"
+      - "reminiscent of"
+    
+    opposition:
+      - "opposes"
+      - "contradicts"
+      - "differs from"
+      - "opposite"
+      - "conflicts with"
+      - "contrasts with"
+    
+    containment:
+      - "includes"
+      - "contains"
+      - "part of"
+      - "subset"
+      - "element"
+      - "component of"
+    
+    influence:
+      - "influences"
+      - "affects"
+      - "shapes"
+      - "impacts"
+      - "modifies"
+      - "determines"
+
+# Domain Classification
+domains:
+  mathematics:
+    keywords:
+      - "number"
+      - "equation"
+      - "theorem"
+      - "proof"
+      - "geometry"
+      - "algebra"
+      - "calculus"
+      - "statistics"
+      - "probability"
+      - "logic"
+    
+  science:
+    keywords:
+      - "physics"
+      - "chemistry"
+      - "biology"
+      - "experiment"
+      - "theory"
+      - "discovery"
+      - "hypothesis"
+      - "research"
+      - "observation"
+      - "measurement"
+    
+  philosophy:
+    keywords:
+      - "ethics"
+      - "metaphysics"
+      - "logic"
+      - "consciousness"
+      - "reality"
+      - "truth"
+      - "knowledge"
+      - "existence"
+      - "meaning"
+      - "virtue"
+    
+  art:
+    keywords:
+      - "painting"
+      - "sculpture"
+      - "music"
+      - "literature"
+      - "aesthetics"
+      - "beauty"
+      - "creativity"
+      - "expression"
+      - "culture"
+      - "style"
+    
+  religion:
+    keywords:
+      - "sacred"
+      - "divine"
+      - "prayer"
+      - "ritual"
+      - "scripture"
+      - "faith"
+      - "spiritual"
+      - "worship"
+      - "belief"
+      - "meditation"
+    
+  technology:
+    keywords:
+      - "invention"
+      - "engineering"
+      - "mechanism"
+      - "tool"
+      - "innovation"
+      - "machine"
+      - "device"
+      - "system"
+      - "process"
+      - "technique"
+
+# Hypothesis Generation Settings
+hypothesis:
+  max_hypotheses_per_analysis: 50
+  novelty_threshold: 0.5
+  evidence_threshold: 0.4
+  
+  # Transitive relationship settings
+  transitive:
+    max_path_length: 3
+    min_confidence: 0.6
+    enable: true
+  
+  # Cross-domain bridge settings
+  cross_domain:
+    enable: true
+    min_confidence: 0.5
+    max_bridges_per_pair: 5
+  
+  # Anomaly detection settings
+  anomaly:
+    enable: true
+    outlier_threshold: 2.0
+    min_cluster_size: 3
+
+# Network Analysis Settings
+network:
+  max_nodes: 10000
+  max_edges: 50000
+  
+  # Centrality calculations
+  centrality:
+    degree: true
+    betweenness: true
+    closeness: true
+    eigenvector: true
+  
+  # Community detection
+  community:
+    algorithm: "louvain"
+    resolution: 1.0
+    enable: true
+  
+  # Path finding
+  paths:
+    max_depth: 5
+    max_paths: 10
+    algorithm: "shortest_path"
+
+# Performance Settings
+performance:
+  batch_size: 100
+  max_workers: 4
+  cache_embeddings: true
+  cache_ttl: 3600  # seconds
+  
+  # Memory management
+  memory:
+    max_concepts_in_memory: 100000
+    cleanup_interval: 300  # seconds
+    
+# Logging Settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/concept_explorer.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# Export Settings
+export:
+  formats:
+    - "json"
+    - "csv"
+    - "gexf"  # Gephi format
+    - "graphml"
+  
+  include_metadata: true
+  compress_output: true

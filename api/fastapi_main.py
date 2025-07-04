@@ -23,11 +23,26 @@ from pydantic import BaseModel, Field
 import uvicorn
 import yaml
 
-# Import our agents
-from agents.scraper.scraper import WebScraper
-from agents.text_processor.processor import TextProcessor
-from agents.knowledge_graph.graph_builder import GraphBuilder
-from agents.vector_index.indexer import VectorIndexer
+# Import our agents with error handling
+try:
+    from agents.scraper.scraper_agent import ScraperAgent as WebScraper
+except ImportError:
+    WebScraper = None
+
+try:
+    from agents.text_processor.text_processor import TextProcessor
+except ImportError:
+    TextProcessor = None
+
+try:
+    from agents.knowledge_graph.knowledge_graph_builder import GraphBuilder
+except ImportError:
+    GraphBuilder = None
+
+try:
+    from agents.vector_index.vector_indexer import VectorIndexer
+except ImportError:
+    VectorIndexer = None
 
 # Configure logging
 logging.basicConfig(

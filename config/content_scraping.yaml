@@ -1,0 +1,84 @@
+# Content Scraping Configuration
+# Configuration for multi-source content acquisition and processing
+
+scraping:
+  youtube:
+    api_key: "${AIzaSyCk4WC3d3sX6pTHQWu9otHwguZr1nEYSks}"
+    max_transcript_length: 50000
+    supported_languages: ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh"]
+    rate_limit: 100  # requests per day
+    timeout: 30      # seconds
+    
+  general:
+    max_file_size: "100MB"
+    supported_formats: ["pdf", "docx", "txt", "jpg", "png", "jpeg", "gif", "webp"]
+    rate_limit: 10  # requests per minute per domain
+    timeout: 30     # seconds
+    user_agent: "MCP-Yggdrasil/1.0 (Educational Research Bot)"
+    
+  web:
+    respect_robots_txt: true
+    max_page_size: "10MB"
+    max_depth: 3
+    concurrent_requests: 5
+    delay_between_requests: 1  # seconds
+    
+  staging:
+    max_pending_items: 1000
+    auto_cleanup_days: 30
+    analysis_timeout: 300  # seconds
+    batch_size: 50
+    
+  ocr:
+    engine: "tesseract"
+    languages: ["eng", "spa", "fra", "deu"]
+    confidence_threshold: 0.7
+    
+processing:
+  domains:
+    auto_classify: true
+    confidence_threshold: 0.8
+    default_domain: "general"
+    
+  quality:
+    min_content_length: 100  # characters
+    max_content_length: 1000000  # characters
+    filter_duplicates: true
+    content_similarity_threshold: 0.9
+    
+  analysis:
+    default_agents: ["text_processor", "claim_analyzer"]
+    max_agents_per_item: 5
+    parallel_processing: true
+    priority_levels: ["high", "medium", "low"]
+
+monitoring:
+  metrics:
+    enabled: true
+    collection_interval: 60  # seconds
+    
+  alerts:
+    queue_size_threshold: 100
+    error_rate_threshold: 0.1  # 10%
+    processing_time_threshold: 600  # seconds
+    
+  logging:
+    level: "INFO"
+    format: "json"
+    max_file_size: "100MB"
+    backup_count: 5
+
+security:
+  content_filtering:
+    enabled: true
+    blocked_domains: []
+    allowed_domains: []
+    
+  file_validation:
+    scan_uploads: true
+    max_scan_time: 30  # seconds
+    
+  rate_limiting:
+    enabled: true
+    per_ip_limit: 100  # requests per hour
+    per_user_limit: 1000  # requests per day
