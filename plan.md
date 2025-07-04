@@ -848,3 +848,9 @@ tenacity >= 8.2.0       # For retry logic
 ---
 
 **This plan provides a comprehensive roadmap for implementing robust database synchronization in the MCP Yggdrasil server while maintaining the existing architecture and ensuring data consistency across the hybrid database system.**
+
+
+## Additional User Notes ##
+- Clean up directory and organize for better navigation and less usage for Claude-Code
+- Find a way to improve claude-code usage (as of now the size of the project only allows it to do like one function/feature implementation per session, if that)
+- Maybe create small agents or something to improve claude-code? Or use separate LLMs to do different tasks? (Use gemini-cli as well)
