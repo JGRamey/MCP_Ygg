@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Add web services to the existing docker-compose.yml
+  streamlit:
+    build: .
+    ports:
+      - "8502:8502"
+    command: streamlit run streamlit_workspace/main_dashboard.py --server.port 8502 --server.address 0.0.0.0
+    volumes:
+      - .:/app
+    depends_on:
+      - neo4j
+      - qdrant
+      - redis
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - yggdrasil-network
+
+  fastapi:
+    build: .
+    ports:
+      - "8000:8000"
+    command: python -m uvicorn api.simple_main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    depends_on:
+      - neo4j
+      - qdrant
+      - redis
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - yggdrasil-network
+
+networks:
+  yggdrasil-network:
+    external: true

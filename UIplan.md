@@ -8,6 +8,16 @@ Transform the current basic HTML dashboard into a comprehensive **IDE-like works
 
 ## 📋 REQUIREMENTS SUMMARY
 
+## User notes ##
+- I dont want an IDE like interface, only file management of the stored data and new data being imported/scraped into the databases. The files displayed in the UI should only be database material (CSV files and such, not project files which is being shown currently)
+- Scraper page is blank. Should have options for the type of source that is going to be scraped (Youtube video/transcript, Book, PDF, Picture/Image, Webpage, Web article, Manuscript, Scroll, etc)
+- Operations console is showing error: ModuleNotFoundError: No module named 'psutil'
+Traceback:
+File "/Users/grant/Documents/GitHub/MCP_Ygg/streamlit_workspace/pages/04_⚡_Operations_Console.py", line 12, in <module>
+    import psutil
+- Graph editor is blank and says "No concepts match the current filters" - Which is completely wrong and should just show the Neo4j knowledge graph. It should basically be an exact replica of the Neo4j dashboard with drag and drop options and editor options to change the graph and update files, relationships, and concepts. 
+- IMPORTANT!!! - Concepts are found within scraped data, for instance I'm using the word "Concept" as a form of "Idea" or a specific area of thought,example: Metaphysics is a type of "Concept" even though it's a subject/branch of Philosophy. Another example for a concept is the "trinity" which is found in Christianity and many other forms of belief or even numerolgy. This is the whole point of the "concept" connector which is to connect like minded concepts across multiple cultures and data/information found in the world. Is this incorrect? Should I go about this differently? If so, stop and talk to me about it so we can correct this.
+
 ### **Primary Goal**
 Create a professional workspace where users can:
 - **Directly manipulate** Neo4j and Qdrant databases
@@ -17,7 +27,6 @@ Create a professional workspace where users can:
 - **Perform advanced analytics** and data quality operations
 
 ### **Target User Experience**
-- **IDE-like interface** similar to VSCode or PyCharm
 - **Real-time database editing** with immediate visual feedback
 - **Professional workflow** for knowledge engineering
 - **Complete project control** through web interface
@@ -61,9 +70,8 @@ Create a professional workspace where users can:
 
 #### **Core Features:**
 - **Concept Management**
-  - Create new concepts with full metadata (name, description, domain, type, level)
+  - Create new concepts with different data files (texts, articles, manuscripts, etc)
   - Edit existing concepts with real-time validation
-  - Delete concepts with dependency checking
   - Duplicate concept detection and merging
   - Bulk import/export operations
 
@@ -71,13 +79,13 @@ Create a professional workspace where users can:
   - Create relationships between concepts
   - Edit relationship properties (type, strength, description)
   - Delete relationships with impact analysis
-  - Relationship type management (BELONGS_TO, RELATES_TO, etc.)
+  - Relationship type management (BELONGS_TO, RELATES_TO, FATHER_OF, SON_OF, DAUGHTER_OF, DISCIPLE_OF, FOLLOWER_OF, etc.)
   - Visual relationship browser
 
 - **Domain & Category Management**
   - Create new domains and sub-domains
   - Modify domain hierarchies and structures
-  - Category type management (root, sub_root, branch, leaf)
+  - Category type management (root, sub_root, branch, limb, leaf)
   - Domain-specific validation rules
   - Cross-domain relationship management
 
@@ -157,7 +165,6 @@ Create a professional workspace where users can:
 - **File Tree**: Expandable project structure browser
 - **Code Editor**: Syntax-highlighted editor for various file types
 - **Configuration Forms**: Guided editing for complex configurations
-- **Version Control Panel**: Git status, commit, and diff views
 - **Backup Manager**: Create and restore project snapshots
 
 #### **Technical Requirements:**
