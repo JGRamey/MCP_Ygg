@@ -1,0 +1,109 @@
+# Content Analysis Agent Configuration
+
+# Semantic similarity thresholds
+similarity_threshold: 0.7
+domain_classification_threshold: 0.4
+entity_matching_threshold: 0.3
+
+# Quality assessment weights
+quality_weights:
+  academic_rigor: 0.25
+  citation_quality: 0.20
+  logical_coherence: 0.25
+  factual_consistency: 0.30
+
+# Domain taxonomy mapping
+taxonomy:
+  csv_root: "CSV"
+  primary_domains:
+    - art
+    - language
+    - mathematics
+    - philosophy
+    - science
+    - technology
+  subdomains:
+    - religion
+    - astrology
+  
+  confidence_levels:
+    high: 0.8
+    medium: 0.6
+    low: 0.4
+
+# Entity extraction settings
+entity_extraction:
+  use_domain_knowledge: true
+  extract_relationships: true
+  relationship_confidence_threshold: 0.7
+  max_entities_per_type: 50
+
+# Claim extraction settings
+claim_extraction:
+  min_claim_length: 20
+  max_claims_per_document: 100
+  confidence_thresholds:
+    primary: 0.8
+    supporting: 0.5
+    contradictory: 0.3
+
+# Semantic analysis settings
+semantic_analysis:
+  similarity_threshold: 0.7
+  novel_concept_threshold: 0.3
+  duplicate_threshold: 0.9
+  cross_domain_threshold: 0.5
+
+# Quality indicators
+quality_assessment:
+  academic_rigor:
+    formal_language_weight: 0.3
+    evidence_quality_weight: 0.4
+    structure_weight: 0.3
+  
+  citation_quality:
+    min_citations_per_100_words: 0.5
+    citation_format_bonus: 0.2
+    doi_bonus: 0.3
+  
+  logical_coherence:
+    connector_density_target: 0.05
+    structure_bonus: 0.2
+    argumentation_bonus: 0.3
+  
+  source_authority:
+    domain_weights:
+      edu: 0.3
+      gov: 0.3
+      org: 0.2
+      academic_sites: 0.4
+    author_credential_bonus: 0.2
+
+# Output settings
+output:
+  save_detailed_analysis: true
+  save_intermediate_results: false
+  output_dir: "data/staging/analyzed"
+  backup_dir: "data/staging/analyzed/backups"
+
+# Performance settings
+performance:
+  max_content_length: 100000  # characters
+  chunk_size: 2000
+  parallel_processing: true
+  max_concurrent_analyses: 5
+  timeout_seconds: 300
+
+# Integration settings
+integration:
+  use_existing_text_processor: true
+  use_existing_claim_analyzer: true
+  use_domain_taxonomy: true
+  cross_reference_existing_knowledge: true
+
+# Logging
+logging:
+  level: "INFO"
+  log_detailed_analysis: true
+  log_performance_metrics: true
+  log_quality_scores: true

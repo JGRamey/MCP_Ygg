@@ -99,8 +99,8 @@ def install_dev_requirements() -> bool:
     """Install development requirements if file exists"""
     # Check both locations for requirements-dev.txt
     requirements_locations = [
-        Path("tests/lint/requirements-dev.txt"),  # New location
-        Path("requirements-dev.txt")              # Legacy location
+        Path("requirements-dev.txt"),              # New root location
+        Path("tests/lint/requirements-dev.txt")   # Legacy location
     ]
     
     for requirements_dev in requirements_locations:

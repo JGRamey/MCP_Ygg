@@ -609,11 +609,13 @@ vector_embedding_age
 
 ## 📅 Enhanced Development Timeline
 
-### Week 1-2: Content Acquisition Layer
+### Week 1-2: Content Acquisition Layer & Project Cleanup
 **Phase 1 Implementation:**
 - [x] Multi-source scraping interface (Streamlit page 07) ✅ **COMPLETED** - Streamlit page exists
 - [x] YouTube Transcript Agent with API integration ✅ **COMPLETED** - Enhanced with efficient yt-dlp implementation
 - [x] JSON staging system with structured workflow ✅ **COMPLETED** - Full staging manager implemented
+- [x] Repository cleanup (cache files, dependencies) ✅ **COMPLETED** - ~70MB saved, dependencies consolidated
+- [x] Configuration standardization ✅ **COMPLETED** - All configs use .yaml, requirements consolidated
 - [ ] Image OCR processing for manuscripts/photos
 - [x] Basic content validation and classification ✅ **COMPLETED** - Domain classification implemented
 
@@ -623,6 +625,8 @@ vector_embedding_age
 - [x] Concept Explorer Agent for relationship discovery ✅ **COMPLETED** - Agent exists in agents/concept_explorer/
 - [x] Processing Queue management page (Streamlit page 08) ✅ **COMPLETED** - Streamlit page exists + enhanced staging manager
 - [x] Sequential vs parallel analysis pipelines ✅ **COMPLETED** - Both modes implemented in analysis API
+- [x] Enhanced Content Analysis Agent with domain taxonomy mapping ✅ **COMPLETED** - New multi-agent validation pipeline
+- [x] Enhanced Fact Verification Agent with cross-referencing ✅ **COMPLETED** - Authoritative source integration
 - [x] Quality assessment and confidence scoring ✅ **COMPLETED** - Quality metrics implemented
 
 ### Week 5-6: Database Synchronization Core
