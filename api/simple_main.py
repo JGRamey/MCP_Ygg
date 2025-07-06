@@ -12,6 +12,8 @@ import logging
 try:
     from api.routes.analysis_pipeline import router as analysis_router
     from api.routes.content_scraping import router as content_router
+    from api.routes.concept_discovery import router as concept_discovery_router
+    from api.routes.performance_monitoring import router as performance_router
     from api.routes.api_routes import scraper_router, query_router, admin_router, relationship_router
 except ImportError as e:
     print(f"Route import warning: {e}")
@@ -54,6 +56,18 @@ def create_app():
         logger.warning(f"❌ Content scraping routes failed: {e}")
     
     try:
+        app.include_router(concept_discovery_router)
+        logger.info("✅ Concept discovery routes loaded")
+    except Exception as e:
+        logger.warning(f"❌ Concept discovery routes failed: {e}")
+    
+    try:
+        app.include_router(performance_router)
+        logger.info("✅ Performance monitoring routes loaded")
+    except Exception as e:
+        logger.warning(f"❌ Performance monitoring routes failed: {e}")
+    
+    try:
         app.include_router(scraper_router, prefix="/api")
         app.include_router(query_router, prefix="/api")
         app.include_router(admin_router, prefix="/api")
@@ -82,6 +96,8 @@ def create_app():
             "services": {
                 "analysis_pipeline": "available",
                 "content_scraping": "available",
+                "concept_discovery": "available",
+                "performance_monitoring": "available",
                 "database_sync": "available"
             }
         }

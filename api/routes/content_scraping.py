@@ -19,18 +19,29 @@ try:
     from data.staging_manager import (
         StagingManager, ContentMetadata, SourceType, Priority, AgentPipeline
     )
+    from agents.concept_explorer.concept_discovery_service import ConceptDiscoveryService
 except ImportError as e:
     print(f"Staging manager import error: {e}")
+
+# Initialize concept discovery service
+try:
+    concept_discovery_service = ConceptDiscoveryService()
+    print("✅ Concept discovery service initialized")
+except Exception as e:
+    print(f"Concept discovery service initialization warning: {e}")
+    concept_discovery_service = None
 
 # Import efficient agent implementations
 try:
     from agents.youtube_transcript.youtube_agent_efficient import EfficientYouTubeAgent
-    from agents.scraper.scraper_agent import ScraperAgent
+    from agents.scraper.high_performance_scraper import OptimizedScraperAgent
     # Create agent instances
     YouTubeAgent = EfficientYouTubeAgent
+    ScraperAgent = OptimizedScraperAgent
+    print("✅ High-performance scraper loaded successfully")
     print("✅ Efficient YouTube agent loaded successfully")
 except ImportError as e:
-    print(f"YouTube agent import warning: {e}")
+    print(f"Agent import warning: {e}")
     # Create minimal fallback implementations
     class YouTubeAgent:
         async def extract_transcript(self, url, extract_metadata=True):
@@ -260,10 +271,39 @@ async def scrape_file(
             tmp_file.write(content)
             tmp_file_path = tmp_file.name
         
+        # Process file content based on type
+        raw_content = ""
+        file_ext = Path(file.filename).suffix.lower()
+        
+        try:
+            if file_ext in ['.jpg', '.jpeg', '.png']:
+                # Use OCR for image files
+                from agents.scraper.scraper_agent import OCRProcessor
+                ocr_processor = OCRProcessor()
+                raw_content = ocr_processor.extract_text_from_image(tmp_file_path, ocr_language or 'eng')
+                
+            elif file_ext == '.pdf':
+                # Use PDF processor with OCR fallback
+                from agents.scraper.scraper_agent import PDFProcessor
+                pdf_processor = PDFProcessor()
+                raw_content, _ = pdf_processor.extract_text_from_pdf(tmp_file_path)
+                
+            elif file_ext in ['.txt', '.md']:
+                # Read text files directly
+                raw_content = content.decode('utf-8', errors='ignore')
+                
+            else:
+                # Default fallback for other file types
+                raw_content = f"File content from: {file.filename} (Content extraction not implemented for this file type)"
+                
+        except Exception as processing_error:
+            # Fallback to basic content decoding
+            raw_content = content.decode('utf-8', errors='ignore') if file.content_type and 'text' in file.content_type else f"File content from: {file.filename} (Content extraction failed: {processing_error})"
+        
         # Submit to staging
         submission_id = await staging_manager.submit_content(
             source_type=SourceType.UPLOAD,
-            raw_content=content.decode('utf-8', errors='ignore') if file.content_type and 'text' in file.content_type else str(content),
+            raw_content=raw_content,
             metadata=metadata,
             source_url=f"file://{file.filename}",
             agent_pipeline=pipeline
@@ -434,15 +474,36 @@ async def scrape_url_background(url: str, metadata: ContentMetadata, agent_pipel
         
         # Scrape content
         scraped_content = await scraper.scrape_url(url)
+        raw_content = scraped_content.get("content", "")
+        
+        # Perform concept discovery if service is available
+        concept_discovery_result = None
+        if concept_discovery_service and raw_content.strip():
+            try:
+                concept_discovery_result = await concept_discovery_service.discover_concepts_from_content(
+                    content=raw_content,
+                    source_document=url,
+                    domain=metadata.domain,
+                    include_hypotheses=True,
+                    include_thought_paths=True
+                )
+                print(f"✅ Concept discovery completed: {len(concept_discovery_result.concepts)} concepts found")
+            except Exception as cd_error:
+                print(f"⚠️ Concept discovery failed: {cd_error}")
         
         # Submit to staging
         submission_id = await staging_manager.submit_content(
             source_type=SourceType.WEBSITE,
-            raw_content=scraped_content.get("content", ""),
+            raw_content=raw_content,
             metadata=metadata,
             source_url=url,
             agent_pipeline=agent_pipeline
         )
+        
+        # Store concept discovery results if available
+        if concept_discovery_result:
+            # This would integrate with the database sync system
+            print(f"📊 Concepts for {submission_id}: {[c.name for c in concept_discovery_result.concepts[:5]]}")
         
         print(f"URL scraping completed: {submission_id}")
         
@@ -463,6 +524,7 @@ async def scrape_youtube_background(
         
         # Extract transcript
         transcript_data = await youtube_agent.extract_transcript(youtube_url, extract_metadata)
+        raw_transcript = transcript_data.get("transcript", "")
         
         # Update metadata with extracted info
         if extract_metadata and transcript_data.get("metadata"):
@@ -471,14 +533,34 @@ async def scrape_youtube_background(
             metadata.author = video_metadata.get("channel", metadata.author)
             metadata.date = video_metadata.get("publish_date", metadata.date)
         
+        # Perform concept discovery on transcript if service is available
+        concept_discovery_result = None
+        if concept_discovery_service and raw_transcript.strip():
+            try:
+                concept_discovery_result = await concept_discovery_service.discover_concepts_from_content(
+                    content=raw_transcript,
+                    source_document=youtube_url,
+                    domain=metadata.domain,
+                    include_hypotheses=True,
+                    include_thought_paths=True
+                )
+                print(f"✅ YouTube concept discovery completed: {len(concept_discovery_result.concepts)} concepts found")
+            except Exception as cd_error:
+                print(f"⚠️ YouTube concept discovery failed: {cd_error}")
+        
         # Submit to staging
         submission_id = await staging_manager.submit_content(
             source_type=SourceType.YOUTUBE,
-            raw_content=transcript_data.get("transcript", ""),
+            raw_content=raw_transcript,
             metadata=metadata,
             source_url=youtube_url,
             agent_pipeline=agent_pipeline
         )
+        
+        # Store concept discovery results if available
+        if concept_discovery_result:
+            # This would integrate with the database sync system
+            print(f"📺 YouTube concepts for {submission_id}: {[c.name for c in concept_discovery_result.concepts[:5]]}")
         
         print(f"YouTube transcript extraction completed: {submission_id}")
         

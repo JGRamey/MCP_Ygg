@@ -78,15 +78,25 @@ class ConceptExplorer:
     """
     
     def __init__(self, 
+                 config_path: Optional[str] = None,
                  model_name: str = "all-MiniLM-L6-v2",
                  spacy_model: str = "en_core_web_sm"):
         """Initialize the concept explorer"""
         
+        # Load configuration
+        self.config = self._load_config(config_path)
+        
+        # Override with provided parameters
+        if model_name != "all-MiniLM-L6-v2":
+            self.config["models"]["sentence_transformer"] = model_name
+        if spacy_model != "en_core_web_sm":
+            self.config["models"]["spacy_model"] = spacy_model
+        
         # Load NLP models
         try:
-            self.nlp = spacy.load(spacy_model)
-            self.sentence_model = SentenceTransformer(model_name)
-            logger.info(f"Loaded models: {spacy_model}, {model_name}")
+            self.nlp = spacy.load(self.config["models"]["spacy_model"])
+            self.sentence_model = SentenceTransformer(self.config["models"]["sentence_transformer"])
+            logger.info(f"Loaded models: {self.config['models']['spacy_model']}, {self.config['models']['sentence_transformer']}")
         except Exception as e:
             logger.error(f"Error loading models: {e}")
             raise
@@ -96,24 +106,61 @@ class ConceptExplorer:
         self.concept_nodes: Dict[str, ConceptNode] = {}
         self.relationship_edges: Dict[str, RelationshipEdge] = {}
         
-        # Domain mappings
-        self.domain_keywords = {
-            "mathematics": ["number", "equation", "theorem", "proof", "geometry", "algebra"],
-            "science": ["physics", "chemistry", "biology", "experiment", "theory", "discovery"],
-            "philosophy": ["ethics", "metaphysics", "logic", "consciousness", "reality", "truth"],
-            "art": ["painting", "sculpture", "music", "literature", "aesthetics", "beauty"],
-            "religion": ["sacred", "divine", "prayer", "ritual", "scripture", "faith"],
-            "technology": ["invention", "engineering", "mechanism", "tool", "innovation"]
-        }
+        # Domain mappings from config
+        self.domain_keywords = {}
+        for domain, domain_config in self.config.get("domains", {}).items():
+            self.domain_keywords[domain] = domain_config.get("keywords", [])
         
-        # Relationship types and patterns
-        self.relationship_patterns = {
-            "causal": ["causes", "leads to", "results in", "produces", "generates"],
-            "temporal": ["before", "after", "during", "precedes", "follows"],
-            "similarity": ["similar to", "like", "resembles", "analogous", "comparable"],
-            "opposition": ["opposes", "contradicts", "differs from", "opposite"],
-            "containment": ["includes", "contains", "part of", "subset", "element"],
-            "influence": ["influences", "affects", "shapes", "impacts", "modifies"]
+        # Relationship types and patterns from config
+        self.relationship_patterns = self.config.get("relationships", {}).get("patterns", {})
+    
+    def _load_config(self, config_path: Optional[str] = None) -> Dict[str, Any]:
+        """Load configuration from YAML file"""
+        try:
+            import yaml
+            
+            if config_path is None:
+                # Use default config path
+                config_path = Path(__file__).parent / "config.yaml"
+            
+            if Path(config_path).exists():
+                with open(config_path, 'r') as f:
+                    config = yaml.safe_load(f)
+                logger.info(f"Loaded configuration from {config_path}")
+                return config
+            else:
+                logger.warning(f"Config file not found at {config_path}, using defaults")
+                return self._get_default_config()
+                
+        except Exception as e:
+            logger.error(f"Error loading config: {e}")
+            return self._get_default_config()
+    
+    def _get_default_config(self) -> Dict[str, Any]:
+        """Get default configuration if config file is not available"""
+        return {
+            "models": {
+                "spacy_model": "en_core_web_sm",
+                "sentence_transformer": "all-MiniLM-L6-v2"
+            },
+            "domains": {
+                "mathematics": {"keywords": ["number", "equation", "theorem", "proof", "geometry", "algebra"]},
+                "science": {"keywords": ["physics", "chemistry", "biology", "experiment", "theory", "discovery"]},
+                "philosophy": {"keywords": ["ethics", "metaphysics", "logic", "consciousness", "reality", "truth"]},
+                "art": {"keywords": ["painting", "sculpture", "music", "literature", "aesthetics", "beauty"]},
+                "religion": {"keywords": ["sacred", "divine", "prayer", "ritual", "scripture", "faith"]},
+                "technology": {"keywords": ["invention", "engineering", "mechanism", "tool", "innovation"]}
+            },
+            "relationships": {
+                "patterns": {
+                    "causal": ["causes", "leads to", "results in", "produces", "generates"],
+                    "temporal": ["before", "after", "during", "precedes", "follows"],
+                    "similarity": ["similar to", "like", "resembles", "analogous", "comparable"],
+                    "opposition": ["opposes", "contradicts", "differs from", "opposite"],
+                    "containment": ["includes", "contains", "part of", "subset", "element"],
+                    "influence": ["influences", "affects", "shapes", "impacts", "modifies"]
+                }
+            }
         }
     
     async def extract_concepts(self, 
@@ -639,15 +686,411 @@ class ConceptExplorer:
     
     async def _generate_missing_link_hypotheses(self, graph: nx.Graph) -> List[ConceptHypothesis]:
         """Generate hypotheses about missing links in the concept network"""
-        # This is a placeholder for more sophisticated missing link prediction
-        return []
+        hypotheses = []
+        
+        try:
+            # Use structural similarity to predict missing links
+            nodes = list(graph.nodes())
+            
+            for i in range(len(nodes)):
+                for j in range(i + 1, len(nodes)):
+                    node_a, node_b = nodes[i], nodes[j]
+                    
+                    # Skip if edge already exists
+                    if graph.has_edge(node_a, node_b):
+                        continue
+                    
+                    # Calculate structural similarity
+                    neighbors_a = set(graph.neighbors(node_a))
+                    neighbors_b = set(graph.neighbors(node_b))
+                    
+                    if len(neighbors_a) > 0 and len(neighbors_b) > 0:
+                        # Jaccard similarity of neighborhoods
+                        intersection = neighbors_a.intersection(neighbors_b)
+                        union = neighbors_a.union(neighbors_b)
+                        jaccard_sim = len(intersection) / len(union) if union else 0
+                        
+                        # Only generate hypothesis if significant structural similarity
+                        if jaccard_sim > 0.3:
+                            # Get node data for better description
+                            node_a_data = graph.nodes[node_a]
+                            node_b_data = graph.nodes[node_b]
+                            
+                            hypothesis = ConceptHypothesis(
+                                hypothesis_id=f"missing_link_{len(hypotheses)}_{node_a}_{node_b}",
+                                description=f"Predicted missing link between '{node_a_data.get('name', node_a)}' and '{node_b_data.get('name', node_b)}' based on structural similarity",
+                                supporting_concepts=list(intersection),
+                                evidence_strength=float(jaccard_sim),
+                                novelty_score=0.8,
+                                testable_predictions=[
+                                    f"Search for co-occurrence patterns between {node_a_data.get('name', node_a)} and {node_b_data.get('name', node_b)}",
+                                    f"Analyze semantic similarity in source documents",
+                                    f"Check for indirect references or implications"
+                                ],
+                                domain_bridge=(node_a_data.get('domain'), node_b_data.get('domain')) if node_a_data.get('domain') != node_b_data.get('domain') else None
+                            )
+                            hypotheses.append(hypothesis)
+            
+            # Sort by evidence strength and limit results
+            hypotheses.sort(key=lambda h: h.evidence_strength, reverse=True)
+            return hypotheses[:15]
+            
+        except Exception as e:
+            logger.error(f"Error generating missing link hypotheses: {e}")
+            return []
     
     async def _generate_bridge_hypotheses(self, graph: nx.Graph) -> List[ConceptHypothesis]:
         """Generate hypotheses about cross-domain bridges"""
-        # This is a placeholder for cross-domain bridge hypothesis generation
-        return []
+        hypotheses = []
+        
+        try:
+            # Group nodes by domain
+            domain_nodes = {}
+            for node_id, node_data in graph.nodes(data=True):
+                domain = node_data.get('domain', 'unknown')
+                if domain not in domain_nodes:
+                    domain_nodes[domain] = []
+                domain_nodes[domain].append((node_id, node_data))
+            
+            # Define domain bridge potential based on conceptual proximity
+            bridge_patterns = {
+                ("mathematics", "science"): ["formula", "calculation", "measurement", "ratio", "proportion"],
+                ("philosophy", "science"): ["truth", "reality", "existence", "consciousness", "nature"],
+                ("art", "mathematics"): ["harmony", "proportion", "symmetry", "pattern", "golden"],
+                ("religion", "philosophy"): ["truth", "meaning", "existence", "eternal", "divine"],
+                ("technology", "science"): ["invention", "discovery", "innovation", "application", "method"],
+                ("art", "philosophy"): ["beauty", "aesthetic", "meaning", "expression", "truth"]
+            }
+            
+            # Generate cross-domain bridge hypotheses
+            domains = list(domain_nodes.keys())
+            for i, domain1 in enumerate(domains):
+                for j, domain2 in enumerate(domains[i+1:], i+1):
+                    if len(domain_nodes[domain1]) == 0 or len(domain_nodes[domain2]) == 0:
+                        continue
+                    
+                    # Check for potential bridge patterns
+                    bridge_key = tuple(sorted([domain1, domain2]))
+                    bridge_keywords = bridge_patterns.get(bridge_key, [])
+                    
+                    # Look for concepts that might bridge these domains
+                    for node1_id, node1_data in domain_nodes[domain1]:
+                        for node2_id, node2_data in domain_nodes[domain2]:
+                            
+                            # Check for conceptual bridges
+                            potential_bridge = False
+                            bridge_evidence = []
+                            
+                            # Method 1: Shared keywords
+                            name1_words = set(node1_data.get('name', '').lower().split())
+                            name2_words = set(node2_data.get('name', '').lower().split())
+                            shared_words = name1_words.intersection(name2_words)
+                            
+                            if shared_words:
+                                potential_bridge = True
+                                bridge_evidence.append(f"Shared concepts: {', '.join(shared_words)}")
+                            
+                            # Method 2: Bridge keywords
+                            for keyword in bridge_keywords:
+                                if keyword in node1_data.get('name', '').lower() or keyword in node2_data.get('name', '').lower():
+                                    potential_bridge = True
+                                    bridge_evidence.append(f"Bridge keyword: {keyword}")
+                            
+                            # Method 3: Structural analysis - check if they're connected through intermediary nodes
+                            try:
+                                if nx.has_path(graph, node1_id, node2_id):
+                                    path_length = nx.shortest_path_length(graph, node1_id, node2_id)
+                                    if 2 <= path_length <= 4:  # Indirect but not too distant
+                                        potential_bridge = True
+                                        bridge_evidence.append(f"Connected through {path_length-1} intermediary concept(s)")
+                            except nx.NetworkXNoPath:
+                                pass
+                            
+                            if potential_bridge and len(bridge_evidence) > 0:
+                                # Calculate bridge strength based on evidence
+                                evidence_strength = min(len(bridge_evidence) * 0.3, 1.0)
+                                
+                                hypothesis = ConceptHypothesis(
+                                    hypothesis_id=f"bridge_{len(hypotheses)}_{domain1}_{domain2}",
+                                    description=f"Cross-domain bridge between '{node1_data.get('name', node1_id)}' ({domain1}) and '{node2_data.get('name', node2_id)}' ({domain2})",
+                                    supporting_concepts=[node1_id, node2_id],
+                                    evidence_strength=evidence_strength,
+                                    novelty_score=0.9,  # Cross-domain bridges are highly novel
+                                    testable_predictions=[
+                                        f"Investigate historical connections between {domain1} and {domain2}",
+                                        f"Search for interdisciplinary research connecting these concepts",
+                                        f"Analyze influence patterns across domains",
+                                        f"Look for common foundational principles"
+                                    ],
+                                    domain_bridge=(domain1, domain2)
+                                )
+                                hypotheses.append(hypothesis)
+            
+            # Sort by novelty score and evidence strength
+            hypotheses.sort(key=lambda h: (h.novelty_score * h.evidence_strength), reverse=True)
+            return hypotheses[:12]
+            
+        except Exception as e:
+            logger.error(f"Error generating bridge hypotheses: {e}")
+            return []
     
     async def _generate_anomaly_hypotheses(self, graph: nx.Graph) -> List[ConceptHypothesis]:
         """Generate hypotheses based on network anomalies"""
-        # This is a placeholder for anomaly-based hypothesis generation
-        return []
+        hypotheses = []
+        
+        try:
+            if len(graph.nodes) < 3:
+                return hypotheses
+            
+            # Calculate network metrics to identify anomalies
+            degree_centrality = nx.degree_centrality(graph)
+            betweenness_centrality = nx.betweenness_centrality(graph)
+            closeness_centrality = nx.closeness_centrality(graph)
+            
+            # Identify nodes with anomalous centrality patterns
+            nodes_data = []
+            for node_id in graph.nodes():
+                node_data = graph.nodes[node_id]
+                nodes_data.append({
+                    'id': node_id,
+                    'name': node_data.get('name', node_id),
+                    'domain': node_data.get('domain', 'unknown'),
+                    'degree': degree_centrality[node_id],
+                    'betweenness': betweenness_centrality[node_id],
+                    'closeness': closeness_centrality[node_id]
+                })
+            
+            # Calculate mean and std for each centrality measure
+            degrees = [n['degree'] for n in nodes_data]
+            betweennesses = [n['betweenness'] for n in nodes_data]
+            closenesses = [n['closeness'] for n in nodes_data]
+            
+            degree_mean, degree_std = np.mean(degrees), np.std(degrees)
+            betweenness_mean, betweenness_std = np.mean(betweennesses), np.std(betweennesses)
+            closeness_mean, closeness_std = np.mean(closenesses), np.std(closenesses)
+            
+            # Identify anomalies (nodes that are > 2 standard deviations from mean)
+            anomalous_nodes = []
+            
+            for node in nodes_data:
+                anomaly_types = []
+                
+                # High degree centrality anomaly (super-connectors)
+                if node['degree'] > degree_mean + 2 * degree_std:
+                    anomaly_types.append("super_connector")
+                
+                # High betweenness centrality (bridges between clusters)
+                if node['betweenness'] > betweenness_mean + 2 * betweenness_std:
+                    anomaly_types.append("cluster_bridge")
+                
+                # Low degree but high closeness (peripheral but important)
+                if node['degree'] < degree_mean - degree_std and node['closeness'] > closeness_mean + degree_std:
+                    anomaly_types.append("peripheral_important")
+                
+                # Isolated high-importance nodes
+                if node['degree'] < degree_mean - degree_std and node['betweenness'] > betweenness_mean:
+                    anomaly_types.append("isolated_bridge")
+                
+                if anomaly_types:
+                    anomalous_nodes.append((node, anomaly_types))
+            
+            # Generate hypotheses for each anomaly
+            for node, anomaly_types in anomalous_nodes:
+                for anomaly_type in anomaly_types:
+                    if anomaly_type == "super_connector":
+                        hypothesis = ConceptHypothesis(
+                            hypothesis_id=f"anomaly_{len(hypotheses)}_super_connector_{node['id']}",
+                            description=f"'{node['name']}' appears to be a super-connector concept with unusually high connectivity (degree: {node['degree']:.3f})",
+                            supporting_concepts=[node['id']] + list(graph.neighbors(node['id']))[:5],
+                            evidence_strength=min((node['degree'] - degree_mean) / (degree_std + 0.001), 1.0),
+                            novelty_score=0.8,
+                            testable_predictions=[
+                                f"Verify if '{node['name']}' is a fundamental concept in {node['domain']}",
+                                "Check if this concept appears in foundational texts across multiple sources",
+                                "Investigate if this concept serves as a definitional anchor for other concepts"
+                            ],
+                            domain_bridge=None
+                        )
+                        hypotheses.append(hypothesis)
+                    
+                    elif anomaly_type == "cluster_bridge":
+                        hypothesis = ConceptHypothesis(
+                            hypothesis_id=f"anomaly_{len(hypotheses)}_bridge_{node['id']}",
+                            description=f"'{node['name']}' appears to bridge different conceptual clusters (betweenness: {node['betweenness']:.3f})",
+                            supporting_concepts=[node['id']],
+                            evidence_strength=min((node['betweenness'] - betweenness_mean) / (betweenness_std + 0.001), 1.0),
+                            novelty_score=0.9,
+                            testable_predictions=[
+                                f"Investigate if '{node['name']}' connects different schools of thought",
+                                "Look for historical periods where this concept enabled knowledge transfer",
+                                "Check if removing this concept would fragment the knowledge network"
+                            ],
+                            domain_bridge=None
+                        )
+                        hypotheses.append(hypothesis)
+                    
+                    elif anomaly_type == "peripheral_important":
+                        hypothesis = ConceptHypothesis(
+                            hypothesis_id=f"anomaly_{len(hypotheses)}_peripheral_{node['id']}",
+                            description=f"'{node['name']}' has low connectivity but high importance (degree: {node['degree']:.3f}, closeness: {node['closeness']:.3f})",
+                            supporting_concepts=[node['id']],
+                            evidence_strength=0.7,
+                            novelty_score=0.85,
+                            testable_predictions=[
+                                f"Research if '{node['name']}' represents an emerging or declining concept",
+                                "Check if this concept has specialized but crucial applications",
+                                "Investigate temporal patterns of usage and influence"
+                            ],
+                            domain_bridge=None
+                        )
+                        hypotheses.append(hypothesis)
+            
+            # Detect structural anomalies
+            # Look for unusually dense or sparse regions
+            if nx.is_connected(graph):
+                try:
+                    communities = nx.community.greedy_modularity_communities(graph)
+                    if len(communities) > 1:
+                        # Analyze community structure anomalies
+                        community_sizes = [len(comm) for comm in communities]
+                        mean_size = np.mean(community_sizes)
+                        
+                        for i, community in enumerate(communities):
+                            if len(community) > mean_size * 2:  # Unusually large community
+                                community_nodes = list(community)[:3]  # Sample of nodes
+                                hypothesis = ConceptHypothesis(
+                                    hypothesis_id=f"anomaly_{len(hypotheses)}_large_cluster_{i}",
+                                    description=f"Detected unusually large conceptual cluster with {len(community)} concepts",
+                                    supporting_concepts=community_nodes,
+                                    evidence_strength=0.6,
+                                    novelty_score=0.7,
+                                    testable_predictions=[
+                                        "Investigate if this cluster represents a well-established domain",
+                                        "Check for over-representation of certain concept types",
+                                        "Analyze if this clustering reflects historical knowledge organization"
+                                    ],
+                                    domain_bridge=None
+                                )
+                                hypotheses.append(hypothesis)
+                
+                except Exception as community_error:
+                    logger.warning(f"Community detection failed: {community_error}")
+            
+            # Sort hypotheses by combined novelty and evidence strength
+            hypotheses.sort(key=lambda h: h.novelty_score * h.evidence_strength, reverse=True)
+            return hypotheses[:10]
+            
+        except Exception as e:
+            logger.error(f"Error generating anomaly hypotheses: {e}")
+            return []
+    
+    async def analyze_temporal_evolution(self, 
+                                       concepts: List[ConceptNode]) -> Dict[str, Any]:
+        """
+        Analyze how concepts evolve and influence each other over time
+        """
+        try:
+            evolution_analysis = {
+                "temporal_clusters": {},
+                "influence_chains": [],
+                "evolutionary_patterns": {},
+                "anachronisms": []
+            }
+            
+            # Group concepts by potential time periods (if available in source documents)
+            temporal_groups = {}
+            
+            for concept in concepts:
+                # Extract temporal indicators from concept names and descriptions
+                temporal_indicators = self._extract_temporal_indicators(concept)
+                
+                for period in temporal_indicators:
+                    if period not in temporal_groups:
+                        temporal_groups[period] = []
+                    temporal_groups[period].append(concept)
+            
+            evolution_analysis["temporal_clusters"] = {
+                period: [c.name for c in concepts] 
+                for period, concepts in temporal_groups.items()
+            }
+            
+            # Analyze potential influence chains across time periods
+            time_periods = sorted(temporal_groups.keys())
+            for i in range(len(time_periods) - 1):
+                earlier_period = time_periods[i]
+                later_period = time_periods[i + 1]
+                
+                # Find concepts that might show influence relationships
+                earlier_concepts = temporal_groups[earlier_period]
+                later_concepts = temporal_groups[later_period]
+                
+                for earlier_concept in earlier_concepts:
+                    for later_concept in later_concepts:
+                        # Check for potential influence using semantic similarity
+                        influence_score = await self._calculate_influence_potential(
+                            earlier_concept, later_concept
+                        )
+                        
+                        if influence_score > 0.7:
+                            evolution_analysis["influence_chains"].append({
+                                "source": earlier_concept.name,
+                                "target": later_concept.name,
+                                "source_period": earlier_period,
+                                "target_period": later_period,
+                                "influence_score": influence_score
+                            })
+            
+            return evolution_analysis
+            
+        except Exception as e:
+            logger.error(f"Error analyzing temporal evolution: {e}")
+            return {}
+    
+    def _extract_temporal_indicators(self, concept: ConceptNode) -> List[str]:
+        """Extract temporal period indicators from concept data"""
+        temporal_patterns = {
+            "ancient": ["ancient", "antiquity", "classical", "prehistoric", "archaic"],
+            "medieval": ["medieval", "middle ages", "byzantine", "feudal", "scholastic"],
+            "renaissance": ["renaissance", "humanist", "reformation", "early modern"],
+            "enlightenment": ["enlightenment", "rationalist", "empirical", "scientific revolution"],
+            "modern": ["modern", "industrial", "contemporary", "19th century", "20th century"],
+            "postmodern": ["postmodern", "contemporary", "digital", "information age"]
+        }
+        
+        text_to_analyze = f"{concept.name} {concept.description}".lower()
+        found_periods = []
+        
+        for period, keywords in temporal_patterns.items():
+            if any(keyword in text_to_analyze for keyword in keywords):
+                found_periods.append(period)
+        
+        return found_periods or ["unknown"]
+    
+    async def _calculate_influence_potential(self, 
+                                           earlier_concept: ConceptNode, 
+                                           later_concept: ConceptNode) -> float:
+        """Calculate potential influence score between concepts from different time periods"""
+        try:
+            # Use semantic similarity as a base measure
+            earlier_embedding = self.sentence_model.encode([earlier_concept.name])
+            later_embedding = self.sentence_model.encode([later_concept.name])
+            
+            semantic_similarity = cosine_similarity(earlier_embedding, later_embedding)[0][0]
+            
+            # Boost score if concepts are in the same domain
+            domain_bonus = 0.2 if earlier_concept.domain == later_concept.domain else 0.0
+            
+            # Check for conceptual evolution keywords
+            evolution_indicators = [
+                "developed", "evolved", "influenced", "inspired", "based on",
+                "derived", "advanced", "refined", "transformed"
+            ]
+            
+            text_to_check = f"{later_concept.description}".lower()
+            evolution_bonus = 0.1 if any(indicator in text_to_check for indicator in evolution_indicators) else 0.0
+            
+            return float(semantic_similarity + domain_bonus + evolution_bonus)
+            
+        except Exception as e:
+            logger.error(f"Error calculating influence potential: {e}")
+            return 0.0

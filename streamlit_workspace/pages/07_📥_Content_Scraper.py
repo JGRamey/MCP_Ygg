@@ -50,6 +50,46 @@ def main():
         text-align: center;
         background-color: #f8f9fa;
         margin: 10px 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .upload-box:hover {
+        border-color: #007bff;
+        background-color: #e3f2fd;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    }
+    
+    .drag-active {
+        border-color: #28a745 !important;
+        background-color: #d4edda !important;
+        animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+    
+    .upload-icon {
+        font-size: 48px;
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+    
+    .upload-text {
+        font-size: 18px;
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+    
+    .upload-hint {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 15px;
     }
     
     .status-box {
@@ -329,6 +369,9 @@ def render_file_upload():
             with col2:
                 extract_tables = st.checkbox("Extract tables", value=False)
                 preserve_layout = st.checkbox("Preserve layout", value=True)
+            
+            # Store OCR language in session state for processing
+            st.session_state['ocr_language'] = ocr_language
         
         # Metadata form
         with st.form("file_upload_form"):
@@ -816,6 +859,41 @@ async def submit_file_content(uploaded_file, title: str, author: str, domain: st
         with open(file_path, "wb") as f:
             f.write(uploaded_file.read())
         
+        # Process file content based on type
+        raw_content = ""
+        file_ext = Path(uploaded_file.name).suffix.lower()
+        
+        try:
+            if file_ext in ['.jpg', '.jpeg', '.png']:
+                # Use OCR for image files
+                from agents.scraper.scraper_agent import OCRProcessor
+                ocr_processor = OCRProcessor()
+                ocr_language = st.session_state.get('ocr_language', 'eng')
+                raw_content = ocr_processor.extract_text_from_image(str(file_path), ocr_language)
+                st.info(f"🔍 OCR Processing: Extracted {len(raw_content)} characters from image")
+                
+            elif file_ext == '.pdf':
+                # Use PDF processor with OCR fallback
+                from agents.scraper.scraper_agent import PDFProcessor
+                pdf_processor = PDFProcessor()
+                raw_content, _ = pdf_processor.extract_text_from_pdf(str(file_path))
+                st.info(f"📄 PDF Processing: Extracted {len(raw_content)} characters")
+                
+            elif file_ext in ['.txt', '.md']:
+                # Read text files directly
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    raw_content = f.read()
+                st.info(f"📝 Text Processing: Loaded {len(raw_content)} characters")
+                
+            else:
+                # Default fallback for other file types
+                raw_content = f"File content from: {uploaded_file.name} (Content extraction not implemented for this file type)"
+                st.warning(f"⚠️ Limited support for .{file_ext} files")
+                
+        except Exception as processing_error:
+            st.warning(f"⚠️ Content extraction failed: {processing_error}")
+            raw_content = f"File content from: {uploaded_file.name} (Content extraction failed)"
+        
         # Create metadata
         metadata = ContentMetadata(
             title=title,
@@ -832,16 +910,21 @@ async def submit_file_content(uploaded_file, title: str, author: str, domain: st
         # Get agent pipeline if configured
         agent_pipeline = st.session_state.get('agent_pipeline')
         
-        # Submit to staging (placeholder content)
+        # Submit to staging with extracted content
         submission_id = await st.session_state.staging_manager.submit_content(
             source_type=SourceType.UPLOAD,
-            raw_content=f"File content from: {uploaded_file.name}",  # Would be replaced with actual content
+            raw_content=raw_content,
             metadata=metadata,
             source_url=f"upload://{file_path.name}",
             agent_pipeline=agent_pipeline
         )
         
         st.success(f"✅ File uploaded and submitted! Submission ID: {submission_id[:8]}...")
+        
+        # Show content preview if available
+        if raw_content and len(raw_content) > 50:
+            with st.expander("📋 Content Preview"):
+                st.text_area("Extracted Content", raw_content[:500] + "..." if len(raw_content) > 500 else raw_content, height=200)
         
     except Exception as e:
         st.error(f"Error submitting file: {e}")

@@ -5,7 +5,7 @@ youtube_agent:
     quota_limit: 10000  # Daily quota limit
     
   processing:
-    max_transcript_length: 50000  # Maximum transcript characters
+    max_transcript_length: 200000  # Maximum transcript characters
     supported_languages: 
       - "en"    # English
       - "es"    # Spanish

@@ -17,7 +17,13 @@ import json
 # YouTube processing imports
 try:
     import yt_dlp
-    from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsRetrievalError
+    from youtube_transcript_api import YouTubeTranscriptApi
+    try:
+        from youtube_transcript_api._errors import TranscriptsRetrievalError
+    except ImportError:
+        # Fallback for different versions of youtube-transcript-api
+        class TranscriptsRetrievalError(Exception):
+            pass
     from googleapiclient.discovery import build
     from googleapiclient.errors import HttpError
     import isodate

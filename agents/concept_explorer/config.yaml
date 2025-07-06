@@ -234,6 +234,69 @@ logging:
   max_size: "10MB"
   backup_count: 5
 
+# Temporal Analysis Settings
+temporal:
+  enable: true
+  influence_threshold: 0.7
+  
+  # Time period patterns for classification
+  periods:
+    ancient:
+      keywords: ["ancient", "antiquity", "classical", "prehistoric", "archaic", "bronze age", "iron age"]
+      weight: 1.0
+    
+    medieval:
+      keywords: ["medieval", "middle ages", "byzantine", "feudal", "scholastic", "gothic", "crusades"]
+      weight: 1.0
+    
+    renaissance:
+      keywords: ["renaissance", "humanist", "reformation", "early modern", "enlightenment precursor"]
+      weight: 1.0
+    
+    enlightenment:
+      keywords: ["enlightenment", "rationalist", "empirical", "scientific revolution", "age of reason"]
+      weight: 1.0
+    
+    modern:
+      keywords: ["modern", "industrial", "19th century", "20th century", "contemporary"]
+      weight: 1.0
+    
+    postmodern:
+      keywords: ["postmodern", "digital", "information age", "21st century", "contemporary"]
+      weight: 1.0
+  
+  # Evolution indicators
+  evolution:
+    keywords: ["developed", "evolved", "influenced", "inspired", "based on", "derived", "advanced", "refined", "transformed"]
+    bonus_weight: 0.1
+
+# Cross-domain Bridge Patterns
+bridges:
+  patterns:
+    mathematics_science:
+      keywords: ["formula", "calculation", "measurement", "ratio", "proportion", "mathematical model"]
+      weight: 0.8
+    
+    philosophy_science:
+      keywords: ["truth", "reality", "existence", "consciousness", "nature", "empirical"]
+      weight: 0.7
+    
+    art_mathematics:
+      keywords: ["harmony", "proportion", "symmetry", "pattern", "golden ratio", "geometric"]
+      weight: 0.9
+    
+    religion_philosophy:
+      keywords: ["truth", "meaning", "existence", "eternal", "divine", "transcendent"]
+      weight: 0.8
+    
+    technology_science:
+      keywords: ["invention", "discovery", "innovation", "application", "method", "engineering"]
+      weight: 0.9
+    
+    art_philosophy:
+      keywords: ["beauty", "aesthetic", "meaning", "expression", "truth", "sublime"]
+      weight: 0.7
+
 # Export Settings
 export:
   formats:
@@ -244,3 +307,9 @@ export:
   
   include_metadata: true
   compress_output: true
+  
+  # Temporal export options
+  temporal:
+    include_evolution_chains: true
+    include_period_clusters: true
+    timeline_format: "json"
