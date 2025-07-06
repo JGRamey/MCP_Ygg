@@ -337,11 +337,42 @@ def render_file_upload():
     
     st.subheader("📄 File Upload Processing")
     
+    # File size limits info
+    st.info("📊 **File Size Limits by Type:**")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **Documents:**
+        - PDF: 200MB
+        - DOCX/DOC: 100MB
+        - TXT/MD: 50MB
+        - EPUB: 100MB
+        """)
+    
+    with col2:
+        st.markdown("""
+        **Images:**
+        - JPG/JPEG: 75MB
+        - PNG: 75MB
+        - GIF: 25MB
+        - TIFF: 100MB
+        """)
+    
+    with col3:
+        st.markdown("""
+        **Data/Archives:**
+        - CSV/JSON: 100MB/50MB
+        - ZIP/TAR: 500MB
+        - LaTeX: 25MB
+        - BIB: 10MB
+        """)
+    
     # File uploader
     uploaded_file = st.file_uploader(
         "Choose a file",
-        type=['pdf', 'docx', 'txt', 'md', 'jpg', 'jpeg', 'png'],
-        help="Supported formats: PDF, DOCX, TXT, MD, JPG, PNG"
+        type=['pdf', 'docx', 'doc', 'txt', 'md', 'epub', 'jpg', 'jpeg', 'png', 'gif', 'tiff', 'csv', 'json', 'xml', 'zip', 'tar', 'gz', 'latex', 'bib', 'log'],
+        help="Supports 20+ file formats with type-specific size limits up to 500MB for archives"
     )
     
     if uploaded_file:

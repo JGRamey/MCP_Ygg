@@ -231,13 +231,31 @@ async def scrape_file(
         if not file.filename:
             raise HTTPException(status_code=400, detail="No file provided")
         
-        # Check file size (limit to 100MB)
+        # Check file size with type-specific limits
         file_size = 0
         content = await file.read()
         file_size = len(content)
         
-        if file_size > 100 * 1024 * 1024:  # 100MB
-            raise HTTPException(status_code=400, detail="File too large (max 100MB)")
+        # Get file extension and check against type-specific limits
+        file_extension = file.filename.split('.')[-1].lower() if '.' in file.filename else 'unknown'
+        
+        # Type-specific size limits (in MB)
+        size_limits = {
+            'pdf': 200, 'docx': 100, 'doc': 100, 'txt': 50, 'md': 50, 'rtf': 25, 'epub': 100,
+            'jpg': 75, 'jpeg': 75, 'png': 75, 'gif': 25, 'webp': 50, 'tiff': 100,
+            'csv': 100, 'json': 50, 'xml': 50, 'yaml': 10,
+            'zip': 500, 'tar': 500, 'gz': 500, 'rar': 500,
+            'latex': 25, 'bib': 10, 'log': 100
+        }
+        
+        max_size_mb = size_limits.get(file_extension, 100)  # Default to 100MB
+        max_size_bytes = max_size_mb * 1024 * 1024
+        
+        if file_size > max_size_bytes:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"File too large for {file_extension.upper()} format (max {max_size_mb}MB, got {file_size / (1024*1024):.1f}MB)"
+            )
         
         # Create metadata
         metadata = ContentMetadata(

@@ -10,11 +10,46 @@ scraping:
     timeout: 30      # seconds
     
   general:
-    max_file_size: "100MB"
-    supported_formats: ["pdf", "docx", "txt", "jpg", "png", "jpeg", "gif", "webp"]
+    max_file_size: "100MB"  # Default fallback limit
+    supported_formats: ["pdf", "docx", "txt", "jpg", "png", "jpeg", "gif", "webp", "csv", "json", "epub", "zip", "tar", "gz"]
     rate_limit: 10  # requests per minute per domain
     timeout: 30     # seconds
     user_agent: "MCP-Yggdrasil/1.0 (Educational Research Bot)"
+    
+  file_size_limits:
+    # Document files
+    pdf: "200MB"      # Large academic collections, scanned documents
+    docx: "100MB"     # Complex documents with embedded media
+    doc: "100MB"      # Legacy Office documents
+    txt: "50MB"       # Large text corpora
+    md: "50MB"        # Extensive documentation
+    rtf: "25MB"       # Rich text format
+    epub: "100MB"     # Multimedia e-books
+    
+    # Image files
+    jpg: "75MB"       # High-resolution scans
+    jpeg: "75MB"      # High-resolution scans
+    png: "75MB"       # Detailed diagrams, screenshots
+    gif: "25MB"       # Educational animations
+    webp: "50MB"      # Modern image format
+    tiff: "100MB"     # High-quality scans
+    
+    # Data files
+    csv: "100MB"      # Research datasets
+    json: "50MB"      # Complex structured data
+    xml: "50MB"       # Structured documents
+    yaml: "10MB"      # Configuration files
+    
+    # Archive files
+    zip: "500MB"      # Compressed document collections
+    tar: "500MB"      # Archive collections
+    gz: "500MB"       # Compressed archives
+    rar: "500MB"      # Compressed archives
+    
+    # Specialized formats
+    latex: "25MB"     # LaTeX documents
+    bib: "10MB"       # Bibliography files
+    log: "100MB"      # Log files for analysis
     
   web:
     respect_robots_txt: true
