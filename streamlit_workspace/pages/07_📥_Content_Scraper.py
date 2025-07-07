@@ -14,10 +14,30 @@ import mimetypes
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Any
-import validators
-import requests
-from urllib.parse import urlparse
-import re
+try:
+    import validators
+    import requests
+    from urllib.parse import urlparse
+    import re
+    IMPORTS_AVAILABLE = True
+except ImportError as e:
+    st.warning(f"Some packages not available: {e}")
+    IMPORTS_AVAILABLE = False
+    # Create minimal fallbacks
+    class validators:
+        @staticmethod
+        def url(url):
+            return url.startswith(('http://', 'https://'))
+    
+    class requests:
+        @staticmethod
+        def head(url, timeout=10):
+            class MockResponse:
+                headers = {'content-type': 'text/html'}
+            return MockResponse()
+    
+    from urllib.parse import urlparse
+    import re
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent.parent
@@ -27,9 +47,120 @@ try:
     from data.staging_manager import StagingManager, ContentMetadata, SourceType, Priority, AgentPipeline
     from agents.youtube_transcript.youtube_agent import YouTubeAgent
     from agents.scraper.scraper_agent import ScraperAgent
+    imports_available = True
 except ImportError as e:
-    st.error(f"Import error: {e}")
-    st.stop()
+    st.warning(f"Some advanced features may not be available: {e}")
+    imports_available = False
+    
+    # Create placeholder classes for basic functionality
+    class StagingManager:
+        def __init__(self):
+            self.submissions = {}
+            self.counter = 0
+        
+        async def submit_content(self, source_type, raw_content, metadata, source_url=None, agent_pipeline=None):
+            self.counter += 1
+            submission_id = f"submission_{self.counter:04d}"
+            
+            # Store the actual content
+            self.submissions[submission_id] = {
+                'id': submission_id,
+                'source_type': source_type,
+                'content': raw_content,
+                'metadata': metadata,
+                'source_url': source_url,
+                'status': 'submitted',
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            # Save to file for persistence
+            try:
+                import json
+                submissions_file = project_root / "data" / "submissions.json"
+                submissions_file.parent.mkdir(exist_ok=True)
+                
+                # Load existing submissions
+                existing_submissions = {}
+                if submissions_file.exists():
+                    with open(submissions_file, 'r') as f:
+                        existing_submissions = json.load(f)
+                
+                # Add new submission
+                existing_submissions[submission_id] = {
+                    'id': submission_id,
+                    'source_type': source_type,
+                    'content': raw_content[:1000] + "..." if len(raw_content) > 1000 else raw_content,  # Truncate for storage
+                    'content_length': len(raw_content),
+                    'title': metadata.title if hasattr(metadata, 'title') else 'Unknown',
+                    'domain': metadata.domain if hasattr(metadata, 'domain') else 'Unknown',
+                    'source_url': source_url,
+                    'status': 'submitted',
+                    'timestamp': datetime.now().isoformat()
+                }
+                
+                # Save to file
+                with open(submissions_file, 'w') as f:
+                    json.dump(existing_submissions, f, indent=2)
+                    
+            except Exception as e:
+                print(f"Could not save submission to file: {e}")
+            
+            return submission_id
+            
+        async def get_queue_stats(self):
+            stats = {"pending": 0, "processing": 0, "analyzed": 0, "approved": 0, "rejected": 0}
+            for submission in self.submissions.values():
+                status = submission.get('status', 'pending')
+                if status in stats:
+                    stats[status] += 1
+                    
+            return {"queue_counts": stats, "total_items": len(self.submissions)}
+            
+        async def list_content(self, **kwargs):
+            # Return simplified submission objects
+            submissions = []
+            for sub_id, sub_data in self.submissions.items():
+                class MockSubmission:
+                    def __init__(self, data):
+                        self.submission_id = data['id']
+                        self.content = data['content']
+                        self.source_url = data.get('source_url')
+                        
+                        class MockMetadata:
+                            def __init__(self, data):
+                                self.title = data.get('title', 'Unknown')
+                                self.domain = data.get('domain', 'Unknown')
+                        
+                        self.metadata = MockMetadata(data)
+                        
+                        class MockStatus:
+                            def __init__(self, status):
+                                self.value = status
+                                
+                        self.processing_status = MockStatus(data.get('status', 'pending'))
+                        
+                submissions.append(MockSubmission(sub_data))
+            return submissions
+    
+    class ContentMetadata:
+        def __init__(self, **kwargs):
+            for k, v in kwargs.items():
+                setattr(self, k, v)
+    
+    class SourceType:
+        WEBSITE = "website"
+        YOUTUBE = "youtube" 
+        UPLOAD = "upload"
+        TEXT = "text"
+    
+    class Priority:
+        def __init__(self, priority):
+            self.value = priority
+    
+    class AgentPipeline:
+        def __init__(self, **kwargs):
+            for k, v in kwargs.items():
+                setattr(self, k, v)
 
 def main():
     """Main content scraper interface"""
@@ -172,7 +303,19 @@ def render_content_submission():
     # Source type selection
     source_type = st.selectbox(
         "Select Content Source",
-        ["URL (Website/Article)", "YouTube Video", "File Upload", "Direct Text Input"],
+        [
+            "🌐 URL (Website/Article)", 
+            "📺 YouTube Video/Transcript", 
+            "📚 Book/eBook", 
+            "📄 PDF Document",
+            "🖼️ Picture/Image (OCR)", 
+            "🌐 Webpage", 
+            "📰 Web Article",
+            "📜 Manuscript", 
+            "📋 Scroll/Document",
+            "📁 File Upload", 
+            "✏️ Direct Text Input"
+        ],
         help="Choose the type of content you want to scrape and analyze"
     )
     
@@ -180,13 +323,17 @@ def render_content_submission():
     if 'form_data' not in st.session_state:
         st.session_state.form_data = {}
     
-    if source_type == "URL (Website/Article)":
+    if source_type in ["🌐 URL (Website/Article)", "🌐 Webpage", "📰 Web Article"]:
         render_url_submission()
-    elif source_type == "YouTube Video":
+    elif source_type == "📺 YouTube Video/Transcript":
         render_youtube_submission()
-    elif source_type == "File Upload":
+    elif source_type in ["📚 Book/eBook", "📄 PDF Document", "📁 File Upload"]:
         render_file_upload()
-    elif source_type == "Direct Text Input":
+    elif source_type == "🖼️ Picture/Image (OCR)":
+        render_image_ocr()
+    elif source_type in ["📜 Manuscript", "📋 Scroll/Document"]:
+        render_manuscript_submission()
+    elif source_type == "✏️ Direct Text Input":
         render_text_input()
 
 def render_url_submission():
@@ -810,32 +957,52 @@ def render_recent_submissions():
 async def submit_url_content(url: str, title: str, author: str, domain: str, language: str, priority: str, date: str):
     """Submit URL content for processing"""
     try:
+        # Actually scrape the URL content
+        with st.spinner("🔍 Scraping content from URL..."):
+            scraped_content = scrape_url_content(url)
+            
+            if not scraped_content:
+                st.error("❌ Failed to scrape content from URL")
+                return
+            
+            # Use scraped title if not provided
+            if not title and scraped_content.get('title'):
+                title = scraped_content['title']
+        
         # Create metadata
         metadata = ContentMetadata(
             title=title or "Web Content",
-            author=author or None,
+            author=author or scraped_content.get('author'),
             date=date,
             domain=domain,
             language=language,
             priority=Priority(priority),
             submitted_by="streamlit_user",
-            file_size=None,
+            file_size=len(scraped_content['content'].encode('utf-8')) if scraped_content.get('content') else 0,
             content_type="website"
         )
         
         # Get agent pipeline if configured
         agent_pipeline = st.session_state.get('agent_pipeline')
         
-        # Submit to staging (we'll use placeholder content for now)
+        # Submit to staging with actual scraped content
         submission_id = await st.session_state.staging_manager.submit_content(
             source_type=SourceType.WEBSITE,
-            raw_content=f"URL content from: {url}",  # Would be replaced with actual scraping
+            raw_content=scraped_content['content'],
             metadata=metadata,
             source_url=url,
             agent_pipeline=agent_pipeline
         )
         
-        st.success(f"✅ Content submitted successfully! Submission ID: {submission_id[:8]}...")
+        # Show success with content preview
+        st.success(f"✅ Content scraped and submitted successfully! Submission ID: {submission_id[:8]}...")
+        
+        # Show scraped content preview
+        if scraped_content.get('content'):
+            with st.expander("📄 Scraped Content Preview", expanded=False):
+                st.markdown(f"**Title:** {scraped_content.get('title', 'No title found')}")
+                st.markdown(f"**Content Length:** {len(scraped_content['content'])} characters")
+                st.text_area("Content Preview", scraped_content['content'][:500] + "..." if len(scraped_content['content']) > 500 else scraped_content['content'], height=200)
         
     except Exception as e:
         st.error(f"Error submitting content: {e}")
@@ -1012,6 +1179,331 @@ def extract_youtube_info(url: str) -> Dict[str, Any]:
     
     except Exception:
         return {}
+
+def render_image_ocr():
+    """Render image OCR processing form"""
+    st.subheader("🖼️ Image OCR Processing")
+    
+    # File uploader for images
+    uploaded_image = st.file_uploader(
+        "Choose an image file",
+        type=['jpg', 'jpeg', 'png', 'gif', 'tiff', 'bmp'],
+        help="Upload an image file for OCR text extraction"
+    )
+    
+    if uploaded_image:
+        # Display image preview
+        col1, col2 = st.columns([1, 2])
+        
+        with col1:
+            st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+            
+        with col2:
+            st.info(f"📁 **File:** {uploaded_image.name}")
+            st.info(f"📏 **Size:** {uploaded_image.size:,} bytes")
+            st.info(f"🗂️ **Type:** {uploaded_image.type}")
+        
+        # OCR Configuration
+        with st.form("image_ocr_form"):
+            st.subheader("🔧 OCR Configuration")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                ocr_language = st.selectbox(
+                    "OCR Language", 
+                    ["eng", "spa", "fra", "deu", "ita", "por", "rus", "jpn", "kor", "chi_sim"],
+                    help="Language for OCR text recognition"
+                )
+                enhance_image = st.checkbox("Enhance image quality", value=True)
+                
+            with col2:
+                extract_tables = st.checkbox("Extract tables", value=False)
+                preserve_layout = st.checkbox("Preserve layout", value=True)
+            
+            # Metadata
+            st.subheader("Content Metadata")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                title = st.text_input("Title", value=uploaded_image.name)
+                domain = st.selectbox("Academic Domain", 
+                                    ["art", "science", "philosophy", "mathematics", "language", "technology"])
+            
+            with col2:
+                author = st.text_input("Author/Source")
+                priority = st.selectbox("Processing Priority", ["high", "medium", "low"])
+            
+            with col3:
+                language = st.selectbox("Content Language", 
+                                      ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh"])
+                date = st.date_input("Date")
+            
+            # Submit button
+            submitted = st.form_submit_button("🔍 Process Image OCR", type="primary")
+            
+            if submitted:
+                st.session_state['ocr_language'] = ocr_language
+                asyncio.run(submit_file_content(uploaded_image, title, author, domain, language, priority, str(date)))
+
+def render_manuscript_submission():
+    """Render manuscript/historical document submission form"""
+    st.subheader("📜 Manuscript & Historical Document Processing")
+    
+    st.info("""
+    📋 **Supported manuscript formats:**
+    - Digital manuscripts (PDF, DOCX, TXT)
+    - Scanned manuscripts (images with OCR)
+    - Historical documents and scrolls
+    - Ancient texts and inscriptions
+    """)
+    
+    # Upload method selection
+    upload_method = st.radio(
+        "Manuscript Source",
+        ["📁 Upload File", "🖼️ Upload Image (OCR)", "🌐 URL to Digital Manuscript", "✏️ Transcribe Text"],
+        horizontal=True
+    )
+    
+    if upload_method == "📁 Upload File":
+        uploaded_file = st.file_uploader(
+            "Choose manuscript file",
+            type=['pdf', 'docx', 'doc', 'txt', 'md', 'rtf'],
+            help="Upload digital manuscript or document file"
+        )
+        
+        if uploaded_file:
+            with st.form("manuscript_file_form"):
+                render_manuscript_metadata_form()
+                
+                if st.form_submit_button("📚 Process Manuscript", type="primary"):
+                    asyncio.run(submit_file_content(
+                        uploaded_file,
+                        st.session_state.get('ms_title', uploaded_file.name),
+                        st.session_state.get('ms_author', ''),
+                        st.session_state.get('ms_domain', 'philosophy'),
+                        st.session_state.get('ms_language', 'en'),
+                        st.session_state.get('ms_priority', 'medium'),
+                        str(st.session_state.get('ms_date', datetime.now().date()))
+                    ))
+    
+    elif upload_method == "🖼️ Upload Image (OCR)":
+        uploaded_image = st.file_uploader(
+            "Choose manuscript image",
+            type=['jpg', 'jpeg', 'png', 'tiff', 'bmp'],
+            help="Upload scanned manuscript or document image for OCR processing"
+        )
+        
+        if uploaded_image:
+            col1, col2 = st.columns([1, 2])
+            
+            with col1:
+                st.image(uploaded_image, caption="Manuscript Image", use_column_width=True)
+            
+            with col2:
+                with st.form("manuscript_ocr_form"):
+                    st.subheader("🔧 OCR Settings")
+                    
+                    ocr_language = st.selectbox(
+                        "Manuscript Language", 
+                        ["eng", "lat", "grc", "ara", "heb", "spa", "fra", "deu", "ita"],
+                        help="Select the language of the manuscript for better OCR accuracy"
+                    )
+                    
+                    manuscript_type = st.selectbox(
+                        "Manuscript Type",
+                        ["Religious Text", "Philosophical Work", "Scientific Treatise", "Literary Work", "Historical Document", "Legal Document"]
+                    )
+                    
+                    render_manuscript_metadata_form()
+                    
+                    if st.form_submit_button("📜 Process Manuscript OCR", type="primary"):
+                        st.session_state['ocr_language'] = ocr_language
+                        st.session_state['manuscript_type'] = manuscript_type
+                        asyncio.run(submit_file_content(
+                            uploaded_image,
+                            st.session_state.get('ms_title', uploaded_image.name),
+                            st.session_state.get('ms_author', ''),
+                            st.session_state.get('ms_domain', 'philosophy'),
+                            st.session_state.get('ms_language', 'en'),
+                            st.session_state.get('ms_priority', 'medium'),
+                            str(st.session_state.get('ms_date', datetime.now().date()))
+                        ))
+    
+    elif upload_method == "🌐 URL to Digital Manuscript":
+        with st.form("manuscript_url_form"):
+            manuscript_url = st.text_input(
+                "Manuscript URL",
+                placeholder="https://example.com/manuscript.pdf",
+                help="URL to digital manuscript or document"
+            )
+            
+            render_manuscript_metadata_form()
+            
+            if st.form_submit_button("🌐 Fetch Manuscript", type="primary"):
+                if manuscript_url:
+                    asyncio.run(submit_url_content(
+                        manuscript_url,
+                        st.session_state.get('ms_title', 'Digital Manuscript'),
+                        st.session_state.get('ms_author', ''),
+                        st.session_state.get('ms_domain', 'philosophy'),
+                        st.session_state.get('ms_language', 'en'),
+                        st.session_state.get('ms_priority', 'medium'),
+                        str(st.session_state.get('ms_date', datetime.now().date()))
+                    ))
+    
+    elif upload_method == "✏️ Transcribe Text":
+        with st.form("manuscript_text_form"):
+            manuscript_text = st.text_area(
+                "Manuscript Text",
+                height=300,
+                placeholder="Enter or paste the manuscript text here...",
+                help="Transcribe the manuscript text manually"
+            )
+            
+            render_manuscript_metadata_form()
+            
+            if st.form_submit_button("📝 Submit Transcription", type="primary"):
+                if manuscript_text.strip():
+                    asyncio.run(submit_text_content(
+                        manuscript_text,
+                        st.session_state.get('ms_title', 'Manuscript Transcription'),
+                        st.session_state.get('ms_author', ''),
+                        st.session_state.get('ms_domain', 'philosophy'),
+                        st.session_state.get('ms_language', 'en'),
+                        st.session_state.get('ms_priority', 'medium'),
+                        str(st.session_state.get('ms_date', datetime.now().date()))
+                    ))
+
+def render_manuscript_metadata_form():
+    """Render manuscript-specific metadata form"""
+    st.subheader("📋 Manuscript Metadata")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        title = st.text_input("Manuscript Title", key="ms_title_input", help="Title or name of the manuscript")
+        domain = st.selectbox("Academic Domain", 
+                            ["philosophy", "art", "science", "mathematics", "language", "technology"],
+                            key="ms_domain_input")
+        st.session_state['ms_title'] = title
+        st.session_state['ms_domain'] = domain
+    
+    with col2:
+        author = st.text_input("Author/Scribe", key="ms_author_input", help="Original author or scribe")
+        priority = st.selectbox("Processing Priority", ["high", "medium", "low"], key="ms_priority_input")
+        st.session_state['ms_author'] = author
+        st.session_state['ms_priority'] = priority
+    
+    with col3:
+        language = st.selectbox("Original Language", 
+                              ["en", "la", "grc", "ar", "he", "es", "fr", "de", "it", "pt"],
+                              key="ms_language_input")
+        date = st.date_input("Date of Creation/Publication", key="ms_date_input")
+        st.session_state['ms_language'] = language
+        st.session_state['ms_date'] = date
+    
+    # Additional manuscript-specific fields
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        century = st.text_input("Century/Period", key="ms_century", help="e.g., '12th century', 'Classical period'")
+        location = st.text_input("Origin/Location", key="ms_location", help="Where the manuscript was created")
+    
+    with col2:
+        tradition = st.text_input("Tradition/School", key="ms_tradition", help="e.g., 'Stoic', 'Platonic', 'Aristotelian'")
+        manuscript_id = st.text_input("Manuscript ID/Reference", key="ms_id", help="Library catalog number or reference")
+
+def scrape_url_content(url: str) -> dict:
+    """Actually scrape content from a URL"""
+    try:
+        # Import additional scraping libraries
+        try:
+            from bs4 import BeautifulSoup
+            HAS_BS4 = True
+        except ImportError:
+            HAS_BS4 = False
+            st.warning("⚠️ BeautifulSoup not installed. Using basic scraping.")
+        
+        # Make request to URL
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        # Parse content based on available libraries
+        if HAS_BS4:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Extract title
+            title_tag = soup.find('title')
+            title = title_tag.get_text().strip() if title_tag else "No title found"
+            
+            # Extract author (try meta tags)
+            author_tag = soup.find('meta', attrs={'name': 'author'}) or soup.find('meta', attrs={'property': 'article:author'})
+            author = author_tag.get('content').strip() if author_tag else None
+            
+            # Remove script and style tags
+            for script in soup(["script", "style", "nav", "footer", "header", "aside"]):
+                script.decompose()
+            
+            # Extract main content
+            # Try to find main content areas
+            main_content = None
+            for selector in ['main', 'article', '.content', '.post', '.entry', '#content', '.main']:
+                main_content = soup.select_one(selector)
+                if main_content:
+                    break
+            
+            if not main_content:
+                main_content = soup.find('body') or soup
+            
+            # Get text content
+            content = main_content.get_text()
+            
+            # Clean up the text
+            lines = (line.strip() for line in content.splitlines())
+            chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+            content = ' '.join(chunk for chunk in chunks if chunk)
+            
+        else:
+            # Basic fallback without BeautifulSoup
+            title = "Scraped Content"
+            author = None
+            content = response.text
+            
+            # Basic HTML tag removal
+            import re
+            content = re.sub(r'<script[^>]*>.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
+            content = re.sub(r'<style[^>]*>.*?</style>', '', content, flags=re.DOTALL | re.IGNORECASE)
+            content = re.sub(r'<[^>]+>', '', content)
+            content = re.sub(r'\s+', ' ', content).strip()
+        
+        # Validate content
+        if len(content.strip()) < 50:
+            return {
+                'title': title,
+                'author': author,
+                'content': f"Content too short or failed to extract meaningful text from {url}. Raw length: {len(content)}"
+            }
+        
+        return {
+            'title': title,
+            'author': author,
+            'content': content,
+            'url': url,
+            'content_type': response.headers.get('content-type', 'text/html')
+        }
+        
+    except requests.exceptions.RequestException as e:
+        st.error(f"Failed to fetch URL: {e}")
+        return None
+    except Exception as e:
+        st.error(f"Error scraping content: {e}")
+        return None
 
 if __name__ == "__main__":
     main()

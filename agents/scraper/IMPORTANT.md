@@ -1,0 +1,1 @@
+Need to update scrapping function to use duck duck go for the browser instead of anything else.

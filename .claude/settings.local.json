@@ -6,7 +6,12 @@
       "Bash(true)",
       "Bash(grep:*)",
       "Bash(python:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(streamlit run:*)",
+      "Bash(docker:*)",
+      "Bash(systemctl:*)",
+      "Bash(chmod:*)",
+      "Bash(/mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/start_app.sh:*)"
     ],
     "deny": []
   }

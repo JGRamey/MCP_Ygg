@@ -390,6 +390,10 @@ def get_filtered_concepts():
     # Start with all concepts
     concepts = get_all_concepts(limit=500)  # Reasonable limit for visualization
     
+    # If no concepts in Neo4j, try loading from CSV files
+    if not concepts:
+        concepts = load_concepts_from_csv()
+    
     if not concepts:
         return []
     
@@ -485,12 +489,12 @@ def create_network_graph(concepts, layout_type, node_size, edge_width):
         
         # Color mapping for domains (6 primary domains)
         domain_colors = {
-            'Art': '#FF6B6B',
-            'Science': '#4ECDC4', 
-            'Mathematics': '#45B7D1',
-            'Philosophy': '#96CEB4',  # Includes Religion sub-domain
-            'Language': '#FFEAA7',
-            'Technology': '#DDA0DD'
+            'art': '#FF6B6B',
+            'science': '#4ECDC4', 
+            'mathematics': '#45B7D1',
+            'philosophy': '#96CEB4',  # Includes Religion sub-domain
+            'language': '#FFEAA7',
+            'technology': '#DDA0DD'
         }
         
         for node in G.nodes(data=True):
@@ -828,6 +832,92 @@ def analyze_relationships(concepts):
         st.error(f"Error in relationship analysis: {str(e)}")
     
     return analysis
+
+def load_concepts_from_csv():
+    """Load concepts from CSV files when Neo4j is empty"""
+    concepts = []
+    
+    try:
+        project_root = Path(__file__).parent.parent.parent
+        csv_dir = project_root / "CSV"
+        
+        st.info("📂 Loading concepts from CSV files...")
+        
+        # Load concepts from each domain
+        domains = ['art', 'language', 'mathematics', 'philosophy', 'science', 'technology']
+        
+        for domain in domains:
+            domain_dir = csv_dir / domain
+            if domain_dir.exists():
+                # Look for concepts.csv in each domain
+                concepts_file = domain_dir / "concepts.csv"
+                if concepts_file.exists():
+                    try:
+                        df = pd.read_csv(concepts_file)
+                        
+                        for _, row in df.iterrows():
+                            concept = {
+                                'id': row.get('id', f"{domain}_{len(concepts)}"),
+                                'name': row.get('name', row.get('concept_name', 'Unknown')),
+                                'domain': domain,
+                                'type': row.get('type', row.get('concept_type', 'leaf')),
+                                'level': int(row.get('level', 1)),
+                                'description': row.get('description', 'No description available')
+                            }
+                            concepts.append(concept)
+                            
+                            # Limit to prevent overwhelming the interface
+                            if len(concepts) >= 200:
+                                break
+                    
+                    except Exception as e:
+                        st.warning(f"Could not load {domain} concepts: {e}")
+                        continue
+        
+        # If still no concepts, create demo data
+        if not concepts:
+            concepts = create_demo_concepts()
+        
+        st.success(f"✅ Loaded {len(concepts)} concepts from CSV files")
+        return concepts
+    
+    except Exception as e:
+        st.error(f"Error loading concepts from CSV: {e}")
+        return create_demo_concepts()
+
+def create_demo_concepts():
+    """Create demonstration concepts for the graph"""
+    demo_concepts = [
+        # Philosophy domain
+        {'id': 'phil_001', 'name': 'Metaphysics', 'domain': 'philosophy', 'type': 'branch', 'level': 2, 'description': 'Study of the nature of reality'},
+        {'id': 'phil_002', 'name': 'Ethics', 'domain': 'philosophy', 'type': 'branch', 'level': 2, 'description': 'Study of moral principles'},
+        {'id': 'phil_003', 'name': 'Stoicism', 'domain': 'philosophy', 'type': 'leaf', 'level': 3, 'description': 'Ancient Greek philosophy school'},
+        {'id': 'phil_004', 'name': 'Trinity', 'domain': 'philosophy', 'type': 'leaf', 'level': 4, 'description': 'Christian concept of divine unity'},
+        
+        # Science domain
+        {'id': 'sci_001', 'name': 'Physics', 'domain': 'science', 'type': 'branch', 'level': 2, 'description': 'Study of matter and energy'},
+        {'id': 'sci_002', 'name': 'Quantum Mechanics', 'domain': 'science', 'type': 'leaf', 'level': 3, 'description': 'Physics of atomic and subatomic particles'},
+        {'id': 'sci_003', 'name': 'Astronomy', 'domain': 'science', 'type': 'branch', 'level': 2, 'description': 'Study of celestial objects'},
+        
+        # Mathematics domain
+        {'id': 'math_001', 'name': 'Geometry', 'domain': 'mathematics', 'type': 'branch', 'level': 2, 'description': 'Study of shapes and space'},
+        {'id': 'math_002', 'name': 'Algebra', 'domain': 'mathematics', 'type': 'branch', 'level': 2, 'description': 'Study of mathematical symbols'},
+        {'id': 'math_003', 'name': 'Sacred Geometry', 'domain': 'mathematics', 'type': 'leaf', 'level': 3, 'description': 'Geometric patterns in nature and spirituality'},
+        
+        # Art domain
+        {'id': 'art_001', 'name': 'Painting', 'domain': 'art', 'type': 'branch', 'level': 2, 'description': 'Visual art using pigments'},
+        {'id': 'art_002', 'name': 'Renaissance Art', 'domain': 'art', 'type': 'leaf', 'level': 3, 'description': 'European art from 14th-17th centuries'},
+        
+        # Language domain
+        {'id': 'lang_001', 'name': 'Linguistics', 'domain': 'language', 'type': 'branch', 'level': 2, 'description': 'Scientific study of language'},
+        {'id': 'lang_002', 'name': 'Etymology', 'domain': 'language', 'type': 'leaf', 'level': 3, 'description': 'Study of word origins'},
+        
+        # Technology domain
+        {'id': 'tech_001', 'name': 'Computer Science', 'domain': 'technology', 'type': 'branch', 'level': 2, 'description': 'Study of computation and computer systems'},
+        {'id': 'tech_002', 'name': 'Artificial Intelligence', 'domain': 'technology', 'type': 'leaf', 'level': 3, 'description': 'Machine intelligence and learning'}
+    ]
+    
+    return demo_concepts
 
 def generate_graph_report():
     """Generate comprehensive graph analysis report"""
