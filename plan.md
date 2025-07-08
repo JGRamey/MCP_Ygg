@@ -940,10 +940,10 @@ tenacity >= 8.2.0       # For retry logic
 
 ---
 
-**This plan provides a comprehensive roadmap for implementing robust database synchronization in the MCP Yggdrasil server while maintaining the existing architecture and ensuring data consistency across the hybrid database system.**
-
+**This plan provides a comprehensive roadmap for implementing robust database synchronization in the MCP Yggdrasil server while maintaining the existing architecture and ensuring data consistency across the hybrid database system.** --- Additionally, make sure to incorporate C:\Users\zochr\Desktop\GitHub\Yggdrasil\MCP_Ygg\.claude\opus_update analysis and updates to the Plan.md file - Make sure it is copied verbatum into this file (plan.md) ---
 
 ## Additional User Notes ##
+- Add "Event" node type/property to Neo4j graph - Important to document certain events in history that led to change in many ways (Spanish Inquisition for example or the Holocaust or the Crucifixion of Christ)
 - Clean up directory and organize for better navigation and less usage for Claude-Code
 - Find a way to improve claude-code usage (as of now the size of the project only allows it to do like one function/feature implementation per session, if that)
 - Maybe create small agents or something to improve claude-code? Or use separate LLMs to do different tasks? (Use gemini-cli as well)
