@@ -1,8 +1,346 @@
 # MCP Yggdrasil - Comprehensive Development & Enhancement Plan
 ## Complete System Optimization and Advanced Features Implementation
 
+## 📁 CURRENT REPOSITORY STRUCTURE
+**⚠️ CRITICAL: Ensure no duplicate files/folders are created - all paths below already exist**
+
+```
+MCP_Ygg/
+├── 📁 Root Files
+│   ├── .gitattributes
+│   ├── .gitignore
+│   ├── .pre-commit-config.yaml
+│   ├── CLAUDE_SESSION.md
+│   ├── CONCEPT_PHILOSOPHY.md
+│   ├── SESSION_OPTIMIZATION_GUIDE.md
+│   ├── Dockerfile
+│   ├── Makefile
+│   ├── app_main.py
+│   ├── claude.md
+│   ├── docker-compose.yml
+│   ├── docker-compose.override.yml
+│   ├── docker-start.sh
+│   ├── final_readme.txt
+│   ├── plan.md
+│   ├── prompt.md
+│   ├── pyproject.toml
+│   ├── requirements.txt
+│   ├── requirements-dev.txt
+│   ├── start_app.sh
+│   └── test_*.py (multiple test files)
+│
+├── 📁 .claude/
+│   └── settings.local.json
+│
+├── 📁 CSV/ (Knowledge Graph Data - 371+ concepts)
+│   ├── art/
+│   │   ├── art_concepts.csv
+│   │   ├── art_people.csv
+│   │   ├── art_relationships.csv
+│   │   └── art_works.csv
+│   ├── language/
+│   │   ├── language_concepts.csv
+│   │   ├── language_people.csv
+│   │   ├── language_relationships.csv
+│   │   └── language_works.csv
+│   ├── mathematics/
+│   │   ├── mathematics_concepts.csv
+│   │   ├── mathematics_people.csv
+│   │   ├── mathematics_relationships.csv
+│   │   └── mathematics_works.csv
+│   ├── philosophy/
+│   │   ├── philosophy_concepts.csv
+│   │   ├── philosophy_people.csv
+│   │   ├── philosophy_relationships.csv
+│   │   ├── philosophy_works.csv
+│   │   └── religion/
+│   │       ├── religion_concepts.csv
+│   │       ├── religion_people.csv
+│   │       ├── religion_relationships.csv
+│   │       └── religion_works.csv
+│   ├── science/
+│   │   ├── science_concepts.csv
+│   │   ├── science_people.csv
+│   │   ├── science_relationships.csv
+│   │   ├── science_works.csv
+│   │   └── pseudoscience/astrology/
+│   │       ├── astrology_concepts.csv
+│   │       ├── astrology_people.csv
+│   │       ├── astrology_relationships.csv
+│   │       └── astrology_works.csv
+│   ├── technology/
+│   │   ├── technology_concepts.csv
+│   │   ├── technology_people.csv
+│   │   ├── technology_relationships.csv
+│   │   └── technology_works.csv
+│   ├── shared/
+│   │   ├── cross_domain_relationships.csv
+│   │   ├── shared_places.csv
+│   │   └── shared_time_periods.csv
+│   ├── sources/
+│   │   ├── books/book_metadata.csv
+│   │   ├── manuscripts/manuscript_metadata.csv
+│   │   ├── modern_sources/scholarly_articles.csv
+│   │   └── tablets/cuneiform_tablets.csv
+│   ├── vectors/sync_metadata.csv
+│   └── import/ (folder exists but empty)
+│
+├── 📁 agents/ (AI Agent Modules)
+│   ├── __init__.py
+│   ├── anomaly_detector/
+│   │   ├── __init__.py
+│   │   ├── anomaly_detector.py
+│   │   └── models/.gitkeep
+│   ├── backup/
+│   │   ├── __init__.py
+│   │   └── backup_agent.py
+│   ├── claim_analyzer/
+│   │   ├── claim_analyzer.md
+│   │   ├── claim_analyzer.py
+│   │   └── claim_analyzer_config.py
+│   ├── concept_explorer/
+│   │   ├── __init__.py
+│   │   ├── concept_discovery_service.py
+│   │   ├── concept_explorer.py
+│   │   ├── config.yaml
+│   │   ├── connection_analyzer.py
+│   │   └── thought_path_tracer.py
+│   ├── content_analyzer/
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   └── content_analysis_agent.py
+│   ├── copyright_checker/
+│   │   ├── __init__.py
+│   │   ├── copyright_checker.py
+│   │   └── lists/.gitkeep
+│   ├── fact_verifier/
+│   │   ├── __init__.py
+│   │   └── enhanced_verification_agent.py
+│   ├── knowledge_graph/
+│   │   ├── __init__.py
+│   │   └── knowledge_graph_builder.py
+│   ├── maintenance/
+│   │   ├── __init__.py
+│   │   └── maintenance_agent.py
+│   ├── metadata_analyzer/
+│   │   ├── __init__.py
+│   │   └── metadata_analyzer.py
+│   ├── neo4j_manager/
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── neo4j_agent.py
+│   │   ├── query_optimizer.py
+│   │   └── schema_manager.py
+│   ├── node_relationship_manager/
+│   │   ├── __init__.py
+│   │   └── relationship_manager.py
+│   ├── pattern_recognition/
+│   │   ├── __init__.py
+│   │   └── pattern_recognition.py
+│   ├── qdrant_manager/
+│   │   ├── __init__.py
+│   │   ├── collection_manager.py
+│   │   ├── config.yaml
+│   │   └── qdrant_agent.py
+│   ├── recommendation/
+│   │   ├── __init__.py
+│   │   └── recommendation_agent.py
+│   ├── scraper/
+│   │   ├── __init__.py
+│   │   ├── IMPORTANT.md
+│   │   ├── high_performance_scraper.py
+│   │   ├── scraper_agent.py
+│   │   ├── scraper_config.py
+│   │   ├── scraper_utils.py
+│   │   └── testscrape.md
+│   ├── sync_manager/
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── conflict_resolver.py
+│   │   ├── event_dispatcher.py
+│   │   └── sync_manager.py
+│   ├── text_processor/
+│   │   ├── __init__.py
+│   │   ├── text_processor.py
+│   │   ├── text_processor_config.py
+│   │   └── text_processor_utils.py
+│   ├── vector_index/
+│   │   ├── __init__.py
+│   │   ├── vector_index_config.py
+│   │   └── vector_indexer.py
+│   ├── youtube_transcript/
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── metadata_extractor.py
+│   │   ├── transcript_processor.py
+│   │   ├── youtube_agent.py
+│   │   ├── youtube_agent_efficient.py
+│   │   └── youtube_agent_simple.py
+│   └── [Translation Agents - MD files]
+│       ├── ENG-Handwritting2text_agent.md
+│       ├── greektranslater.md
+│       ├── hebrewtranslator.md
+│       └── latintranslator.md
+│
+├── 📁 analytics/
+│   ├── __init__.py
+│   ├── base.py
+│   ├── community_analysis.py
+│   ├── complete_trend_analyzer.py
+│   ├── graph_metrics.py
+│   ├── network_analyzer.py
+│   ├── pattern_detection.py
+│   └── plots/.gitkeep
+│
+├── 📁 api/
+│   ├── __init__.py
+│   ├── fastapi_main.py
+│   ├── simple_main.py
+│   ├── middleware/
+│   │   ├── __init__.py
+│   │   └── security_middleware.py
+│   └── routes/
+│       ├── __init__.py
+│       ├── analysis_pipeline.py
+│       ├── api_routes.py
+│       ├── concept_discovery.py
+│       ├── content_scraping.py
+│       └── performance_monitoring.py
+│
+├── 📁 cache/
+│   ├── __init__.py
+│   ├── cache_manager.py
+│   └── config.py
+│
+├── 📁 chat_logs/
+│   ├── memory.json
+│   ├── prompt.md
+│   └── [Multiple dated session logs]
+│
+├── 📁 config/
+│   ├── analysis_pipeline.yaml
+│   ├── content_scraping.yaml
+│   ├── database_agents.yaml
+│   ├── server.yaml
+│   └── visualization.yaml
+│
+├── 📁 data/
+│   ├── staging_manager.py
+│   ├── backups/.gitkeep
+│   ├── metadata/.gitkeep
+│   ├── processed/.gitkeep
+│   ├── raw/.gitkeep
+│   └── staging/
+│       ├── README.md
+│       ├── analyzed/example-analyzed-content.json
+│       ├── approved/example-approved-content.json
+│       ├── pending/example-youtube-submission.json
+│       ├── processing/ (empty)
+│       └── rejected/ (empty)
+│
+├── 📁 k8s/
+│   ├── k8s-deployment.yaml.txt
+│   └── monitoring/prometheus-grafana.yaml.txt
+│
+├── 📁 opus_update/
+│   ├── UIplan.md
+│   ├── analysis.md
+│   ├── critical_implementation.md
+│   ├── data_validation_pipeline_plan.md
+│   ├── refactoring.md
+│   └── scraper_update.md
+│
+├── 📁 scripts/
+│   ├── chat_logger.py
+│   ├── csv_cleanup_script.py
+│   ├── dependency_validation.py.txt
+│   ├── enhanced_yggdrasil_integrator.py
+│   ├── initialize_system.py
+│   ├── run_tests.py
+│   └── yggdrasil_integrator.py
+│
+├── 📁 streamlit_workspace/ (Complete IDE-like Workspace)
+│   ├── __init__.py
+│   ├── existing_dashboard.py
+│   ├── main_dashboard.py
+│   ├── data/staging/ (mirrors main data/staging/)
+│   ├── pages/
+│   │   ├── 01_🗄️_Database_Manager.py
+│   │   ├── 02_📊_Graph_Editor.py
+│   │   ├── 03_📁_File_Manager.py
+│   │   ├── 03_📁_File_Manager_Old.py
+│   │   ├── 04_⚡_Operations_Console.py
+│   │   ├── 05_🎯_Knowledge_Tools.py
+│   │   ├── 06_📈_Analytics.py
+│   │   ├── 07_📥_Content_Scraper.py
+│   │   └── 08_🔄_Processing_Queue.py
+│   └── utils/
+│       ├── database_operations.py
+│       └── session_management.py
+│
+├── 📁 summaries/
+│   ├── CSV_CLEANUP_SUMMARY.md
+│   ├── FULL_STACK_DEPLOYMENT_SUMMARY.md
+│   └── HYBRID_ARCHITECTURE_SUMMARY.md
+│
+├── 📁 tests/
+│   ├── __init__.py
+│   ├── test_csv_import.py
+│   ├── test_hybrid_system.py
+│   ├── integration/test_integration.py
+│   ├── lint/
+│   │   ├── __init__.py
+│   │   ├── ORGANIZATION.md
+│   │   ├── README.md
+│   │   ├── lint_project.py
+│   │   └── setup_linting.py
+│   ├── performance/performance_optimization.py
+│   └── unit/test_scraper.py
+│
+└── 📁 visualization/
+    ├── __init__.py
+    ├── visualization_agent.py
+    ├── output/.gitkeep
+    └── templates/.gitkeep
+```
+
+### 🚨 EXISTING STRUCTURE NOTES:
+- **371+ concepts** already organized across 6 domains
+- **Complete agent ecosystem** with 20+ specialized agents
+- **Full Streamlit workspace** with 8 functional pages
+- **Comprehensive API layer** with FastAPI and multiple route modules
+- **Production-ready configuration** files for all services
+- **Extensive test framework** with unit, integration, and performance tests
+- **Docker deployment** setup with compose files
+- **Chat logging system** with memory management
+- **Analytics and visualization** modules already implemented
+
+**⚠️ CRITICAL WARNING**: Before creating any new files or directories, verify against this structure to prevent duplicates and conflicts.
+
+## 📋 PLAN WORKFLOW & PROGRESS TRACKING
+
+### 🔄 New Workflow Instructions
+**IMPORTANT**: To keep the plan.md file manageable and track progress effectively:
+
+1. **Active Development**: Keep only current/pending tasks in `plan.md`
+2. **Completed Tasks**: Move completed sections to `p_completed.md` 
+3. **Progress Updates**: Update this section with completion status
+4. **File Management**: Regularly clean up plan.md by moving finished work
+
+### 📊 Current Progress Status
+- **Phase 1 Foundation Fixes**: ⏳ PENDING - Ready for implementation
+  - Dependency Management Crisis: ⏳ PENDING - Modular structure planned
+  - Code Refactoring Strategy: ⏳ PENDING - Modular breakdown designed
+  - Testing Framework: ⏳ PENDING - Comprehensive test suite designed
+- **Phase 2 Performance & Optimization**: ⏳ PENDING
+- **Phase 3 Scraper Enhancement**: ⏳ PENDING
+- **Phase 4 Data Validation**: ⏳ PENDING
+- **Phase 5 UI Workspace**: ⏳ PENDING
+
+**Note**: The modular structure and testing framework designs are complete, but the actual implementation work is still pending.
+
 ### 🎯 Executive Summary
-Transform MCP Yggdrasil from a good project into an exceptional enterprise-grade knowledge management system through systematic optimization, advanced AI integration, and comprehensive feature enhancement. This plan addresses critical technical debt while adding sophisticated capabilities across all system layers.
+Transform MCP Yggdrasil into a robust database management and content scraping system through systematic optimization, modular architecture, and enhanced data processing capabilities. This plan focuses on creating efficient database operations and intelligent content acquisition while maintaining code quality and performance.
 
 **Current Project Maturity Score: 7.5/10**
 - Architecture & Design: 8.5/10  
@@ -11,7 +349,7 @@ Transform MCP Yggdrasil from a good project into an exceptional enterprise-grade
 - Performance & Scalability: 7/10
 - DevOps & Deployment: 8/10
 
-**Target Maturity Score: 9.5/10** - Enterprise-ready system with advanced AI capabilities
+**Target Maturity Score: 9.5/10** - Production-ready database management and content scraping system
 
 ## 🚨 CRITICAL TECHNICAL DEBT - IMMEDIATE ACTION REQUIRED
 
@@ -20,75 +358,1134 @@ Transform MCP Yggdrasil from a good project into an exceptional enterprise-grade
 #### 1. **DEPENDENCY MANAGEMENT CRISIS** - TOP PRIORITY
 **Problem**: 71+ packages in requirements.txt with duplicates, no version pinning, dev/prod dependencies mixed.
 
-**Solution**: Complete dependency restructuring using pip-tools:
-```bash
-# Create requirements.in (production only)
-# Core server and API
-fastapi>=0.104.0,<0.105.0
-uvicorn[standard]>=0.24.0,<0.25.0
-pydantic>=2.5.0,<3.0.0
+**Solution**: Modular dependency management with pip-tools
 
-# Database connections
-neo4j>=5.15.0,<6.0.0
-qdrant-client>=1.7.0,<2.0.0
-redis[hiredis]>=5.0.0,<6.0.0
+##### Module Structure:
+```
+dependencies/
+├── __init__.py
+├── config.py           # Dependency configuration settings
+├── requirements_manager.py  # Core dependency management logic
+├── validators.py       # Version validation utilities
+├── cli.py             # Command-line interface for dependency ops
+└── tests/
+    └── test_requirements.py  # Validation tests
+```
 
-# NLP and ML
-spacy>=3.7.0,<4.0.0
-sentence-transformers>=2.2.0,<3.0.0
-scikit-learn>=1.3.0,<2.0.0
+##### Core Implementation:
 
-# Web scraping
-beautifulsoup4>=4.12.0,<5.0.0
-scrapy>=2.11.0,<3.0.0
-selenium>=4.16.0,<5.0.0
+**dependencies/config.py**:
+```python
+"""Dependency configuration management."""
+from typing import Dict, List
+from dataclasses import dataclass
 
-# YouTube processing
-yt-dlp>=2023.12.0
-youtube-transcript-api>=0.6.0,<1.0.0
+@dataclass
+class DependencyConfig:
+    """Configuration for dependency management."""
+    
+    # Core server and API
+    CORE_DEPS = {
+        'fastapi': '>=0.104.0,<0.105.0',
+        'uvicorn[standard]': '>=0.24.0,<0.25.0',
+        'pydantic': '>=2.5.0,<3.0.0',
+    }
+    
+    # Database connections
+    DATABASE_DEPS = {
+        'neo4j': '>=5.15.0,<6.0.0',
+        'qdrant-client': '>=1.7.0,<2.0.0',
+        'redis[hiredis]': '>=5.0.0,<6.0.0',
+    }
+    
+    # NLP and ML
+    ML_DEPS = {
+        'spacy': '>=3.7.0,<4.0.0',
+        'sentence-transformers': '>=2.2.0,<3.0.0',
+        'scikit-learn': '>=1.3.0,<2.0.0',
+    }
+    
+    # Web scraping
+    SCRAPING_DEPS = {
+        'beautifulsoup4': '>=4.12.0,<5.0.0',
+        'scrapy': '>=2.11.0,<3.0.0',
+        'selenium': '>=4.16.0,<5.0.0',
+    }
+    
+    # YouTube processing
+    YOUTUBE_DEPS = {
+        'yt-dlp': '>=2023.12.0',
+        'youtube-transcript-api': '>=0.6.0,<1.0.0',
+    }
+    
+    # UI
+    UI_DEPS = {
+        'streamlit': '>=1.28.0,<2.0.0',
+    }
+```
 
-# UI
-streamlit>=1.28.0,<2.0.0
+**dependencies/requirements_manager.py**:
+```python
+"""Core dependency management functionality."""
+import subprocess
+import sys
+from pathlib import Path
+from typing import Dict, List, Optional
+from .config import DependencyConfig
+
+class RequirementsManager:
+    """Manages project dependencies with pip-tools."""
+    
+    def __init__(self, project_root: Path):
+        self.project_root = project_root
+        self.config = DependencyConfig()
+    
+    def create_requirements_in(self) -> None:
+        """Create requirements.in file with categorized dependencies."""
+        requirements_content = self._build_requirements_content()
+        requirements_path = self.project_root / "requirements.in"
+        
+        with open(requirements_path, 'w') as f:
+            f.write(requirements_content)
+    
+    def compile_requirements(self) -> bool:
+        """Compile requirements.in to requirements.txt."""
+        try:
+            subprocess.run([
+                sys.executable, "-m", "pip", "install", "pip-tools"
+            ], check=True)
+            
+            subprocess.run([
+                "pip-compile", "requirements.in", "-o", "requirements.txt"
+            ], check=True, cwd=self.project_root)
+            
+            return True
+        except subprocess.CalledProcessError:
+            return False
+    
+    def _build_requirements_content(self) -> str:
+        """Build the requirements.in content with categorized dependencies."""
+        sections = [
+            ("# Core server and API", self.config.CORE_DEPS),
+            ("# Database connections", self.config.DATABASE_DEPS),
+            ("# NLP and ML", self.config.ML_DEPS),
+            ("# Web scraping", self.config.SCRAPING_DEPS),
+            ("# YouTube processing", self.config.YOUTUBE_DEPS),
+            ("# UI", self.config.UI_DEPS),
+        ]
+        
+        content = []
+        for section_name, deps in sections:
+            content.append(section_name)
+            for package, version in deps.items():
+                content.append(f"{package}{version}")
+            content.append("")  # Empty line between sections
+        
+        return "\n".join(content)
+```
+
+**dependencies/cli.py**:
+```python
+"""Command-line interface for dependency management."""
+import click
+from pathlib import Path
+from .requirements_manager import RequirementsManager
+
+@click.group()
+def cli():
+    """Dependency management CLI."""
+    pass
+
+@cli.command()
+@click.option('--project-root', type=click.Path(exists=True), default='.')
+def setup(project_root):
+    """Setup dependency management."""
+    manager = RequirementsManager(Path(project_root))
+    
+    click.echo("Creating requirements.in...")
+    manager.create_requirements_in()
+    
+    click.echo("Compiling requirements...")
+    if manager.compile_requirements():
+        click.echo("✅ Dependencies setup complete!")
+    else:
+        click.echo("❌ Failed to compile requirements", err=True)
+
+if __name__ == '__main__':
+    cli()
 ```
 
 **Implementation Commands**:
 ```bash
-# 1. Install pip-tools
-pip install pip-tools
+# 1. Create modular dependency structure
+mkdir -p dependencies/tests
+touch dependencies/__init__.py dependencies/config.py dependencies/requirements_manager.py dependencies/validators.py dependencies/cli.py
 
-# 2. Create requirements.in and requirements-dev.in
-# 3. Compile locked versions
-pip-compile requirements.in -o requirements.txt
-pip-compile requirements-dev.in -o requirements-dev.txt
+# 2. Run dependency setup
+python -m dependencies.cli setup
 
-# 4. Test in clean environment
+# 3. Test in clean environment
 pip install -r requirements.txt -r requirements-dev.txt
 ```
 
 #### 2. **CODE REFACTORING - BREAK DOWN MONOLITHIC FILES**
-**Problem**: 
+**Problem**: Large monolithic files that violate single responsibility principle
 - `analytics/network_analyzer.py` (1,711 lines)
 - `streamlit_workspace/existing_dashboard.py` (1,617 lines)  
 - `visualization/visualization_agent.py` (1,026 lines)
 
 **Solution**: Modular architecture with proper separation of concerns
+
+##### 2.1 Analytics Module Refactoring
+
+**Target Structure** (Note: Some files already exist):
 ```
 analytics/
-├── __init__.py
-├── base.py              # Base classes and interfaces
-├── graph_metrics.py     # Graph metric calculations
-├── pattern_detection.py # Pattern detection algorithms
-├── community_analysis.py # Community detection
-├── visualization.py     # Visualization utilities
-└── network_analyzer.py  # Main orchestrator (now ~200 lines)
+├── __init__.py                    # ✅ EXISTS - Module initialization
+├── base.py                        # ✅ EXISTS - Base classes and interfaces
+├── graph_metrics.py               # ✅ EXISTS - Graph metric calculations
+├── pattern_detection.py          # ✅ EXISTS - Pattern detection algorithms
+├── community_analysis.py         # ✅ EXISTS - Community detection
+├── complete_trend_analyzer.py    # ✅ EXISTS - Trend analysis
+├── network_analyzer.py           # ⚠️ NEEDS REFACTORING - Main orchestrator (1,711 lines → ~200 lines)
+└── plots/.gitkeep                # ✅ EXISTS - Visualization output
 ```
 
-**Implementation Priority**: 
-1. Extract base classes and interfaces
-2. Separate graph metrics calculations
-3. Isolate pattern detection algorithms
-4. Create community analysis module
-5. Update all imports and maintain backward compatibility
+**analytics/base.py** - Base Classes and Interfaces:
+```python
+"""Base classes and interfaces for analytics modules."""
+from abc import ABC, abstractmethod
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass
+import networkx as nx
+
+@dataclass
+class AnalysisResult:
+    """Standardized result container for analytics operations."""
+    analysis_type: str
+    metrics: Dict[str, Any]
+    visualization_data: Optional[Dict] = None
+    timestamp: str = None
+    confidence_score: float = 0.0
+
+class BaseAnalyzer(ABC):
+    """Base class for all analytics components."""
+    
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.logger = self._setup_logger()
+    
+    @abstractmethod
+    def analyze(self, graph: nx.Graph) -> AnalysisResult:
+        """Perform analysis on the given graph."""
+        pass
+    
+    @abstractmethod
+    def validate_input(self, graph: nx.Graph) -> bool:
+        """Validate input graph structure."""
+        pass
+    
+    def _setup_logger(self):
+        """Setup module-specific logger."""
+        import logging
+        return logging.getLogger(f"analytics.{self.__class__.__name__}")
+
+class NetworkMetricsInterface(ABC):
+    """Interface for network metrics calculations."""
+    
+    @abstractmethod
+    def calculate_centrality(self, graph: nx.Graph) -> Dict[str, float]:
+        """Calculate centrality metrics."""
+        pass
+    
+    @abstractmethod
+    def calculate_clustering(self, graph: nx.Graph) -> Dict[str, float]:
+        """Calculate clustering coefficients."""
+        pass
+```
+
+**analytics/network_analyzer.py** - Refactored Main Orchestrator:
+```python
+"""Main network analysis orchestrator - refactored from 1,711 lines to ~200 lines."""
+from typing import Dict, List, Any
+import networkx as nx
+from .base import BaseAnalyzer, AnalysisResult
+from .graph_metrics import GraphMetricsCalculator
+from .pattern_detection import PatternDetector
+from .community_analysis import CommunityAnalyzer
+
+class NetworkAnalyzer(BaseAnalyzer):
+    """Main orchestrator for network analysis operations."""
+    
+    def __init__(self, config: Dict[str, Any]):
+        super().__init__(config)
+        self.metrics_calculator = GraphMetricsCalculator(config)
+        self.pattern_detector = PatternDetector(config)
+        self.community_analyzer = CommunityAnalyzer(config)
+    
+    def analyze(self, graph: nx.Graph) -> AnalysisResult:
+        """Perform comprehensive network analysis."""
+        if not self.validate_input(graph):
+            raise ValueError("Invalid graph structure")
+        
+        # Delegate to specialized analyzers
+        metrics = self.metrics_calculator.calculate_all_metrics(graph)
+        patterns = self.pattern_detector.detect_patterns(graph)
+        communities = self.community_analyzer.analyze_communities(graph)
+        
+        return AnalysisResult(
+            analysis_type="comprehensive_network_analysis",
+            metrics={
+                "network_metrics": metrics,
+                "patterns": patterns,
+                "communities": communities
+            },
+            confidence_score=self._calculate_confidence(metrics, patterns, communities)
+        )
+    
+    def validate_input(self, graph: nx.Graph) -> bool:
+        """Validate input graph structure."""
+        return isinstance(graph, nx.Graph) and len(graph.nodes) > 0
+    
+    def _calculate_confidence(self, metrics: Dict, patterns: Dict, communities: Dict) -> float:
+        """Calculate overall confidence score for analysis."""
+        # Implementation depends on specific metrics
+        return 0.85  # Placeholder
+```
+
+##### 2.2 Streamlit Dashboard Refactoring
+
+**Target Structure**:
+```
+streamlit_workspace/
+├── __init__.py                    # ✅ EXISTS
+├── main_dashboard.py              # ✅ EXISTS - Main navigation
+├── existing_dashboard.py          # ⚠️ NEEDS REFACTORING (1,617 lines)
+├── components/                    # 🆕 NEW - Reusable UI components
+│   ├── __init__.py
+│   ├── data_visualization.py      # Data visualization widgets
+│   ├── form_handlers.py           # Form processing and validation
+│   ├── graph_display.py           # Graph rendering components
+│   └── metrics_display.py         # Metrics dashboard widgets
+├── pages/                         # ✅ EXISTS - Individual pages
+└── utils/                         # ✅ EXISTS - Utility functions
+```
+
+**streamlit_workspace/components/data_visualization.py**:
+```python
+"""Reusable data visualization components for Streamlit."""
+import streamlit as st
+import plotly.graph_objects as go
+import plotly.express as px
+from typing import Dict, List, Any
+
+class DataVisualizationComponents:
+    """Reusable visualization components."""
+    
+    @staticmethod
+    def render_network_graph(graph_data: Dict[str, Any]) -> None:
+        """Render interactive network graph."""
+        fig = go.Figure()
+        
+        # Add nodes
+        fig.add_trace(go.Scatter(
+            x=graph_data.get('node_x', []),
+            y=graph_data.get('node_y', []),
+            mode='markers+text',
+            text=graph_data.get('node_labels', []),
+            textposition="middle center",
+            name="Nodes"
+        ))
+        
+        # Add edges
+        for edge in graph_data.get('edges', []):
+            fig.add_trace(go.Scatter(
+                x=[edge['x1'], edge['x2']],
+                y=[edge['y1'], edge['y2']],
+                mode='lines',
+                line=dict(width=1),
+                showlegend=False
+            ))
+        
+        fig.update_layout(
+            title="Knowledge Graph Network",
+            showlegend=False,
+            hovermode='closest'
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    @staticmethod
+    def render_metrics_dashboard(metrics: Dict[str, Any]) -> None:
+        """Render metrics dashboard with cards."""
+        cols = st.columns(len(metrics))
+        
+        for i, (metric_name, value) in enumerate(metrics.items()):
+            with cols[i]:
+                st.metric(
+                    label=metric_name.replace('_', ' ').title(),
+                    value=f"{value:.2f}" if isinstance(value, float) else str(value)
+                )
+```
+
+##### 2.3 Visualization Module Refactoring
+
+**Target Structure**:
+```
+visualization/
+├── __init__.py                    # ✅ EXISTS
+├── visualization_agent.py        # ⚠️ NEEDS REFACTORING (1,026 lines)
+├── core/                          # 🆕 NEW - Core visualization logic
+│   ├── __init__.py
+│   ├── graph_renderer.py          # Graph rendering engine
+│   ├── layout_manager.py          # Layout algorithms
+│   └── style_manager.py           # Visual styling
+├── exporters/                     # 🆕 NEW - Export functionality
+│   ├── __init__.py
+│   ├── image_exporter.py          # Image export (PNG, SVG)
+│   ├── pdf_exporter.py            # PDF generation
+│   └── html_exporter.py           # HTML export
+├── output/.gitkeep                # ✅ EXISTS
+└── templates/.gitkeep             # ✅ EXISTS
+```
+
+**visualization/core/graph_renderer.py**:
+```python
+"""Core graph rendering functionality."""
+import networkx as nx
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+from typing import Dict, List, Any, Optional
+
+class GraphRenderer:
+    """Main graph rendering engine."""
+    
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.default_style = {
+            'node_color': '#1f77b4',
+            'node_size': 500,
+            'edge_color': '#999999',
+            'edge_width': 1.0,
+            'font_size': 10
+        }
+    
+    def render_matplotlib(self, graph: nx.Graph, style: Optional[Dict] = None) -> plt.Figure:
+        """Render graph using matplotlib."""
+        style = style or self.default_style
+        
+        fig, ax = plt.subplots(figsize=(12, 8))
+        
+        # Calculate layout
+        pos = nx.spring_layout(graph, k=1, iterations=50)
+        
+        # Draw graph
+        nx.draw(
+            graph, pos, ax=ax,
+            node_color=style['node_color'],
+            node_size=style['node_size'],
+            edge_color=style['edge_color'],
+            width=style['edge_width'],
+            font_size=style['font_size'],
+            with_labels=True
+        )
+        
+        ax.set_title("Knowledge Graph Visualization")
+        return fig
+    
+    def render_plotly(self, graph: nx.Graph, style: Optional[Dict] = None) -> go.Figure:
+        """Render interactive graph using Plotly."""
+        style = style or self.default_style
+        
+        # Calculate layout
+        pos = nx.spring_layout(graph, k=1, iterations=50)
+        
+        # Create plotly figure
+        fig = go.Figure()
+        
+        # Add edges
+        for edge in graph.edges():
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            fig.add_trace(go.Scatter(
+                x=[x0, x1, None],
+                y=[y0, y1, None],
+                mode='lines',
+                line=dict(width=style['edge_width'], color=style['edge_color']),
+                showlegend=False
+            ))
+        
+        # Add nodes
+        node_x = [pos[node][0] for node in graph.nodes()]
+        node_y = [pos[node][1] for node in graph.nodes()]
+        node_text = list(graph.nodes())
+        
+        fig.add_trace(go.Scatter(
+            x=node_x, y=node_y,
+            mode='markers+text',
+            text=node_text,
+            textposition="middle center",
+            marker=dict(
+                size=style['node_size']//10,
+                color=style['node_color']
+            ),
+            name="Nodes"
+        ))
+        
+        fig.update_layout(
+            title="Interactive Knowledge Graph",
+            showlegend=False,
+            hovermode='closest'
+        )
+        
+        return fig
+```
+
+##### Implementation Commands:
+```bash
+# 1. Create new component directories (check existing structure first)
+mkdir -p streamlit_workspace/components
+mkdir -p visualization/core visualization/exporters
+
+# 2. Create module files
+touch streamlit_workspace/components/__init__.py
+touch streamlit_workspace/components/data_visualization.py
+touch streamlit_workspace/components/form_handlers.py
+touch streamlit_workspace/components/graph_display.py
+touch streamlit_workspace/components/metrics_display.py
+
+touch visualization/core/__init__.py
+touch visualization/core/graph_renderer.py
+touch visualization/core/layout_manager.py
+touch visualization/core/style_manager.py
+
+touch visualization/exporters/__init__.py
+touch visualization/exporters/image_exporter.py
+touch visualization/exporters/pdf_exporter.py
+touch visualization/exporters/html_exporter.py
+
+# 3. Run refactoring with proper imports
+python -c "from analytics.base import BaseAnalyzer; print('✅ Analytics base import successful')"
+python -c "from streamlit_workspace.components.data_visualization import DataVisualizationComponents; print('✅ Streamlit components import successful')"
+python -c "from visualization.core.graph_renderer import GraphRenderer; print('✅ Visualization core import successful')"
+```
+
+**Refactoring Benefits**:
+- **Maintainability**: Each module has a single responsibility
+- **Testability**: Smaller, focused functions are easier to test
+- **Reusability**: Components can be reused across different parts of the system
+- **Readability**: Code is more organized and easier to understand
+- **Extensibility**: New features can be added without modifying existing code
+
+##### 2.4 Testing and Validation Framework
+
+**Testing Structure**:
+```
+tests/
+├── __init__.py                        # ✅ EXISTS
+├── unit/                              # ✅ EXISTS - Unit tests
+│   ├── test_scraper.py               # ✅ EXISTS
+│   ├── test_analytics/               # 🆕 NEW - Analytics module tests
+│   │   ├── __init__.py
+│   │   ├── test_base.py              # Test base classes
+│   │   ├── test_network_analyzer.py  # Test main orchestrator
+│   │   ├── test_graph_metrics.py     # Test metrics calculations
+│   │   └── test_pattern_detection.py # Test pattern detection
+│   ├── test_dependencies/            # 🆕 NEW - Dependency management tests
+│   │   ├── __init__.py
+│   │   ├── test_config.py            # Test dependency configuration
+│   │   ├── test_requirements_manager.py # Test requirements management
+│   │   └── test_validators.py        # Test validation logic
+│   └── test_visualization/           # 🆕 NEW - Visualization tests
+│       ├── __init__.py
+│       ├── test_graph_renderer.py    # Test graph rendering
+│       ├── test_layout_manager.py    # Test layout algorithms
+│       └── test_exporters.py         # Test export functionality
+├── integration/                      # ✅ EXISTS - Integration tests
+│   ├── test_integration.py          # ✅ EXISTS
+│   ├── test_module_integration.py   # 🆕 NEW - Cross-module integration
+│   └── test_streamlit_components.py # 🆕 NEW - UI component integration
+└── performance/                      # ✅ EXISTS - Performance tests
+    ├── performance_optimization.py  # ✅ EXISTS
+    ├── test_analytics_performance.py # 🆕 NEW - Analytics performance
+    └── test_caching_performance.py   # 🆕 NEW - Caching performance
+```
+
+**Example Test Files**:
+
+**tests/unit/test_dependencies/test_requirements_manager.py**:
+```python
+"""Unit tests for dependency management module."""
+import pytest
+import tempfile
+from pathlib import Path
+from unittest.mock import patch, MagicMock
+
+from dependencies.requirements_manager import RequirementsManager
+from dependencies.config import DependencyConfig
+
+
+class TestRequirementsManager:
+    """Test suite for RequirementsManager."""
+    
+    @pytest.fixture
+    def temp_project_dir(self):
+        """Create temporary project directory for testing."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            yield Path(temp_dir)
+    
+    @pytest.fixture
+    def requirements_manager(self, temp_project_dir):
+        """Create RequirementsManager instance for testing."""
+        return RequirementsManager(temp_project_dir)
+    
+    def test_init(self, requirements_manager, temp_project_dir):
+        """Test RequirementsManager initialization."""
+        assert requirements_manager.project_root == temp_project_dir
+        assert isinstance(requirements_manager.config, DependencyConfig)
+    
+    def test_create_requirements_in(self, requirements_manager, temp_project_dir):
+        """Test requirements.in file creation."""
+        requirements_manager.create_requirements_in()
+        
+        requirements_file = temp_project_dir / "requirements.in"
+        assert requirements_file.exists()
+        
+        content = requirements_file.read_text()
+        assert "# Core server and API" in content
+        assert "fastapi>=0.104.0,<0.105.0" in content
+        assert "# Database connections" in content
+        assert "neo4j>=5.15.0,<6.0.0" in content
+    
+    @patch('subprocess.run')
+    def test_compile_requirements_success(self, mock_run, requirements_manager):
+        """Test successful requirements compilation."""
+        mock_run.return_value = None  # No exception means success
+        
+        result = requirements_manager.compile_requirements()
+        assert result is True
+        
+        # Verify subprocess calls
+        assert mock_run.call_count == 2
+        calls = mock_run.call_args_list
+        assert "pip-tools" in str(calls[0])
+        assert "pip-compile" in str(calls[1])
+    
+    @patch('subprocess.run')
+    def test_compile_requirements_failure(self, mock_run, requirements_manager):
+        """Test failed requirements compilation."""
+        from subprocess import CalledProcessError
+        mock_run.side_effect = CalledProcessError(1, 'pip-compile')
+        
+        result = requirements_manager.compile_requirements()
+        assert result is False
+    
+    def test_build_requirements_content(self, requirements_manager):
+        """Test requirements content generation."""
+        content = requirements_manager._build_requirements_content()
+        
+        # Check structure
+        assert "# Core server and API" in content
+        assert "# Database connections" in content
+        assert "# NLP and ML" in content
+        
+        # Check specific dependencies
+        assert "fastapi>=0.104.0,<0.105.0" in content
+        assert "neo4j>=5.15.0,<6.0.0" in content
+        assert "spacy>=3.7.0,<4.0.0" in content
+        
+        # Check formatting
+        lines = content.split('\n')
+        assert any(line.startswith('#') for line in lines)  # Has comments
+        assert any(line == '' for line in lines)  # Has empty lines
+```
+
+**tests/unit/test_analytics/test_network_analyzer.py**:
+```python
+"""Unit tests for NetworkAnalyzer module."""
+import pytest
+import networkx as nx
+from unittest.mock import Mock, patch
+
+from analytics.network_analyzer import NetworkAnalyzer
+from analytics.base import AnalysisResult
+
+
+class TestNetworkAnalyzer:
+    """Test suite for NetworkAnalyzer."""
+    
+    @pytest.fixture
+    def sample_graph(self):
+        """Create sample graph for testing."""
+        G = nx.Graph()
+        G.add_edges_from([
+            ('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'),
+            ('A', 'C'), ('B', 'D')
+        ])
+        return G
+    
+    @pytest.fixture
+    def analyzer_config(self):
+        """Create test configuration."""
+        return {
+            'centrality_algorithms': ['betweenness', 'closeness'],
+            'community_detection': 'louvain',
+            'pattern_threshold': 0.5
+        }
+    
+    @pytest.fixture
+    def network_analyzer(self, analyzer_config):
+        """Create NetworkAnalyzer instance for testing."""
+        return NetworkAnalyzer(analyzer_config)
+    
+    def test_init(self, network_analyzer, analyzer_config):
+        """Test NetworkAnalyzer initialization."""
+        assert network_analyzer.config == analyzer_config
+        assert hasattr(network_analyzer, 'metrics_calculator')
+        assert hasattr(network_analyzer, 'pattern_detector')
+        assert hasattr(network_analyzer, 'community_analyzer')
+    
+    def test_validate_input_valid_graph(self, network_analyzer, sample_graph):
+        """Test input validation with valid graph."""
+        result = network_analyzer.validate_input(sample_graph)
+        assert result is True
+    
+    def test_validate_input_empty_graph(self, network_analyzer):
+        """Test input validation with empty graph."""
+        empty_graph = nx.Graph()
+        result = network_analyzer.validate_input(empty_graph)
+        assert result is False
+    
+    def test_validate_input_invalid_input(self, network_analyzer):
+        """Test input validation with invalid input."""
+        result = network_analyzer.validate_input("not a graph")
+        assert result is False
+    
+    @patch('analytics.network_analyzer.GraphMetricsCalculator')
+    @patch('analytics.network_analyzer.PatternDetector')
+    @patch('analytics.network_analyzer.CommunityAnalyzer')
+    def test_analyze_success(self, mock_community, mock_pattern, mock_metrics, 
+                            network_analyzer, sample_graph):
+        """Test successful network analysis."""
+        # Mock component results
+        mock_metrics.return_value.calculate_all_metrics.return_value = {
+            'betweenness_centrality': {'A': 0.5, 'B': 0.3},
+            'clustering_coefficient': 0.67
+        }
+        
+        mock_pattern.return_value.detect_patterns.return_value = {
+            'triangles': 2,
+            'cliques': ['A', 'B', 'C']
+        }
+        
+        mock_community.return_value.analyze_communities.return_value = {
+            'modularity': 0.45,
+            'communities': [['A', 'B'], ['C', 'D']]
+        }
+        
+        result = network_analyzer.analyze(sample_graph)
+        
+        # Verify result structure
+        assert isinstance(result, AnalysisResult)
+        assert result.analysis_type == "comprehensive_network_analysis"
+        assert 'network_metrics' in result.metrics
+        assert 'patterns' in result.metrics
+        assert 'communities' in result.metrics
+        assert 0.0 <= result.confidence_score <= 1.0
+    
+    def test_analyze_invalid_graph(self, network_analyzer):
+        """Test analysis with invalid graph."""
+        with pytest.raises(ValueError, match="Invalid graph structure"):
+            network_analyzer.analyze("not a graph")
+    
+    def test_calculate_confidence(self, network_analyzer):
+        """Test confidence score calculation."""
+        metrics = {'centrality': 0.8}
+        patterns = {'triangles': 5}
+        communities = {'modularity': 0.6}
+        
+        confidence = network_analyzer._calculate_confidence(metrics, patterns, communities)
+        assert isinstance(confidence, float)
+        assert 0.0 <= confidence <= 1.0
+```
+
+**tests/unit/test_visualization/test_graph_renderer.py**:
+```python
+"""Unit tests for GraphRenderer module."""
+import pytest
+import networkx as nx
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+from unittest.mock import patch, MagicMock
+
+from visualization.core.graph_renderer import GraphRenderer
+
+
+class TestGraphRenderer:
+    """Test suite for GraphRenderer."""
+    
+    @pytest.fixture
+    def sample_graph(self):
+        """Create sample graph for testing."""
+        G = nx.Graph()
+        G.add_edges_from([('A', 'B'), ('B', 'C'), ('C', 'A')])
+        return G
+    
+    @pytest.fixture
+    def renderer_config(self):
+        """Create test configuration."""
+        return {
+            'default_layout': 'spring',
+            'output_format': 'png',
+            'figure_size': (10, 8)
+        }
+    
+    @pytest.fixture
+    def graph_renderer(self, renderer_config):
+        """Create GraphRenderer instance for testing."""
+        return GraphRenderer(renderer_config)
+    
+    def test_init(self, graph_renderer, renderer_config):
+        """Test GraphRenderer initialization."""
+        assert graph_renderer.config == renderer_config
+        assert isinstance(graph_renderer.default_style, dict)
+        assert 'node_color' in graph_renderer.default_style
+        assert 'edge_color' in graph_renderer.default_style
+    
+    @patch('matplotlib.pyplot.subplots')
+    @patch('networkx.spring_layout')
+    @patch('networkx.draw')
+    def test_render_matplotlib(self, mock_draw, mock_layout, mock_subplots,
+                              graph_renderer, sample_graph):
+        """Test matplotlib rendering."""
+        # Mock matplotlib components
+        mock_fig = MagicMock()
+        mock_ax = MagicMock()
+        mock_subplots.return_value = (mock_fig, mock_ax)
+        mock_layout.return_value = {'A': (0, 0), 'B': (1, 0), 'C': (0.5, 1)}
+        
+        result = graph_renderer.render_matplotlib(sample_graph)
+        
+        # Verify method calls
+        mock_subplots.assert_called_once_with(figsize=(12, 8))
+        mock_layout.assert_called_once_with(sample_graph, k=1, iterations=50)
+        mock_draw.assert_called_once()
+        mock_ax.set_title.assert_called_once_with("Knowledge Graph Visualization")
+        
+        assert result == mock_fig
+    
+    @patch('networkx.spring_layout')
+    def test_render_plotly(self, mock_layout, graph_renderer, sample_graph):
+        """Test Plotly rendering."""
+        mock_layout.return_value = {'A': (0, 0), 'B': (1, 0), 'C': (0.5, 1)}
+        
+        result = graph_renderer.render_plotly(sample_graph)
+        
+        # Verify result structure
+        assert isinstance(result, go.Figure)
+        assert len(result.data) >= 2  # At least edges and nodes
+        
+        # Check layout
+        assert result.layout.title.text == "Interactive Knowledge Graph"
+        assert result.layout.showlegend is False
+        assert result.layout.hovermode == 'closest'
+    
+    def test_render_matplotlib_custom_style(self, graph_renderer, sample_graph):
+        """Test matplotlib rendering with custom style."""
+        custom_style = {
+            'node_color': '#ff0000',
+            'node_size': 300,
+            'edge_color': '#00ff00',
+            'edge_width': 2.0,
+            'font_size': 12
+        }
+        
+        with patch('matplotlib.pyplot.subplots') as mock_subplots, \
+             patch('networkx.spring_layout') as mock_layout, \
+             patch('networkx.draw') as mock_draw:
+            
+            mock_fig = MagicMock()
+            mock_ax = MagicMock()
+            mock_subplots.return_value = (mock_fig, mock_ax)
+            mock_layout.return_value = {'A': (0, 0), 'B': (1, 0), 'C': (0.5, 1)}
+            
+            result = graph_renderer.render_matplotlib(sample_graph, custom_style)
+            
+            # Verify custom style was used
+            call_args = mock_draw.call_args
+            assert call_args[1]['node_color'] == '#ff0000'
+            assert call_args[1]['node_size'] == 300
+            assert call_args[1]['edge_color'] == '#00ff00'
+            assert call_args[1]['width'] == 2.0
+            assert call_args[1]['font_size'] == 12
+```
+
+**tests/integration/test_module_integration.py**:
+```python
+"""Integration tests for cross-module functionality."""
+import pytest
+import tempfile
+from pathlib import Path
+import networkx as nx
+
+from dependencies.requirements_manager import RequirementsManager
+from analytics.network_analyzer import NetworkAnalyzer
+from visualization.core.graph_renderer import GraphRenderer
+
+
+class TestModuleIntegration:
+    """Test suite for cross-module integration."""
+    
+    @pytest.fixture
+    def integrated_system(self):
+        """Create integrated system for testing."""
+        config = {
+            'analytics': {
+                'centrality_algorithms': ['betweenness'],
+                'community_detection': 'louvain'
+            },
+            'visualization': {
+                'default_layout': 'spring',
+                'output_format': 'png'
+            }
+        }
+        
+        analyzer = NetworkAnalyzer(config['analytics'])
+        renderer = GraphRenderer(config['visualization'])
+        
+        return {
+            'analyzer': analyzer,
+            'renderer': renderer,
+            'config': config
+        }
+    
+    @pytest.fixture
+    def sample_network(self):
+        """Create sample network for integration testing."""
+        G = nx.karate_club_graph()  # Well-known test graph
+        return G
+    
+    def test_analysis_to_visualization_pipeline(self, integrated_system, sample_network):
+        """Test complete analysis-to-visualization pipeline."""
+        analyzer = integrated_system['analyzer']
+        renderer = integrated_system['renderer']
+        
+        # Perform analysis
+        analysis_result = analyzer.analyze(sample_network)
+        
+        # Verify analysis completed successfully
+        assert analysis_result.analysis_type == "comprehensive_network_analysis"
+        assert 'network_metrics' in analysis_result.metrics
+        
+        # Render visualization
+        matplotlib_fig = renderer.render_matplotlib(sample_network)
+        plotly_fig = renderer.render_plotly(sample_network)
+        
+        # Verify visualizations were created
+        assert matplotlib_fig is not None
+        assert plotly_fig is not None
+        assert hasattr(plotly_fig, 'data')
+        assert len(plotly_fig.data) > 0
+    
+    def test_dependency_management_integration(self):
+        """Test dependency management integration with project structure."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            project_root = Path(temp_dir)
+            
+            # Create requirements manager
+            manager = RequirementsManager(project_root)
+            
+            # Create requirements.in file
+            manager.create_requirements_in()
+            
+            # Verify file exists and contains expected dependencies
+            requirements_file = project_root / "requirements.in"
+            assert requirements_file.exists()
+            
+            content = requirements_file.read_text()
+            
+            # Check that dependencies required by our modules are present
+            assert "networkx" in content or "# NLP and ML" in content
+            assert "plotly" in content or "streamlit" in content
+            assert "fastapi" in content
+    
+    def test_error_handling_across_modules(self, integrated_system):
+        """Test error handling across module boundaries."""
+        analyzer = integrated_system['analyzer']
+        renderer = integrated_system['renderer']
+        
+        # Test invalid graph handling
+        with pytest.raises(ValueError):
+            analyzer.analyze("not a graph")
+        
+        # Test empty graph handling
+        empty_graph = nx.Graph()
+        with pytest.raises(ValueError):
+            analyzer.analyze(empty_graph)
+        
+        # Test renderer with minimal graph
+        minimal_graph = nx.Graph()
+        minimal_graph.add_node('A')
+        
+        # Should handle gracefully
+        fig = renderer.render_matplotlib(minimal_graph)
+        assert fig is not None
+```
+
+**tests/performance/test_analytics_performance.py**:
+```python
+"""Performance tests for analytics modules."""
+import pytest
+import time
+import networkx as nx
+import numpy as np
+
+from analytics.network_analyzer import NetworkAnalyzer
+
+
+class TestAnalyticsPerformance:
+    """Performance test suite for analytics modules."""
+    
+    @pytest.fixture
+    def performance_config(self):
+        """Create performance test configuration."""
+        return {
+            'centrality_algorithms': ['betweenness', 'closeness'],
+            'community_detection': 'louvain',
+            'pattern_threshold': 0.5
+        }
+    
+    @pytest.fixture
+    def analyzer(self, performance_config):
+        """Create NetworkAnalyzer for performance testing."""
+        return NetworkAnalyzer(performance_config)
+    
+    def test_small_graph_performance(self, analyzer):
+        """Test performance with small graph (< 100 nodes)."""
+        graph = nx.barabasi_albert_graph(50, 3)
+        
+        start_time = time.time()
+        result = analyzer.analyze(graph)
+        end_time = time.time()
+        
+        execution_time = end_time - start_time
+        
+        # Should complete in less than 1 second
+        assert execution_time < 1.0
+        assert result.analysis_type == "comprehensive_network_analysis"
+    
+    def test_medium_graph_performance(self, analyzer):
+        """Test performance with medium graph (100-1000 nodes)."""
+        graph = nx.barabasi_albert_graph(500, 5)
+        
+        start_time = time.time()
+        result = analyzer.analyze(graph)
+        end_time = time.time()
+        
+        execution_time = end_time - start_time
+        
+        # Should complete in less than 10 seconds
+        assert execution_time < 10.0
+        assert result.analysis_type == "comprehensive_network_analysis"
+    
+    @pytest.mark.slow
+    def test_large_graph_performance(self, analyzer):
+        """Test performance with large graph (1000+ nodes)."""
+        graph = nx.barabasi_albert_graph(2000, 10)
+        
+        start_time = time.time()
+        result = analyzer.analyze(graph)
+        end_time = time.time()
+        
+        execution_time = end_time - start_time
+        
+        # Should complete in less than 60 seconds
+        assert execution_time < 60.0
+        assert result.analysis_type == "comprehensive_network_analysis"
+    
+    def test_memory_usage(self, analyzer):
+        """Test memory usage during analysis."""
+        import psutil
+        import os
+        
+        process = psutil.Process(os.getpid())
+        
+        # Measure initial memory
+        initial_memory = process.memory_info().rss / 1024 / 1024  # MB
+        
+        # Analyze graph
+        graph = nx.barabasi_albert_graph(1000, 5)
+        result = analyzer.analyze(graph)
+        
+        # Measure final memory
+        final_memory = process.memory_info().rss / 1024 / 1024  # MB
+        
+        memory_increase = final_memory - initial_memory
+        
+        # Should not increase memory by more than 100MB
+        assert memory_increase < 100
+        assert result.analysis_type == "comprehensive_network_analysis"
+```
+
+**Testing Configuration in pyproject.toml**:
+```toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers"
+testpaths = [
+    "tests",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "performance: marks tests as performance tests",
+]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["dependencies", "analytics", "visualization", "agents", "api"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/conftest.py",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+```
+
+**Running Tests**:
+```bash
+# Run all tests
+pytest
+
+# Run only unit tests
+pytest -m unit
+
+# Run only integration tests  
+pytest -m integration
+
+# Run performance tests
+pytest -m performance
+
+# Run tests with coverage
+pytest --cov=dependencies --cov=analytics --cov=visualization
+
+# Run specific test file
+pytest tests/unit/test_analytics/test_network_analyzer.py
+
+# Run tests excluding slow tests
+pytest -m "not slow"
+```
 
 #### 3. **COMPREHENSIVE CACHING IMPLEMENTATION**
 **Problem**: Underutilized Redis caching leading to repeated expensive computations.
