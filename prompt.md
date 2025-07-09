@@ -31,3 +31,8 @@ Use context7 and follow these guidelines to ensure modular, maintainable, and co
    - A brief description of its purpose.
    - The complete code with proper imports.
    - A note on how it integrates with other modules.
+
+10. ## IMPORTANT ##
+   - Do one task/update at a time 
+   - Let me know when you're finished and update the plan.md file as progress is made by checkmarking things as complete
+   - Put concise notes on the update that was made for each task or improvement in the plan.md file
