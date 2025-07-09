@@ -85,67 +85,10 @@ MCP_Ygg/
 │   ├── vectors/sync_metadata.csv
 │   └── import/ (folder exists but empty)
 │
-├── 📁 agents/ (AI Agent Modules)
+├── 📁 agents/ (AI Agent Modules - Organized by Function)
 │   ├── __init__.py
-│   ├── anomaly_detector/
-│   │   ├── __init__.py
-│   │   ├── anomaly_detector.py
-│   │   └── models/.gitkeep
-│   ├── backup/
-│   │   ├── __init__.py
-│   │   └── backup_agent.py
-│   ├── claim_analyzer/
-│   │   ├── claim_analyzer.md
-│   │   ├── claim_analyzer.py
-│   │   └── claim_analyzer_config.py
-│   ├── concept_explorer/
-│   │   ├── __init__.py
-│   │   ├── concept_discovery_service.py
-│   │   ├── concept_explorer.py
-│   │   ├── config.yaml
-│   │   ├── connection_analyzer.py
-│   │   └── thought_path_tracer.py
-│   ├── content_analyzer/
-│   │   ├── __init__.py
-│   │   ├── config.yaml
-│   │   └── content_analysis_agent.py
-│   ├── copyright_checker/
-│   │   ├── __init__.py
-│   │   ├── copyright_checker.py
-│   │   └── lists/.gitkeep
-│   ├── fact_verifier/
-│   │   ├── __init__.py
-│   │   └── enhanced_verification_agent.py
-│   ├── knowledge_graph/
-│   │   ├── __init__.py
-│   │   └── knowledge_graph_builder.py
-│   ├── maintenance/
-│   │   ├── __init__.py
-│   │   └── maintenance_agent.py
-│   ├── metadata_analyzer/
-│   │   ├── __init__.py
-│   │   └── metadata_analyzer.py
-│   ├── neo4j_manager/
-│   │   ├── __init__.py
-│   │   ├── config.yaml
-│   │   ├── neo4j_agent.py
-│   │   ├── query_optimizer.py
-│   │   └── schema_manager.py
-│   ├── node_relationship_manager/
-│   │   ├── __init__.py
-│   │   └── relationship_manager.py
-│   ├── pattern_recognition/
-│   │   ├── __init__.py
-│   │   └── pattern_recognition.py
-│   ├── qdrant_manager/
-│   │   ├── __init__.py
-│   │   ├── collection_manager.py
-│   │   ├── config.yaml
-│   │   └── qdrant_agent.py
-│   ├── recommendation/
-│   │   ├── __init__.py
-│   │   └── recommendation_agent.py
-│   ├── scraper/
+│   ├── 🕷️ SCRAPING PROCESS AGENTS
+│   ├── scraper/                           # Web content acquisition
 │   │   ├── __init__.py
 │   │   ├── IMPORTANT.md
 │   │   ├── high_performance_scraper.py
@@ -153,22 +96,7 @@ MCP_Ygg/
 │   │   ├── scraper_config.py
 │   │   ├── scraper_utils.py
 │   │   └── testscrape.md
-│   ├── sync_manager/
-│   │   ├── __init__.py
-│   │   ├── config.yaml
-│   │   ├── conflict_resolver.py
-│   │   ├── event_dispatcher.py
-│   │   └── sync_manager.py
-│   ├── text_processor/
-│   │   ├── __init__.py
-│   │   ├── text_processor.py
-│   │   ├── text_processor_config.py
-│   │   └── text_processor_utils.py
-│   ├── vector_index/
-│   │   ├── __init__.py
-│   │   ├── vector_index_config.py
-│   │   └── vector_indexer.py
-│   ├── youtube_transcript/
+│   ├── youtube_transcript/                # YouTube content acquisition
 │   │   ├── __init__.py
 │   │   ├── config.yaml
 │   │   ├── metadata_extractor.py
@@ -176,11 +104,103 @@ MCP_Ygg/
 │   │   ├── youtube_agent.py
 │   │   ├── youtube_agent_efficient.py
 │   │   └── youtube_agent_simple.py
-│   └── [Translation Agents - MD files]
-│       ├── ENG-Handwritting2text_agent.md
-│       ├── greektranslater.md
-│       ├── hebrewtranslator.md
-│       └── latintranslator.md
+│   ├── copyright_checker/                 # Content validation during scraping
+│   │   ├── __init__.py
+│   │   ├── copyright_checker.py
+│   │   └── lists/.gitkeep
+│   ├── text_processor/                    # Initial text processing
+│   │   ├── __init__.py
+│   │   ├── text_processor.py
+│   │   ├── text_processor_config.py
+│   │   └── text_processor_utils.py
+│   │
+│   ├── 🔍 DATA ANALYSIS AGENTS
+│   ├── analytics/                         # Comprehensive analysis suite
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   ├── community_analysis.py
+│   │   ├── complete_trend_analyzer.py
+│   │   ├── graph_metrics.py
+│   │   ├── network_analyzer.py
+│   │   ├── pattern_detection.py
+│   │   ├── plots/.gitkeep
+│   │   ├── anomaly_detector/              # ✅ REFACTORED - Modular structure
+│   │   │   ├── __init__.py
+│   │   │   ├── anomaly_detector.py        # Main orchestrator (242 lines)
+│   │   │   ├── config.py                  # Configuration management
+│   │   │   ├── data_fetcher.py            # Database operations
+│   │   │   ├── detectors.py               # Detection algorithms
+│   │   │   ├── models.py                  # Data models
+│   │   │   ├── utils.py                   # Utility functions
+│   │   │   └── models/.gitkeep
+│   │   ├── claim_analyzer/                # Fact verification
+│   │   │   ├── claim_analyzer.md
+│   │   │   ├── claim_analyzer.py
+│   │   │   └── claim_analyzer_config.py
+│   │   ├── concept_explorer/              # Concept relationship analysis
+│   │   │   ├── __init__.py
+│   │   │   ├── concept_discovery_service.py
+│   │   │   ├── concept_explorer.py
+│   │   │   ├── config.yaml
+│   │   │   ├── connection_analyzer.py
+│   │   │   └── thought_path_tracer.py
+│   │   └── content_analyzer/              # Content deep analysis
+│   │       ├── __init__.py
+│   │       ├── config.yaml
+│   │       └── content_analysis_agent.py
+│   ├── fact_verifier/                     # Enhanced fact checking
+│   │   ├── __init__.py
+│   │   └── enhanced_verification_agent.py
+│   ├── metadata_analyzer/                 # Metadata pattern analysis
+│   │   ├── __init__.py
+│   │   └── metadata_analyzer.py
+│   ├── pattern_recognition/               # Pattern detection
+│   │   ├── __init__.py
+│   │   └── pattern_recognition.py
+│   ├── recommendation/                    # Content recommendations
+│   │   ├── __init__.py
+│   │   └── recommendation_agent.py
+│   │
+│   ├── 🗄️ DATABASE MANAGEMENT AGENTS
+│   ├── neo4j_manager/                     # Neo4j operations
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── neo4j_agent.py
+│   │   ├── query_optimizer.py
+│   │   └── schema_manager.py
+│   ├── qdrant_manager/                    # Qdrant vector operations
+│   │   ├── __init__.py
+│   │   ├── collection_manager.py
+│   │   ├── config.yaml
+│   │   └── qdrant_agent.py
+│   ├── vector_index/                      # Vector indexing operations
+│   │   ├── __init__.py
+│   │   ├── vector_index_config.py
+│   │   └── vector_indexer.py
+│   ├── sync_manager/                      # Database synchronization
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── conflict_resolver.py
+│   │   ├── event_dispatcher.py
+│   │   └── sync_manager.py
+│   ├── knowledge_graph/                   # Knowledge graph construction
+│   │   ├── __init__.py
+│   │   └── knowledge_graph_builder.py
+│   ├── node_relationship_manager/         # Graph relationship management
+│   │   ├── __init__.py
+│   │   └── relationship_manager.py
+│   ├── backup/                            # Database backup operations
+│   │   ├── __init__.py
+│   │   └── backup_agent.py
+│   ├── maintenance/                       # System maintenance
+│   │   ├── __init__.py
+│   │   └── maintenance_agent.py
+│   │
+│   └── 🌍 TRANSLATION AGENTS (Documentation)
+│       ├── ENG-Handwritting2text_agent.md  # English handwriting OCR
+│       ├── greektranslater.md              # Greek translation
+│       ├── hebrewtranslator.md             # Hebrew translation
+│       └── latintranslator.md              # Latin translation
 │
 ├── 📁 analytics/
 │   ├── __init__.py
