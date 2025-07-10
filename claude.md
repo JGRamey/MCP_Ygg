@@ -40,8 +40,11 @@
 This is **MCP Yggdrasil** - a sophisticated hybrid knowledge server combining:
 - **Neo4j** (knowledge graph) + **Qdrant** (vector search) + **Redis** (cache)
 - **Six primary academic domains**: Art, Language, Mathematics, Philosophy (includes Religion), Science (includes Astrology), Technology
-- **Yggdrasil tree structure**: Recent docs (leaves) → Ancient knowledge (trunk)
-- **AI agents**: Claim Analyzer, Text Processor, Web Scraper, Vector Indexer
+- **Yggdrasil tree structure**: Root = Main Categories/Subjects -> Branch = Subjects/fields within the main Categories/Fields -> Limb = Groups/Cultures/Civilizations, people,  place, ideas, etc. within particular branches -> Leaf = Individual works, texts, accomplishments,   doctrines, etc. -> 
+Properties = Attributes, Qualities, Information, etc. or any important details about each individual node (Nodes are all things just mentioned, Groups, People, Ideas, Texts, Manuscripts, Categories, Fields, Subjects, etc. Everything in the Neo4j graph is considered a node unless it's a relationship) -> 
+Relationships = Related nodes to some capacity eg. Father of, Mother of, Brother of, Sister of, etc. and Student of, Teacher of, Creator/Founder of, Inspired/Influenced by, etc. and for places here are some examples we can expand on, Birthplace of (person, religion, doctrine, idea, art style, language, etc), battle of, etc.
+Please ask if you need clarity or ideas when it comes to creating and labeling nodes.
+- **AI agents**: Text Processor, Web Scraper & Text Scraper,  Vector Indexer, Graph Manager, Data/Information analysis agents
 - **Database management interface**: Streamlit-based interface for database operations and content scraping
 
 ## 📋 RECENT WORK COMPLETED
@@ -66,6 +69,7 @@ This is **MCP Yggdrasil** - a sophisticated hybrid knowledge server combining:
 - `setup_linting.py` - One-click setup script
 - `requirements-dev.txt` - All dev dependencies
 - Config files stay in root: `.flake8`, `pyproject.toml`, `.pre-commit-config.yaml`
+- Updated plan.md file for updates and improvements: C:\Users\zochr\Desktop\GitHub\Yggdrasil\MCP_Ygg\plan.md
 
 ### Core Architecture
 - `streamlit_workspace/` - **DATABASE MANAGEMENT INTERFACE** - Professional Streamlit application
@@ -165,3 +169,4 @@ python scripts/enhanced_yggdrasil_integrator.py    # Integration script (already
 python scripts/chat_logger.py    # Test chat logging functionality
 # Note: Chat logs automatically created in chat_logs/ directory by date/time
 ```
+
