@@ -1,4 +1,4 @@
-### NEEDS TO BE UPDATED WITH THE CURRENT CLAUDE MEMORY FILE ###
+### NEEDS TO BE UPDATED WITH THE CURRENT CLAUDE MEMORY FILE FROM DESKTOP###
 
 
 {
@@ -37,7 +37,7 @@
 ### Use the following Context7 libraries for coding: Python, Rust (Qdrant), Cypher (Neo4j), and any other libraries if necessary but those are the essential libraries. ###
 
 # PROJECT CONTEXT FOR CLAUDE
-# Last updated: 2025-07-01 (✅ COMPLETE IDE-LIKE STREAMLIT WORKSPACE DEPLOYED)
+# Last updated: 2025-07-14 (✅ Project Structure Aligned, Dependency Management Initiated)
 
 ## 🎯 PROJECT OVERVIEW
 This is **MCP Yggdrasil** - a sophisticated hybrid knowledge server combining:
@@ -65,6 +65,10 @@ Please ask if you need clarity or ideas when it comes to creating and labeling n
 12. **✅ AGENT REORGANIZATION** - Functional categorization: Scraping → Analysis → Database Management
 13. **✅ ANOMALY DETECTOR REFACTORING** - Modular structure (768→242 lines) with comprehensive tests
 14. **✅ DATA INTEGRATION & CLEANUP** - 371 concepts standardized across 6 primary domains
+15. **✅ CHAT LOGGING SYSTEM** - Automated chat logging system implemented with timestamps and action summaries.
+16. **✅ DEPENDENCY MANAGEMENT SETUP** - Modular dependency management structure created and `requirements.txt`/`requirements-dev.txt` compiled using `pip-tools`.
+17. **✅ REPOSITORY CLEANUP** - `venv/` removed, `__pycache__` and other cache files cleaned, `.gitignore` updated.
+18. **✅ PLAN.MD ALIGNMENT** - Project plan (`plan.md`) aligned with `updates/` directory structure, and `.MASSplan.md` archived.
 
 ## 🔧 KEY FILES & LOCATIONS
 ### Linting (tests/lint/)
@@ -132,20 +136,36 @@ from agents.knowledge_graph.knowledge_graph_builder import KnowledgeGraphBuilder
 
 ### Documentation
 - `plan.md` - **UPDATED**: Comprehensive development plan with modular structure (active tasks only)
+- `updates/` - **NEW**: Directory containing detailed implementation plans (e.g., `01_foundation_fixes.md`)
 - `p_completed.md` - **NEW**: Completed tasks and implementations (moved from plan.md)
 - `data_validation_pipeline_plan.md` - **NEW**: Multi-agent intelligent data validation plan
 - `agents/claim_analyzer/claim_analyzer.md` - Fact-checking agent docs
 - `final_readme.txt` - Comprehensive project documentation
 - `CSV_CLEANUP_SUMMARY.md` - Detailed data integration and cleanup results
 
+### Refactoring Workflow Documentation
+- `/Users/grant/Documents/GitHub/MCP_Ygg/opus_update/refactoring/refactoring.md` - Document for refactoring rationale, plan, and process.
+- Original files are backed up to `/Users/grant/Documents/GitHub/MCP_Ygg/opus_update/refactoring/` before refactoring.
+
 ### Chat Logs & Session Management
 - `chat_logs/` - **NEW**: Organized chat logs by date/time with action summaries
 - `scripts/chat_logger.py` - **NEW**: Automated chat logging system with timestamps
+
+#### Session Logging Protocol
+1.  **New Session Start**: A new log file will be automatically created in the `chat_logs/` directory with the format `YYYY-MM-DD_HH-MM.md`.
+2.  **Real-time Logging**: The log will be updated with each message exchange and a summary of any actions I take (e.g., file modifications, commands run).
+3.  **Session Summary**: A high-level summary of the session's achievements will be included at the top of the log file.
+4.  **Audit Trail**: This process ensures a complete and transparent audit trail of all project development decisions and implementations.
 
 ### Project Planning & Progress
 - `plan.md` - **ACTIVE**: Current and pending implementation tasks with modular structure
 - `p_completed.md` - **NEW**: Archive of completed tasks and implementations
 - `prompt.md` - **NEW**: Modular coding guidelines and best practices for implementation
+
+### Refactoring Workflow
+1.  **Backup**: Before refactoring a file, its original content will be copied to `/Users/grant/Documents/GitHub/MCP_Ygg/opus_update/refactoring/`.
+2.  **Document**: The rationale, plan, and process for the refactoring will be documented in `/Users/grant/Documents/GitHub/MCP_Ygg/opus_update/refactoring/refactoring.md`. This includes the "what, how, and why" of the changes.
+3.  **Implement**: Only after documentation will the refactoring of the code take place.
 
 ## 🚀 AVAILABLE COMMANDS
 ```bash
