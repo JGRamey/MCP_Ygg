@@ -1,6 +1,6 @@
 This was Groks recommendation to improve this portion of the project
 ## Important to Consider ##
-- It doesn't have to be followed exactly... Think and plan the best course of action when refactoring this entire folder while considering Groks input - Make the best decision possible for overall functionality
+- It doesn't have to be followed exactly... Think and plan the best course of action when refactoring this entire folder (/Users/grant/Documents/GitHub/MCP_Ygg/agents/analytics/graph_analysis) while considering Groks input - Make the best decision possible for overall functionality
 ## Additionally ##
 - Make sure to refactor both /Users/grant/Documents/GitHub/MCP_Ygg/agents/analytics/graph_analysis/network_analyzer.py & /Users/grant/Documents/GitHub/MCP_Ygg/agents/analytics/graph_analysis/trend_analyzer.py
 - Make individual folders if needed to keep the main "graph_analysis" folder organized, especially if refactoring causes multiple new files

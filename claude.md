@@ -69,6 +69,8 @@ Please ask if you need clarity or ideas when it comes to creating and labeling n
 16. **✅ DEPENDENCY MANAGEMENT SETUP** - Modular dependency management structure created and `requirements.txt`/`requirements-dev.txt` compiled using `pip-tools`.
 17. **✅ REPOSITORY CLEANUP** - `venv/` removed, `__pycache__` and other cache files cleaned, `.gitignore` updated.
 18. **✅ PLAN.MD ALIGNMENT** - Project plan (`plan.md`) aligned with `updates/` directory structure, and `.MASSplan.md` archived.
+19. **✅ DEPENDENCY MANAGEMENT CRISIS** - Implemented modular dependency management, created `requirements.in` files, compiled requirements, and installed dependencies.
+20. **✅ REPOSITORY CLEANUP** - `venv/` removed, `__pycache__` and other cache files cleaned, `.gitignore` updated.
 
 ## 🔧 KEY FILES & LOCATIONS
 ### Linting (tests/lint/)
@@ -184,12 +186,16 @@ make test              # Run tests
 make docker            # Start services
 make init              # Initialize system
 
-# CSV Management & Cleanup
+# CSV Management & Cleanup - 
 python scripts/csv_cleanup_script.py    # Clean and standardize all CSV files
 python scripts/enhanced_yggdrasil_integrator.py    # Integration script (already completed)
 
-# Chat Logging & Session Management
+# Chat Logging & Session Management - Doesn't work
 python scripts/chat_logger.py    # Test chat logging functionality
 # Note: Chat logs automatically created in chat_logs/ directory by date/time
 ```
+
+## Agent Operational Guidelines
+- **Pre-implementation Check**: Before implementing any steps, check the current project state to verify if the updates/steps have already been implemented.
+- **Task Completion**: Mark completed tasks off the list in the plan.md file and the individual update files found in /Users/grant/Documents/GitHub/MCP_Ygg/updates - update `p_completed.md` as appropriate. Analyze the `p_completed.md` file to make sure you are following the existing structure and not going off course.
 

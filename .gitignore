@@ -73,34 +73,4 @@ k8s/secrets-real.yaml
 *.backup
 *.tar.gz
 
-# Virtual environments
-venv/
-env/
-.venv/
 
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
-
-# Backups
-*.backup
-*.tar.gz
-*.zip
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
