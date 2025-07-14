@@ -38,9 +38,9 @@ from .data_collectors import (
 )
 from .trend_detector import TrendDetector, detect_trend_direction
 from .predictor import TrendPredictor, generate_predictions
-from .statistics_engine import StatisticsEngine, calculate_trend_statistics
-from .seasonality_detector import SeasonalityDetector, detect_seasonality
-from .trend_visualization import TrendVisualizer, generate_trend_visualization
+from .statistics_engine import StatisticsEngine, create_statistics_engine
+from .seasonality_detector import SeasonalityDetector, create_seasonality_detector
+from .trend_visualization import TrendVisualizationEngine, create_trend_visualization_engine
 
 # Import shared models from parent
 from ..models import TrendAnalysis, TrendPoint, TrendType, TrendDirection, TrendConfig
@@ -53,7 +53,7 @@ __all__ = [
     'TrendPredictor',
     'StatisticsEngine',
     'SeasonalityDetector',
-    'TrendVisualizer',
+    'TrendVisualizationEngine',
     
     # Models and enums
     'TrendAnalysis',
@@ -66,9 +66,9 @@ __all__ = [
     'analyze_trends',
     'detect_trend_direction',
     'generate_predictions',
-    'calculate_trend_statistics',
-    'detect_seasonality',
-    'generate_trend_visualization'
+    'create_statistics_engine',
+    'create_seasonality_detector',
+    'create_trend_visualization_engine'
 ]
 
 # Module version
