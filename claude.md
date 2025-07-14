@@ -1,3 +1,6 @@
+### NEEDS TO BE UPDATED WITH THE CURRENT CLAUDE MEMORY FILE ###
+
+
 {
   "mcpServers": {
     "memory": {
