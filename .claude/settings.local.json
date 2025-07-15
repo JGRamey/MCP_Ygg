@@ -13,7 +13,8 @@
       "Bash(chmod:*)",
       "Bash(/mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/start_app.sh:*)",
       "Bash(mkdir:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }

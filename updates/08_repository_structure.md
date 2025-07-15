@@ -374,9 +374,9 @@ MCP_Ygg/
 │   └── 📁 unit/                         # Unit tests
 │       └── test_scraper.py
 │
-├── 📁 visualization/                    # Visualization module
+├── 📁 agents/visualization/             # Visualization module (moved to agents/)
 │   ├── __init__.py
-│   ├── visualization_agent.py           # Viz agent (1,026 lines)
+│   ├── visualization_agent.py           # Viz agent (76 lines - refactored)
 │   ├── 📁 output/                       # Output files
 │   │   └── .gitkeep
 │   └── 📁 templates/                    # Viz templates
@@ -445,7 +445,7 @@ MCP_Ygg/
 
 #### Analysis & Visualization
 - **analytics/**: Data analysis algorithms
-- **visualization/**: Graph and data visualization
+- **agents/visualization/**: Graph and data visualization
 
 ### 🔍 Quick Reference
 
