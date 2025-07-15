@@ -7,13 +7,33 @@ from datetime import datetime, timedelta
 from typing import Any, Callable, Optional, Union
 
 import redis.asyncio as redis
-from prometheus_client import Counter, Histogram
 
-
-# Metrics
-cache_hits = Counter('cache_hits_total', 'Total cache hits', ['function'])
-cache_misses = Counter('cache_misses_total', 'Total cache misses', ['function'])
-cache_latency = Histogram('cache_operation_seconds', 'Cache operation latency', ['operation'])
+# Optional Prometheus metrics
+try:
+    from prometheus_client import Counter, Histogram
+    METRICS_AVAILABLE = True
+    # Metrics
+    cache_hits = Counter('cache_hits_total', 'Total cache hits', ['function'])
+    cache_misses = Counter('cache_misses_total', 'Total cache misses', ['function'])
+    cache_latency = Histogram('cache_operation_seconds', 'Cache operation latency', ['operation'])
+except ImportError:
+    METRICS_AVAILABLE = False
+    # Mock metrics objects
+    class MockMetric:
+        def labels(self, *args, **kwargs):
+            return self
+        def inc(self, *args, **kwargs):
+            pass
+        def observe(self, *args, **kwargs):
+            pass
+        def time(self):
+            return self
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+    
+    cache_hits = cache_misses = cache_latency = MockMetric()
 
 
 class CacheManager:

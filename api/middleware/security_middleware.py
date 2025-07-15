@@ -7,7 +7,7 @@ OAuth2/JWT authentication, encryption, and audit logging for MCP Server
 import asyncio
 import logging
 from pathlib import Path
-from typing import List, Dict, Optional, Any, Union
+from typing import List, Dict, Optional, Any, Union, Tuple
 from datetime import datetime, timedelta
 import json
 import hashlib
@@ -16,20 +16,53 @@ from enum import Enum
 
 from fastapi import Depends, HTTPException, status, Request, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from passlib.hash import bcrypt
-import aiofiles
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.backends import default_backend
+# Optional security dependencies
+try:
+    from jose import JWTError, jwt
+    JWT_AVAILABLE = True
+except ImportError:
+    JWT_AVAILABLE = False
+    class JWTError(Exception):
+        pass
+    jwt = None
+
+try:
+    from passlib.context import CryptContext
+    from passlib.hash import bcrypt
+    PASSLIB_AVAILABLE = True
+except ImportError:
+    PASSLIB_AVAILABLE = False
+    CryptContext = None
+
+try:
+    import aiofiles
+    AIOFILES_AVAILABLE = True
+except ImportError:
+    AIOFILES_AVAILABLE = False
+    aiofiles = None
+
+try:
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.hazmat.backends import default_backend
+    CRYPTO_AVAILABLE = True
+except ImportError:
+    CRYPTO_AVAILABLE = False
+    Fernet = None
+
 import base64
 import os
-import redis
+try:
+    import redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis = None
+
 import yaml
 
 # Configure logging
@@ -183,14 +216,24 @@ class PasswordManager:
     
     def __init__(self):
         """Initialize password manager"""
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        if not PASSLIB_AVAILABLE or not CryptContext:
+            logger.warning("Passlib not available, password hashing disabled")
+            self.pwd_context = None
+        else:
+            self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         """Verify password against hash"""
+        if not self.pwd_context:
+            logger.warning("Password verification not available")
+            return False
         return self.pwd_context.verify(plain_password, hashed_password)
     
     def get_password_hash(self, password: str) -> Tuple[str, str]:
         """Hash password with salt"""
+        if not self.pwd_context:
+            logger.warning("Password hashing not available")
+            return password, ""  # Fallback - not secure!
         salt = secrets.token_hex(32)
         hashed = self.pwd_context.hash(password + salt)
         return hashed, salt

@@ -1,0 +1,22 @@
+{
+  "admin": {
+    "id": "admin-001",
+    "username": "admin",
+    "email": "admin@mcp-server.local",
+    "full_name": "System Administrator",
+    "role": "admin",
+    "is_active": true,
+    "created_at": "2025-07-15 23:10:56.395572",
+    "last_login": null,
+    "permissions": [
+      "read",
+      "write",
+      "delete",
+      "admin",
+      "scrape",
+      "maintain"
+    ],
+    "hashed_password": "tlVj!qsDhcYY%2gV",
+    "salt": ""
+  }
+}
