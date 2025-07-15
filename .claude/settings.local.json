@@ -12,7 +12,8 @@
       "Bash(systemctl:*)",
       "Bash(chmod:*)",
       "Bash(/mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/start_app.sh:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }

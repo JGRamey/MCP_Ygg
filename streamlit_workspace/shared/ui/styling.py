@@ -411,3 +411,87 @@ def create_custom_metric(label: str, value: str, delta: Optional[str] = None,
     """
     
     st.markdown(metric_html, unsafe_allow_html=True)
+
+
+def get_knowledge_tools_css() -> str:
+    """
+    Get Knowledge Tools specific CSS styling.
+    
+    Returns CSS for knowledge tools components including wizards,
+    quality metrics, recommendations, and validation results.
+    """
+    return """
+    <style>
+    .tool-container {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .wizard-step {
+        background: #f8f9fa;
+        border-left: 4px solid #2E8B57;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .quality-metric {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 0.5rem;
+    }
+    
+    .quality-score {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .issue-card {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+    
+    .issue-high { border-left: 4px solid #dc3545; }
+    .issue-medium { border-left: 4px solid #ffc107; }
+    .issue-low { border-left: 4px solid #28a745; }
+    
+    .recommendation-card {
+        background: #e8f5e8;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-left: 4px solid #2E8B57;
+    }
+    
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .validation-result {
+        padding: 0.5rem;
+        border-radius: 4px;
+        margin: 0.2rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+    
+    .validation-pass { background: #d4edda; color: #155724; }
+    .validation-fail { background: #f8d7da; color: #721c24; }
+    .validation-warn { background: #fff3cd; color: #856404; }
+    </style>
+    """
