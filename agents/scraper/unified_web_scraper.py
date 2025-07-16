@@ -18,6 +18,7 @@ from dataclasses import dataclass
 # Local imports
 from .enhanced_content_extractor import EnhancedContentExtractor
 from .anti_detection import AntiDetectionManager, RateLimiter
+from .site_specific_parsers import SiteParserManager
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,7 @@ class UnifiedWebScraper:
         self.content_extractor = EnhancedContentExtractor()
         self.anti_detection = AntiDetectionManager(self._config_to_dict())
         self.rate_limiter = RateLimiter(self.config.requests_per_second)
+        self.site_parser_manager = SiteParserManager()
         
         # Performance tracking
         self.stats = {
@@ -150,11 +152,29 @@ class UnifiedWebScraper:
                     method_used=method_used
                 )
             
-            # Extract content using Trafilatura
-            extracted_content = self.content_extractor.extract_main_content(html_content, url)
+            # Try site-specific parser first
+            site_parsed_content = self.site_parser_manager.parse_content(html_content, url)
             
-            # Extract metadata
-            metadata = self.content_extractor.extract_metadata(html_content, url)
+            if site_parsed_content and site_parsed_content.title:
+                # Use site-specific parsed content
+                extracted_content = {
+                    'title': site_parsed_content.title,
+                    'main_text': site_parsed_content.content or site_parsed_content.raw_text or '',
+                    'author': site_parsed_content.author,
+                    'date': site_parsed_content.date,
+                    'abstract': site_parsed_content.abstract,
+                    'keywords': site_parsed_content.keywords,
+                    'citations': site_parsed_content.citations,
+                    'site_specific': True
+                }
+                metadata = site_parsed_content.metadata or {}
+                logger.info(f"✅ Site-specific parsing successful for {url}")
+            else:
+                # Fall back to Trafilatura extraction
+                extracted_content = self.content_extractor.extract_main_content(html_content, url)
+                metadata = self.content_extractor.extract_metadata(html_content, url)
+                extracted_content['site_specific'] = False
+                logger.debug(f"Using Trafilatura extraction for {url}")
             
             # Extract links if configured
             if self.config.extract_links:
