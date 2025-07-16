@@ -14,7 +14,9 @@
       "Bash(/mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/start_app.sh:*)",
       "Bash(mkdir:*)",
       "Bash(cp:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

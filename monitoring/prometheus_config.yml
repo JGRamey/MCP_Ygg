@@ -1,0 +1,60 @@
+# Prometheus Configuration for MCP Yggdrasil
+# Phase 2 Enhanced Monitoring Setup
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "mcp_yggdrasil_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+  # MCP Yggdrasil FastAPI application
+  - job_name: 'mcp-yggdrasil-api'
+    static_configs:
+      - targets: ['localhost:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 5s
+
+  # MCP Yggdrasil Streamlit Dashboard
+  - job_name: 'mcp-yggdrasil-ui'
+    static_configs:
+      - targets: ['localhost:8502']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Redis metrics (if redis_exporter is running)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['localhost:9121']
+    scrape_interval: 10s
+
+  # Neo4j metrics (if neo4j has prometheus plugin)
+  - job_name: 'neo4j'
+    static_configs:
+      - targets: ['localhost:2004']
+    scrape_interval: 15s
+
+  # System metrics (if node_exporter is running)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+    scrape_interval: 15s
+
+  # Python application metrics
+  - job_name: 'python-app'
+    static_configs:
+      - targets: ['localhost:8001']  # Custom metrics endpoint
+    metrics_path: '/app-metrics'
+    scrape_interval: 10s
