@@ -1,24 +1,18 @@
 # 📚 MCP YGGDRASIL - PROJECT CONTEXT FOR CLAUDE
-**Last Updated**: 2025-07-16 | **Phase**: 3.0 In Progress | **Status**: Phase 3 Core Implementation Complete
+**Last Updated**: 2025-07-16 | **Development Week**: 1 of 12 | **Overall Progress**: 15%
 
 {
   "mcpServers": {
     "memory": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
         "MEMORY_FILE_PATH": "/Users/grant/Documents/GitHub/MCP_Ygg/chat_logs/memory.json"
       }
     },
     "sequential-thinking": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "env": {}
     },
     "context7": {
@@ -26,414 +20,280 @@
     },
     "git": {
       "command": "uvx",
-      "args": [
-        "mcp-server-git"
-      ],
+      "args": ["mcp-server-git"],
       "env": {}
     }
   }
 }
 
-### Use the following Context7 libraries for coding: Python, Rust (Qdrant), Cypher (Neo4j), and any other libraries if necessary but those are the essential libraries. ###
-
+### **Primary Tech Stack**: Python, Rust (Qdrant), Cypher (Neo4j), TypeScript (Streamlit)
 
 ---
 
 ## 🎯 PROJECT OVERVIEW
 
-**MCP Yggdrasil** is a sophisticated hybrid knowledge server combining multiple cutting-edge technologies:
-
-### **Core Technology Stack**
-- **Neo4j** - Knowledge graph database for complex relationships
-- **Qdrant** - Vector search engine for semantic queries  
-- **Redis** - High-performance caching layer
-- **FastAPI** - Modern async API framework
-- **Streamlit** - Interactive database management interface
-
-### **Knowledge Domains**
-**Six Primary Academic Domains**:
-- **Art** - Visual arts, literature, music, cultural expressions
-- **Language** - Linguistics, etymology, translation, communication
-- **Mathematics** - Pure & applied mathematics, logic, computation
-- **Philosophy** - Ethics, metaphysics, epistemology, religion
-- **Science** - Natural sciences, research, astronomy, pseudoscience
-- **Technology** - Engineering, computer science, innovations
-
-### **Yggdrasil Tree Structure**
-```
-Root (Categories) → Branch (Subjects) → Limb (Groups/People/Places) → Leaf (Individual Works/Ideas)
-```
-- **Root**: Main Categories/Subjects
-- **Branch**: Subjects/fields within main categories
-- **Limb**: Groups, cultures, civilizations, people, places, ideas
-- **Leaf**: Individual works, texts, accomplishments, doctrines
-- **Properties**: Attributes, qualities, information about each node
-- **Relationships**: Connections between nodes (Father of, Student of, Inspired by, etc.)
-
-### **AI Agent Architecture**
-**Three-Tier Functional Organization**:
-1. **Scraping Process**: Web scraper, YouTube transcript, text processor
-2. **Data Analysis**: Fact verifier, anomaly detector, pattern recognition
-3. **Database Management**: Neo4j manager, Qdrant manager, sync manager
-
-
----
-
-## 🏆 MAJOR ACHIEVEMENTS - PHASE 1 COMPLETE
-
-### **🔍 PHASE 1: FOUNDATION & REFACTORING** (VERIFICATION REQUIRED)
-
-**CRITICAL DISCOVERY**: After implementing enhanced verification workflow, Phase 1 completion status requires verification against the complete specification in `updates/01_foundation_fixes.md`.
-
-**Reported Achievements** (needs verification):
-- **7 major files refactored**: 10,000+ lines → 31 modular components
-- **Repository size reduced**: ~70MB cleanup
-- **All critical infrastructure**: Modularized and production-ready
-
-**⚠️ VERIFICATION NEEDED**: 
-- Comprehensive caching implementation (Redis with CacheManager)
-- Testing framework setup with pytest configuration
-- Performance baseline metrics establishment
-- Complete validation against all checklist items in `updates/01_foundation_fixes.md`
-
-#### **Completed Refactoring Projects**:
-
-1. **✅ Network Analysis** (1,712 lines → 11 modules)
-   - Core analyzer, centrality analysis, community detection
-   - Influence analysis, bridge analysis, flow analysis
-   - Structural analysis, clustering, path analysis, visualization
-
-2. **✅ Trend Analysis** (1,010 lines → 7 modules)  
-   - Advanced statistical analysis, seasonality detection
-   - Prediction engine, data collectors, visualization
-
-3. **✅ Streamlit Dashboard** (1,617 lines → 6 components + shared library)
-   - Config management, UI components, page renderers
-   - Data operations, search operations, ~1,200 lines shared library
-
-4. **✅ Content Scraper** (1,508 lines → 4 modules, 94.6% reduction)
-   - Main interface, scraping engine, content processors
-   - Submission manager with comprehensive workflow
-
-5. **✅ Knowledge Tools** (1,385 lines → 5 modules, 89% reduction)
-   - Concept builder, quality assurance, knowledge analytics
-   - AI recommendations, relationship manager
-
-6. **✅ Visualization Agent** (1,026 lines → 13 modules, 92.6% reduction)
-   - Core models, data processors, layout engines
-   - Template management, export handlers
-
-7. **✅ Anomaly Detector** (768 lines → modular structure)
-
-#### **Infrastructure Achievements**:
-- **✅ Dependency Management**: Modular pip-tools setup
-- **✅ Repository Cleanup**: 70MB reduction, clean .gitignore
-- **✅ Backup System**: All original files preserved in archive/
-- **✅ Chat Logging**: Automated session documentation
-- **✅ Progress Tracking**: p_completed.md system
-- **✅ Data Integration**: 371 concepts across 6 domains
-
----
-
-## 🚀 CURRENT STATUS - PHASE 2 IMPLEMENTATION
-
-### **🔍 PHASE 2: PERFORMANCE OPTIMIZATION** (VERIFICATION REQUIRED)
-
-**CRITICAL DISCOVERY**: After implementing enhanced verification workflow, Phase 2 completion status requires verification against the complete specification in `updates/02_performance_optimization.md`.
-
-**Version 2.2.0 - "Phase 2 Partial Implementation"**
-
-#### **Reported Enhancements** (needs verification):
-
-1. **✅ Enhanced FastAPI Application** (VERIFIED)
-   - **Performance Middleware**: Custom timing headers (x-process-time)
-   - **Security Integration**: OAuth2/JWT with audit logging
-   - **Cache Integration**: Redis with health checks and warming
-   - **Middleware Stack**: Security → Performance → CORS → Compression
-
-**⚠️ MISSING COMPONENTS IDENTIFIED** (from specification):
-- Enhanced Claim Analyzer Agent (multi-source verification)
-- Enhanced Text Processor Agent (multilingual, transformers)
-- Enhanced Vector Indexer Agent (dynamic model selection)
-- Authentication & Authorization System (complete OAuth2 system)
-- Audit Logging System (Neo4j integration)
-- Prometheus Metrics (comprehensive monitoring)
-- Structured Logging (JSON formatter)
-- Async Task Queue Implementation (Celery configuration)
-- Document Processing Tasks (async task system)
-- Task Progress Tracking (Redis-based progress)
-
-2. **✅ System Integration Excellence**
-   - **Graceful Dependency Handling**: Works with missing dependencies
-   - **Enhanced Health Check**: Comprehensive system status reporting
-   - **Performance Monitoring**: Integrated benchmarking routes
-   - **Error Resilience**: Fallbacks for all optional components
-
-3. **✅ Performance Validation Completed (2025-07-16)**
-   - **Scraping Performance**: 0.23s for 2 URLs (Target: <10s) → **43x better than target**
-   - **Cache Performance**: <0.001s responses (Target: <500ms) → **500x better than target**  
-   - **Memory Cache Speedup**: 3,367x improvement demonstrated
-   - **Dependency Optimization**: selectolax, chardet installed and tested
-   - **System Reliability**: 100% success rate validated
-
-4. **✅ Workflow Innovation**
-   - **Duplicate Prevention Protocol**: Mandatory scanning before implementation
-   - **6-Step Standard Workflow**: Systematic development process
-   - **"Enhance vs. Create"**: Integration over duplication principle
-
----
-
-## 📁 PROJECT STRUCTURE & KEY FILES
+**MCP Yggdrasil** is an enterprise-grade knowledge management system that combines graph databases, vector search, and AI agents to create a sophisticated academic knowledge network.
 
 ### **Core Architecture**
+- **Neo4j**: Knowledge graph for complex relationships (371+ concepts)
+- **Qdrant**: Vector search for semantic queries (7 collections)
+- **Redis**: High-performance caching and session management
+- **FastAPI**: Async REST API with performance optimization
+- **Streamlit**: Interactive database management UI (8 pages)
+
+### **Knowledge Structure - The Yggdrasil Tree**
 ```
-MCP_Ygg/
-├── streamlit_workspace/          # Database Management Interface
-│   ├── main_dashboard.py         # Main navigation (187 lines)
-│   ├── shared/                   # Shared component library (~1,200 lines)
-│   ├── pages/                    # Streamlit pages (all refactored)
-│   └── utils/                    # Database utilities
-├── agents/                       # AI Agents (3-tier architecture)
-│   ├── scraper/                  # Web scraping agents
-│   ├── analytics/                # Data analysis agents  
-│   └── *_manager/                # Database management agents
-├── api/                          # FastAPI Backend (v2.0.0)
-│   ├── fastapi_main.py           # Enhanced main application
-│   ├── middleware/               # Security & performance middleware
-│   └── routes/                   # API endpoints
-├── cache/                        # Redis caching system
-├── CSV/                          # Knowledge graph data (production-ready)
-├── chat_logs/                    # Session documentation
-└── updates/                      # Implementation plans
+🌳 Root (6 Domains) → Branch (Subjects) → Limb (Entities) → Leaf (Works/Ideas)
 ```
+- **Domains**: Art, Language, Mathematics, Philosophy, Science, Technology
+- **Concepts**: Ideas and theoretical constructs (371+ indexed)
+- **Relationships**: Cross-domain connections and influences
+- **Events**: Historical occurrences that shaped knowledge
 
-### **Agent Import Patterns**
-```python
-# Scraping Process Agents (Phase 3 Enhanced)
-from agents.scraper.unified_web_scraper import UnifiedWebScraper, ScraperConfig
-from agents.scraper.enhanced_content_extractor import EnhancedContentExtractor
-from agents.scraper.anti_detection import AntiDetectionManager, RateLimiter
-from agents.text_processor.text_processor import TextProcessor
-
-# Data Analysis Agents  
-from agents.analytics.anomaly_detector.anomaly_detector import AnomalyDetector
-from agents.fact_verifier.enhanced_verification_agent import FactVerifier
-from agents.enhanced_verification.multi_source_verifier import MultiSourceVerifier
-
-# Database Management Agents
-from agents.neo4j_manager.neo4j_agent import Neo4jAgent
-from agents.qdrant_manager.qdrant_agent import QdrantAgent
-
-# Optional LangChain Integration (Reference)
-from agents.enhanced_reasoning.langchain_integration import EnhancedReasoningAgent
-```
-
-### **Documentation & Planning**
-- **`plan.md`** - Master development plan (active tasks)
-- **`p_completed.md`** - Completed implementations archive
-- **`updates/`** - Detailed phase implementation plans
-- **`chat_logs/`** - Comprehensive session documentation
-- **`archive/`** - Original file backups (11 files preserved)
+### **AI Agent Ecosystem (20+ Agents)**
+1. **Data Acquisition**: Scraper, YouTube transcript, copyright checker
+2. **Analysis & Validation**: Text processor, fact verifier, anomaly detector
+3. **Database Management**: Neo4j/Qdrant managers, sync coordinator
 
 ---
 
-## 🚀 AVAILABLE COMMANDS
+## 📊 PROJECT STATUS SUMMARY
 
-### **Primary Interfaces**
-```bash
-# Database Management Interface (Primary)
-streamlit run main_dashboard.py --server.port 8502
-# Access at: http://localhost:8502
+### **Actual Development Progress**
+| Phase | Status | Actual % | Target Week | Key Missing Components |
+|-------|--------|----------|-------------|------------------------|
+| **Phase 1: Foundation** | 🔄 Active | 75% | Week 2 | pip-tools, 8 large files, performance metrics |
+| **Phase 2: Performance** | ⏳ Partial | 30% | Week 4 | Enhanced AI agents, Celery, full monitoring |
+| **Phase 3: Scraper** | ✅ Mostly Complete | 85% | Week 6 | Plugin architecture, selenium-stealth |
+| **Phase 4: Validation** | ⏳ Pending | 0% | Week 8 | All components |
+| **Phase 5: UI** | ⏳ Pending | 0% | Week 10 | psutil already installed, graph editor |
+| **Phase 6: Advanced** | ⏳ Pending | 0% | Week 12 | All components |
 
-# FastAPI Backend (v2.0.0 Performance Optimized)
-python api/fastapi_main.py
-# Access at: http://localhost:8000
-```
+**Overall Completion: 30% of 12-week roadmap**
 
-### **Development Commands**
-```bash
-# Linting & Quality
-make lint              # Run all linting tools
-make lint-fix          # Auto-fix formatting  
-make setup-lint        # One-time setup
-
-# Development Workflow
-make install           # Install dependencies
-make test              # Run tests
-make docker            # Start services (Neo4j + Qdrant + Redis)
-make init              # Initialize system
-
-# Data Management
-python scripts/csv_cleanup_script.py    # Clean CSV data
-```
+### **Critical Issues Requiring Immediate Action**
+1. **Dependencies**: No pip-tools implementation (requirements.in files missing)
+2. **Large Files**: 8+ files over 1000 lines need refactoring
+3. **Duplicate Files**: Multiple "2.py" files in scraper folder need cleanup
+4. **Phase Gaps**: Missing enhanced AI agents from Phase 2
+5. **No Performance Metrics**: Baseline metrics not established
 
 ---
 
-## 🔄 ENHANCED SESSION WORKFLOW (CRITICAL UPDATE)
+## 🗂️ NEW MODULAR PLAN STRUCTURE
 
-**Every session MUST follow this ENHANCED 7-step workflow to prevent incomplete implementations:**
-
-### **1. COMPREHENSIVE PROJECT STATUS ANALYSIS** 📊
-```bash
-# MANDATORY: Read ALL relevant files COMPLETELY
-1. Read CLAUDE.md - Project context and recent work
-2. Read plan.md - Master development plan overview  
-3. Read updates/ - COMPLETE phase task files (line by line)
-   - updates/01_foundation_fixes.md (COMPLETE READ REQUIRED)
-   - updates/02_performance_optimization.md (COMPLETE READ REQUIRED)  
-   - updates/03_scraper_enhancement.md (COMPLETE READ REQUIRED)
-   - updates/04_data_validation.md (when applicable)
-   - updates/05_ui_workspace.md (when applicable)
-4. Cross-reference actual implementations against specifications
-5. Identify ANY missing components from specifications
-6. Assess current project maturity and next priorities
+### **How to Navigate the Development Plan**
+```
+📁 Project Root/
+├── 📄 plan.md                    # Quick overview & navigation
+├── 📁 updates/                   # Detailed implementation guides
+│   ├── 01_foundation_fixes.md    # Week 1-2: Technical debt
+│   ├── 02_performance_optimization.md # Week 3-4: Performance
+│   ├── 03_scraper_enhancement.md # Week 5-6: Scraping
+│   ├── 04_data_validation.md     # Week 7-8: Validation
+│   ├── 05_ui_workspace.md        # Week 9-10: UI fixes
+│   ├── 06_technical_specs.md     # Architecture reference
+│   ├── 07_metrics_timeline.md    # KPIs & timeline
+│   ├── 08_repository_structure.md # File system map
+│   └── 09_implementation_status.md # Progress tracking
+├── 📄 p_completed.md             # Completed work archive
+└── 📁 chat_logs/                 # Session documentation
 ```
 
-### **1.1 IMPLEMENTATION VERIFICATION** 🔍
+### **Efficient Workflow with Modular Files**
+1. **Start**: Read `plan.md` for current priorities
+2. **Deep Dive**: Open specific phase file for implementation details
+3. **Reference**: Check `08_repository_structure.md` before creating files
+4. **Track**: Update `09_implementation_status.md` after completing tasks
+5. **Archive**: Move completed items to `p_completed.md`
+
+---
+
+## 🔄 MANDATORY SESSION WORKFLOW
+
+### **Step 1: Project Analysis & Verification** 📊
 ```bash
-# MANDATORY: Before claiming completion, verify ALL specification components exist
-1. Read ENTIRE update file for current phase (every line)
-2. Create checklist of ALL specified components/files/features
-3. Verify each component actually exists in codebase
-4. Test critical import paths and functionality
-5. Document any discrepancies between specification and implementation
-6. Update phase completion percentage accurately
+# Read in this exact order:
+1. claude.md          # Current context (this file)
+2. plan.md           # Overview of all phases
+3. updates/09_implementation_status.md # Current progress
+4. updates/[current_phase].md # Full implementation details
+
+# Verify implementation status:
+- Check actual files exist for claimed completions
+- Test imports and functionality
+- Update percentages based on reality
 ```
 
-### **2. TODO LIST CREATION** ✅
+### **Step 2: Task Planning** ✅
 ```python
-# Create structured todo list with priorities
+# Create TODO list for session
 TodoWrite([
-    {"id": "task_description", "status": "pending", "priority": "high"},
-    {"id": "next_task", "status": "pending", "priority": "medium"}
+    {"id": "fix_psutil_import", "status": "pending", "priority": "critical"},
+    {"id": "implement_pip_tools", "status": "pending", "priority": "high"},
+    {"id": "refactor_network_analyzer", "status": "pending", "priority": "medium"}
 ])
 ```
 
-### **3. CHAT LOG CREATION** 📝
+### **Step 3: Documentation** 📝
 ```bash
-# Create timestamped chat log
-Location: /Users/grant/Documents/GitHub/MCP_Ygg/chat_logs/
-Format: YYYY-MM-DD_HH-MM_session-description.md
+# Create session log
+Path: /Users/grant/Documents/GitHub/MCP_Ygg/chat_logs/
+Format: YYYY-MM-DD_HH-MM_phase-X-task-description.md
 ```
 
-### **4. DUPLICATE PREVENTION SCAN** 🔍
-**⚠️ MANDATORY: Before creating ANY new files or implementing features**
-
+### **Step 4: Duplicate Prevention** 🔍
 ```bash
-# 1. Search for existing similar functionality
-Grep pattern="[feature_name|middleware|connection|cache|auth]" glob="**/*.py"
+# MANDATORY before creating ANY file
+Grep pattern="[feature_name]" glob="**/*.py"
+LS path="[target_directory]"
 
-# 2. Check specific directories
-LS path="/Users/grant/Documents/GitHub/MCP_Ygg/api"
-LS path="/Users/grant/Documents/GitHub/MCP_Ygg/agents" 
-LS path="/Users/grant/Documents/GitHub/MCP_Ygg/cache"
-
-# 3. Search for existing API routes and main files  
-Glob pattern="**/main*.py"
-Glob pattern="**/route*.py"
-
-# 4. Check for existing database connections
-Grep pattern="AsyncGraphDatabase|ConnectionPool|QdrantClient|redis.*pool" glob="**/*.py"
+# If similar functionality exists:
+- Enhance existing file
+- Do NOT create duplicate
 ```
 
-**Before Implementation Checklist:**
-- ✅ Scanned for existing files/functions with similar purpose
-- ✅ Checked relevant directories (api/, agents/, cache/, middleware/)
-- ✅ Verified no duplicate functionality exists
-- ✅ **If duplicates found**: Enhance existing files instead of creating new ones
-- ✅ Document what exists vs. what needs to be added/modified
+### **Step 5: Implementation** 🔨
+- Follow phase-specific checklist from `updates/` files
+- Update TODO status as you progress
+- Test each component before marking complete
+- Do not skip anything in the phase files from `updates/` - Don't be lazy, read the entire file
 
-### **5. IMPLEMENTATION EXECUTION** 🔨
-1. **Complete Duplicate Prevention Scan** - MANDATORY first step
-2. **Mark Current Task In Progress** - Update TodoWrite status
-3. **Execute Implementation** - Complete work (enhance existing or create new)
-4. **Mark Task Complete** - Update TodoWrite status  
-5. **Update Chat Log** - Document progress
-6. **Move to Next Task** - Repeat cycle
-
-### **6. SESSION CONTINUATION** 🔄
-- Update chat log with progress
-- Keep TodoWrite current with status changes
-- Document issues or blockers
-- Set up next session priorities
+### **Step 6: Progress Update** 📈
+- Update `09_implementation_status.md`
+- Move completed items to `p_completed.md`
+- Document any blockers or issues
+- Update this file (claude.md-> "Next Steps" & "Project Status") once tasks are complete and once phases are complete so we can pick
+up from where we left off in another session just in case
 
 ---
 
-## 📋 AGENT OPERATIONAL GUIDELINES
+## 🚀 IMMEDIATE PRIORITIES (Week 1)
 
-### **Core Principles**
-1. **🔍 MANDATORY Duplicate Prevention**: Always complete Step 4 scan before implementation
-2. **🔄 Enhance vs. Create**: Integrate with existing files instead of creating duplicates  
-3. **📝 Document Integration**: Record what exists and how new functionality integrates
-4. **✅ Follow Standard Workflow**: Use the 6-step process for all sessions
-5. **📊 Track Progress**: Update plan.md and p_completed.md appropriately
+### **Critical Fixes Required**
+1. **Install psutil**: Fix Operations Console crash
+   ```bash
+   pip install psutil>=5.9.0
+   # Add to requirements.txt with version
+   ```
 
-### **Session Management**
-- **New Session Protocol**: Follow 6-step workflow
-- **Task Completion**: Mark tasks complete in plan.md and update files
-- **Progress Tracking**: Use TodoWrite tool throughout session
-- **Documentation**: Create chat logs following established format
+2. **Implement pip-tools**: Manage dependencies properly
+   ```bash
+   # See updates/01_foundation_fixes.md for full implementation
+   pip install pip-tools
+   pip-compile requirements.in
+   ```
 
-### **Quality Assurance**
-- **Pre-implementation Check**: Verify current project state
-- **Import Verification**: Test all modified files work correctly
-- **Graceful Error Handling**: Handle missing dependencies properly
-- **Backwards Compatibility**: Preserve existing functionality
+3. **Start Refactoring**: Break down large files
+   - `analytics/network_analyzer.py` (1,711 lines)
+   - `streamlit_workspace/existing_dashboard.py` (1,617 lines)
 
----
-
-## 🎯 CURRENT PRIORITIES & NEXT STEPS
-
-### **Phase 3 Implementation Status (2025-07-16)** 🔄 85% Complete
-1. ✅ **Trafilatura Integration** - Enhanced content extractor with JSON-LD/OpenGraph support (427 lines)
-2. ✅ **Anti-blocking Infrastructure** - Proxy rotation, selenium-stealth, 13 user agents, risk assessment (547 lines)
-3. ✅ **Unified Scraper Architecture** - HTTP → Selenium → Trafilatura pipeline with caching & performance tracking (450 lines)
-4. ✅ **LangChain Integration Reference** - Smart agent orchestration and decision-making framework (417 lines)
-5. ✅ **Site-specific Parser Plugins** - Wikipedia, arXiv, PubMed, Stack Overflow, GitHub parsers (485 lines)
-6. ✅ **Multi-source Content Acquisition** - Intelligent source selection and content aggregation system (380 lines)
-7. ✅ **StructuredDataExtractor** - Advanced extruct integration for JSON-LD/microdata extraction (380 lines)
-8. ✅ **AdvancedLanguageDetector** - pycld3/langdetect with mixed language detection (420 lines)
-9. ✅ **Scraper Profiles** - 6 configurable profiles (fast, comprehensive, stealth, academic, news, social) (280 lines)
-
-### **Current Phase 3 Dependencies**
-- **Installed**: `trafilatura`, `extruct`, `langdetect` 
-- **Note**: `pycld3` failed due to missing protobuf - using langdetect fallback
-- **Optional**: selenium-stealth, fake-useragent for enhanced anti-detection
-
-### **Phase 3 Current Achievements (85% Complete)**
-- ✅ Complete scraper infrastructure with anti-detection capabilities
-- ✅ Site-specific parsing for 5 major platforms (Wikipedia, arXiv, PubMed, Stack Overflow, GitHub)
-- ✅ Multi-source content acquisition with intelligent source prioritization
-- ✅ Advanced structured data extraction (JSON-LD, microdata, OpenGraph)
-- ✅ Enhanced language detection with 45+ language support and mixed language analysis
-- ✅ 6 configurable scraper profiles for different use cases
-- ✅ Integrated system with fallback mechanisms and performance tracking
-
-### **Phase 3 Remaining Work (15%)**
-- ⏳ Complete selenium-stealth integration enhancements
-- ⏳ Implement plugin architecture base classes (BaseSiteParser system)
-- ⏳ Final integration testing and validation
-
-### **CRITICAL PROJECT STATUS UPDATE**
-
-**🚨 MAJOR DISCOVERY**: Comprehensive verification revealed significant gaps in Phase 1 & 2 implementations:
-
-**ACTUAL PROJECT STATUS**:
-- **Phase 1**: ~85% complete (missing caching, testing framework, performance baselines)
-- **Phase 2**: ~30% complete (missing enhanced AI agents, auth system, monitoring, async tasks)
-- **Phase 3**: 85% complete (accurate assessment after recent implementations)
-
-**WORKFLOW ENHANCEMENT IMPLEMENTED**:
-- **Enhanced Session Workflow**: Now requires complete file reading and verification
-- **Implementation Verification**: Cross-reference specifications against actual code
-- **Accurate Status Tracking**: Prevent overestimation of completion percentages
-
-### **Future Phase Planning**
-- **Phase 3 Final**: Complete remaining anti-detection and plugin architecture
-- **Phase 4**: Data Validation Pipeline & Multi-agent validation
-- **Phase 5**: UI Workspace Development & Advanced features
-- **Phase 6**: Production Deployment & Enterprise security
+### **Today's Focus**
+- [ ] Read `updates/01_foundation_fixes.md` completely
+- [ ] Fix psutil installation
+- [ ] Create `requirements.in` with pip-tools
+- [ ] Begin refactoring one large file
+- [ ] Update implementation status
 
 ---
 
-**🚀 MCP Yggdrasil Status**: MAJOR WORKFLOW REVISION COMPLETE - Enhanced verification workflow implemented. Actual status: Phase 1 (85%), Phase 2 (30%), Phase 3 (85%). Critical need to complete missing Phase 1 & 2 components before proceeding to Phase 4.
+## 📁 KEY PROJECT PATHS
+
+### **Essential Directories**
+```
+/Users/grant/Documents/GitHub/MCP_Ygg/
+├── agents/           # 20+ AI agents (check before creating new)
+├── api/             # FastAPI backend (enhanced in Phase 2)
+├── cache/           # Redis caching (needs implementation)
+├── CSV/             # 371+ concepts across 6 domains
+├── streamlit_workspace/ # UI with 8 pages
+├── tests/           # Test suite (needs expansion)
+└── updates/         # NEW: Modular implementation plans
+```
+
+### **Command Reference**
+```bash
+# Start UI
+streamlit run streamlit_workspace/main_dashboard.py
+
+# Start API
+python api/fastapi_main.py
+
+# Run tests (when implemented)
+pytest tests/
+
+# Clean CSV data
+python scripts/csv_cleanup_script.py
+```
+
+---
+
+## 📈 SUCCESS METRICS
+
+### **Week 1-2 Targets (Foundation)**
+- [ ] Dependencies managed with pip-tools
+- [ ] Repository size reduced by 70MB
+- [ ] All files under 500 lines
+- [ ] 50% test coverage achieved
+- [ ] Redis caching operational
+
+### **Performance Goals (Week 3-4)**
+- [ ] API response <500ms (currently 2-3s)
+- [ ] Cache hit rate >85% (currently <50%)
+- [ ] Memory usage <1GB (currently 2-3GB)
+
+### **Knowledge Base Growth**
+- Current: 371 concepts, 1,200 relationships
+- 3-Month Target: 1,000 concepts, 5,000 relationships
+- Required Growth: +5 concepts/day, +42 relationships/day
+
+---
+
+## ⚠️ CRITICAL WARNINGS
+
+### **Before Creating ANY File**
+1. Check `updates/08_repository_structure.md`
+2. Search for existing similar functionality
+3. Enhance existing files rather than creating new ones
+
+### **Known Duplicate Directories**
+- `analytics/` exists in both root and `agents/`
+- Use `agents/analytics/` for new analytics agents
+
+### **Do NOT Skip**
+- Reading complete phase specifications before implementation
+- Verifying claimed completions against actual code
+- Testing imports and functionality
+- Updating progress tracking
+
+---
+
+## 🎯 NEXT STEPS
+### **Session Completed** (2025-07-16): Status verification complete
+- ✅ Verified actual vs claimed progress for all phases
+- ✅ Updated CLAUDE.md with accurate percentages
+- ✅ Identified critical gaps and missing components
+- ✅ Found psutil already in requirements.txt
+- ✅ Found Redis caching already implemented
+- ✅ Found testing framework with comprehensive conftest.py
+
+### **Priority Actions for Next Session**
+1. **Phase 1 Completion** (25% remaining):
+   - Implement pip-tools with requirements.in files
+   - Refactor 8 large files (1000+ lines each)
+   - Establish performance baseline metrics
+   - Clean up duplicate "2.py" files
+
+2. **Phase 2 Enhancement** (70% remaining):
+   - Create enhanced AI agents (claim analyzer, text processor)
+   - Complete Prometheus monitoring setup
+   - Implement Celery async task queue
+   - Add structured JSON logging
+
+3. **Phase 3 Finalization** (15% remaining):
+   - Complete plugin architecture
+   - Finalize selenium-stealth integration
+
+---
+
+**🚀 Project Status**: Week 1 of 12-week roadmap. Critical foundation work needed before proceeding to advanced features. Focus on technical debt elimination and establishing solid testing/monitoring infrastructure.
