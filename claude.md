@@ -1,21 +1,24 @@
 # 📚 MCP YGGDRASIL - PROJECT CONTEXT FOR CLAUDE
 **Last Updated**: 2025-07-15 | **Phase**: 2.0 Performance Optimized | **Status**: Production Ready
 
-## 🏗️ MCP SERVER CONFIGURATION
-
-```json
 {
   "mcpServers": {
     "memory": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
       "env": {
         "MEMORY_FILE_PATH": "/Users/grant/Documents/GitHub/MCP_Ygg/chat_logs/memory.json"
       }
     },
     "sequential-thinking": {
-      "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
       "env": {}
     },
     "context7": {
@@ -23,14 +26,16 @@
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git"],
+      "args": [
+        "mcp-server-git"
+      ],
       "env": {}
     }
   }
 }
-```
 
-### Use the following Context7 libraries for coding: Python, Rust (Qdrant), Cypher (Neo4j), and any other libraries if necessary but those are the essential libraries.
+### Use the following Context7 libraries for coding: Python, Rust (Qdrant), Cypher (Neo4j), and any other libraries if necessary but those are the essential libraries. ###
+
 
 ---
 
