@@ -4,6 +4,19 @@ server:
   workers: 4
   debug: false
 
+api:
+  title: "MCP Knowledge Graph Server"
+  description: "Hybrid Neo4j and Qdrant database for knowledge management"
+  version: "2.0.0"
+  docs_url: "/docs"
+  redoc_url: "/redoc"
+
+cors:
+  allow_origins: ["*"]
+  allow_credentials: true
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
 database:
   neo4j:
     uri: "bolt://localhost:7687"

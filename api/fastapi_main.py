@@ -66,17 +66,32 @@ except ImportError:
 
 try:
     from agents.text_processor.text_processor import TextProcessor
-except ImportError:
+    logger.info("✅ Text processor imported successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ Text processor not available: {e}")
+    TextProcessor = None
+except Exception as e:
+    logger.warning(f"⚠️ Text processor initialization failed: {e}")
     TextProcessor = None
 
 try:
     from agents.knowledge_graph.knowledge_graph_builder import GraphBuilder
-except ImportError:
+    logger.info("✅ Graph builder imported successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ Graph builder not available: {e}")
+    GraphBuilder = None
+except Exception as e:
+    logger.warning(f"⚠️ Graph builder initialization failed: {e}")
     GraphBuilder = None
 
 try:
     from agents.vector_index.vector_indexer import VectorIndexer
-except ImportError:
+    logger.info("✅ Vector indexer imported successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ Vector indexer not available: {e}")
+    VectorIndexer = None
+except Exception as e:
+    logger.warning(f"⚠️ Vector indexer initialization failed: {e}")
     VectorIndexer = None
 
 # Logging already configured above
