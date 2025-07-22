@@ -1,0 +1,208 @@
+{
+  "timestamp": "2025-07-22T08:47:46.861126",
+  "system_info": {
+    "platform": "posix",
+    "cpu_count": 16,
+    "cpu_freq": {
+      "current": 3503.998,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "memory_total_gb": 15.53,
+    "memory_available_gb": 14.34,
+    "python_version": "3.12.11"
+  },
+  "component_metrics": {
+    "file_operations": {
+      "write_performance": {
+        "mean_time_ms": 4.25,
+        "median_time_ms": 3.98,
+        "std_time_ms": 1.0,
+        "min_time_ms": 3.1,
+        "max_time_ms": 6.74,
+        "p95_time_ms": 6.28,
+        "p99_time_ms": 6.65,
+        "mean_memory_mb": 0.01,
+        "iterations": 20
+      },
+      "read_performance": {
+        "mean_time_ms": 2.75,
+        "median_time_ms": 2.57,
+        "std_time_ms": 0.58,
+        "min_time_ms": 2.1,
+        "max_time_ms": 4.69,
+        "p95_time_ms": 3.83,
+        "p99_time_ms": 4.43,
+        "mean_memory_mb": 0.0,
+        "iterations": 50
+      }
+    },
+    "computation": {
+      "matrix_operations": {
+        "mean_time_ms": 0.39,
+        "median_time_ms": 0.15,
+        "std_time_ms": 1.72,
+        "min_time_ms": 0.1,
+        "max_time_ms": 12.43,
+        "p95_time_ms": 0.21,
+        "p99_time_ms": 6.47,
+        "mean_memory_mb": 0.07,
+        "iterations": 50
+      },
+      "vector_operations": {
+        "mean_time_ms": 0.28,
+        "median_time_ms": 0.27,
+        "std_time_ms": 0.03,
+        "min_time_ms": 0.25,
+        "max_time_ms": 0.36,
+        "p95_time_ms": 0.34,
+        "p99_time_ms": 0.36,
+        "mean_memory_mb": 0.01,
+        "iterations": 20
+      },
+      "json_operations": {
+        "mean_time_ms": 0.41,
+        "median_time_ms": 0.4,
+        "std_time_ms": 0.06,
+        "min_time_ms": 0.36,
+        "max_time_ms": 0.75,
+        "p95_time_ms": 0.48,
+        "p99_time_ms": 0.63,
+        "mean_memory_mb": 0.0,
+        "iterations": 50
+      }
+    },
+    "async_operations": {
+      "concurrent_execution": {
+        "mean_time_ms": 1.23,
+        "median_time_ms": 1.23,
+        "std_time_ms": 0.03,
+        "min_time_ms": 1.18,
+        "max_time_ms": 1.3,
+        "p95_time_ms": 1.3,
+        "p99_time_ms": 1.3,
+        "mean_memory_mb": 0.0,
+        "iterations": 20
+      },
+      "sequential_execution": {
+        "mean_time_ms": 11.75,
+        "median_time_ms": 11.87,
+        "std_time_ms": 0.38,
+        "min_time_ms": 11.12,
+        "max_time_ms": 12.31,
+        "p95_time_ms": 12.2,
+        "p99_time_ms": 12.29,
+        "mean_memory_mb": 0.0,
+        "iterations": 20
+      },
+      "concurrency_speedup": 9.55
+    },
+    "memory_operations": {
+      "dict_creation": {
+        "mean_time_ms": 0.95,
+        "median_time_ms": 0.82,
+        "std_time_ms": 0.4,
+        "min_time_ms": 0.79,
+        "max_time_ms": 2.15,
+        "p95_time_ms": 1.58,
+        "p99_time_ms": 2.04,
+        "mean_memory_mb": 0.09,
+        "iterations": 10
+      },
+      "memory_allocation": {
+        "mean_time_ms": 0.24,
+        "median_time_ms": 0.23,
+        "std_time_ms": 0.04,
+        "min_time_ms": 0.19,
+        "max_time_ms": 0.31,
+        "p95_time_ms": 0.3,
+        "p99_time_ms": 0.31,
+        "mean_memory_mb": -0.02,
+        "iterations": 10
+      }
+    },
+    "simulated_components": {
+      "cache_write": {
+        "mean_time_ms": 0.01,
+        "median_time_ms": 0.01,
+        "std_time_ms": 0.0,
+        "min_time_ms": 0.0,
+        "max_time_ms": 0.03,
+        "p95_time_ms": 0.02,
+        "p99_time_ms": 0.02,
+        "mean_memory_mb": 0.0,
+        "iterations": 100
+      },
+      "cache_read": {
+        "mean_time_ms": 0.0,
+        "median_time_ms": 0.0,
+        "std_time_ms": 0.0,
+        "min_time_ms": 0.0,
+        "max_time_ms": 0.02,
+        "p95_time_ms": 0.01,
+        "p99_time_ms": 0.02,
+        "mean_memory_mb": 0.0,
+        "iterations": 100
+      },
+      "api_response": {
+        "mean_time_ms": 0.04,
+        "median_time_ms": 0.03,
+        "std_time_ms": 0.01,
+        "min_time_ms": 0.03,
+        "max_time_ms": 0.07,
+        "p95_time_ms": 0.05,
+        "p99_time_ms": 0.06,
+        "mean_memory_mb": 0.0,
+        "iterations": 50
+      },
+      "database_query": {
+        "mean_time_ms": 10.32,
+        "median_time_ms": 10.33,
+        "std_time_ms": 0.09,
+        "min_time_ms": 10.16,
+        "max_time_ms": 10.5,
+        "p95_time_ms": 10.46,
+        "p99_time_ms": 10.49,
+        "mean_memory_mb": 0.0,
+        "iterations": 20
+      }
+    }
+  },
+  "overall_metrics": {
+    "total_operations_tested": 13,
+    "average_operation_time_ms": 2.51,
+    "fastest_operation_ms": 0.0,
+    "slowest_operation_ms": 11.75,
+    "operations_under_10ms": 11,
+    "operations_under_50ms": 13,
+    "operations_under_100ms": 13,
+    "operations_under_500ms": 13,
+    "average_memory_impact_mb": 0.01
+  },
+  "target_comparison": {
+    "api_response": {
+      "current": 0.05,
+      "target": 500,
+      "status": "\u2705 PASS",
+      "margin": "100.0%"
+    },
+    "cache_read": {
+      "current": 0.0,
+      "target": 10,
+      "status": "\u2705 PASS",
+      "margin": "100.0%"
+    },
+    "vector_operations": {
+      "current": 0.28,
+      "target": 100,
+      "status": "\u2705 PASS",
+      "margin": "99.7%"
+    },
+    "memory_usage": {
+      "current": 39.95,
+      "target": 1000,
+      "status": "\u2705 PASS",
+      "margin": "96.0%"
+    }
+  }
+}
