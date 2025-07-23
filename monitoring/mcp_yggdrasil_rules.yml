@@ -1,0 +1,221 @@
+# Prometheus Alerting Rules for MCP Yggdrasil
+# Phase 2 Enhanced Monitoring - Alert Conditions
+
+groups:
+  - name: mcp_yggdrasil_api
+    interval: 30s
+    rules:
+      # API Performance Alerts
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, rate(mcp_api_request_duration_seconds_bucket[5m])) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High API latency detected"
+          description: "95th percentile API response time is {{ $value }}s, exceeding 500ms threshold"
+      
+      - alert: APIErrorRate
+        expr: rate(mcp_api_requests_total{status=~"4..|5.."}[5m]) / rate(mcp_api_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High API error rate"
+          description: "API error rate is {{ $value | humanizePercentage }}, exceeding 5% threshold"
+      
+      - alert: APIUnavailable
+        expr: up{job="mcp-yggdrasil-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "MCP Yggdrasil API is down"
+          description: "The MCP Yggdrasil API has been unavailable for more than 1 minute"
+
+  - name: mcp_yggdrasil_system
+    interval: 30s
+    rules:
+      # System Resource Alerts
+      - alert: HighCPUUsage
+        expr: mcp_system_cpu_usage_percent > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}%, exceeding 80% threshold for 5 minutes"
+      
+      - alert: HighMemoryUsage
+        expr: mcp_system_memory_usage_percent > 85
+        for: 3m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value }}%, exceeding 85% threshold"
+      
+      - alert: HighDiskUsage
+        expr: mcp_system_disk_usage_percent > 90
+        for: 1m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "High disk usage"
+          description: "Disk usage is {{ $value }}%, exceeding 90% threshold"
+      
+      - alert: SystemHealthDegraded
+        expr: mcp_system_health_score < 0.7
+        for: 2m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "System health degraded"
+          description: "System health score for {{ $labels.component }} is {{ $value }}, below 0.7 threshold"
+
+  - name: mcp_yggdrasil_database
+    interval: 30s
+    rules:
+      # Database Performance Alerts
+      - alert: SlowNeo4jQueries
+        expr: histogram_quantile(0.95, rate(mcp_neo4j_query_duration_seconds_bucket[5m])) > 2.0
+        for: 3m
+        labels:
+          severity: warning
+          component: neo4j
+        annotations:
+          summary: "Slow Neo4j queries detected"
+          description: "95th percentile Neo4j query time is {{ $value }}s, exceeding 2s threshold"
+      
+      - alert: HighNeo4jErrorRate
+        expr: rate(mcp_neo4j_queries_total{status="error"}[5m]) / rate(mcp_neo4j_queries_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          component: neo4j
+        annotations:
+          summary: "High Neo4j error rate"
+          description: "Neo4j error rate is {{ $value | humanizePercentage }}, exceeding 10% threshold"
+      
+      - alert: SlowQdrantOperations
+        expr: histogram_quantile(0.95, rate(mcp_qdrant_operation_duration_seconds_bucket[5m])) > 1.0
+        for: 3m
+        labels:
+          severity: warning
+          component: qdrant
+        annotations:
+          summary: "Slow Qdrant operations detected"
+          description: "95th percentile Qdrant operation time is {{ $value }}s, exceeding 1s threshold"
+
+  - name: mcp_yggdrasil_cache
+    interval: 30s
+    rules:
+      # Cache Performance Alerts
+      - alert: LowCacheHitRate
+        expr: mcp_cache_hit_rate < 0.75
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }}, below 75% threshold"
+      
+      - alert: HighCacheErrorRate
+        expr: rate(mcp_cache_operations_total{result="error"}[5m]) / rate(mcp_cache_operations_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "High cache error rate"
+          description: "Cache error rate is {{ $value | humanizePercentage }}, exceeding 5% threshold"
+
+  - name: mcp_yggdrasil_ai_agents
+    interval: 30s
+    rules:
+      # AI Agent Performance Alerts
+      - alert: SlowAIAgentProcessing
+        expr: histogram_quantile(0.95, rate(mcp_ai_agent_processing_duration_seconds_bucket[5m])) > 10.0
+        for: 2m
+        labels:
+          severity: warning
+          component: ai_agents
+        annotations:
+          summary: "Slow AI agent processing"
+          description: "95th percentile AI agent processing time for {{ $labels.agent_type }} is {{ $value }}s, exceeding 10s threshold"
+      
+      - alert: HighAIAgentErrorRate
+        expr: rate(mcp_ai_agent_operations_total{status="error"}[5m]) / rate(mcp_ai_agent_operations_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          component: ai_agents
+        annotations:
+          summary: "High AI agent error rate"
+          description: "AI agent {{ $labels.agent_type }} error rate is {{ $value | humanizePercentage }}, exceeding 10% threshold"
+      
+      - alert: LargeProcessingQueue
+        expr: mcp_processing_queue_size > 100
+        for: 2m
+        labels:
+          severity: warning
+          component: processing
+        annotations:
+          summary: "Large processing queue"
+          description: "Processing queue size is {{ $value }}, exceeding 100 items"
+
+  - name: mcp_yggdrasil_connections
+    interval: 30s
+    rules:
+      # Connection Alerts
+      - alert: HighActiveConnections
+        expr: mcp_active_connections > 50
+        for: 3m
+        labels:
+          severity: warning
+          component: connections
+        annotations:
+          summary: "High number of active connections"
+          description: "{{ $labels.type }} connections count is {{ $value }}, exceeding 50 threshold"
+      
+      - alert: NoActiveConnections
+        expr: mcp_active_connections{type=~"neo4j|redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: connections
+        annotations:
+          summary: "No active database connections"
+          description: "No active {{ $labels.type }} connections detected for 1 minute"
+
+  - name: mcp_yggdrasil_errors
+    interval: 30s
+    rules:
+      # Error Rate Alerts
+      - alert: HighErrorRate
+        expr: rate(mcp_errors_total[5m]) > 1
+        for: 2m
+        labels:
+          severity: warning
+          component: errors
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate for {{ $labels.component }} is {{ $value }} errors/second, exceeding 1/second threshold"
+      
+      - alert: CriticalErrors
+        expr: rate(mcp_errors_total{error_type="critical"}[1m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          component: errors
+        annotations:
+          summary: "Critical errors detected"
+          description: "Critical errors detected in {{ $labels.component }}: {{ $value }} errors/minute"
