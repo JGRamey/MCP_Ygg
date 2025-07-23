@@ -1,37 +1,295 @@
 #!/usr/bin/env python3
 """
 Enhanced Text Processor Agent with Multilingual Support
-Main processor class with comprehensive text analysis capabilities
+Provides advanced text processing with transformers, entity linking, and multilingual capabilities
 """
 
 import asyncio
 import logging
-from typing import List, Dict, Tuple
-from dataclasses import asdict
+from typing import List, Dict, Optional, Tuple, Union, Any
+from dataclasses import dataclass, asdict
 from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
-from collections import defaultdict
 
 import numpy as np
-import aiofiles
+import spacy
+from sentence_transformers import SentenceTransformer
+import langdetect
+from langdetect import detect_langs, LangDetectException
+from transformers import pipeline, AutoTokenizer, AutoModel
 import torch
+from collections import defaultdict
+import aiofiles
 
 # Import base components from existing text processor
 from agents.text_processor.text_processor import (
-    TextChunker, TextCleaner, Entity, EmbeddingGenerator
+    TextChunker, TextCleaner, Entity, TextChunk,
+    ProcessedDocument, EmbeddingGenerator
 )
-
-# Import modular components
-from agents.text_processor.models import ProcessedText, LinkedEntity
-from agents.text_processor.entity_linker import EntityLinker
-from agents.text_processor.multilingual_processor import MultilingualProcessor
-from agents.text_processor.utils import load_config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class ProcessedText:
+    """Enhanced processed text with additional fields"""
+    original_text: str
+    language: str
+    language_confidence: float
+    entities: List[Dict]
+    concepts: List[Dict]
+    summary: str
+    sentiment: Dict
+    key_phrases: List[str]
+    linked_entities: List[Dict]  # Linked to knowledge graph
+    embeddings: np.ndarray
+    processing_metadata: Dict
+
+
+@dataclass
+class LinkedEntity:
+    """Entity linked to knowledge graph"""
+    text: str
+    label: str
+    kb_id: Optional[str]
+    kb_type: Optional[str]
+    confidence: float
+    properties: Dict
+
+
+class EntityLinker:
+    """Link entities to knowledge graph"""
+    
+    def __init__(self, neo4j_agent=None):
+        self.neo4j_agent = neo4j_agent
+        self.entity_cache = {}
+        
+    async def link_entities(self, entities: List[Entity], domain: str = "general") -> List[LinkedEntity]:
+        """Link entities to knowledge graph nodes"""
+        linked_entities = []
+        
+        for entity in entities:
+            # Check cache first
+            cache_key = f"{entity.text}:{entity.label}"
+            if cache_key in self.entity_cache:
+                linked_entities.append(self.entity_cache[cache_key])
+                continue
+            
+            # Query knowledge graph
+            linked = await self._find_in_knowledge_graph(entity, domain)
+            if linked:
+                self.entity_cache[cache_key] = linked
+                linked_entities.append(linked)
+            else:
+                # Create unlinked entity
+                linked = LinkedEntity(
+                    text=entity.text,
+                    label=entity.label,
+                    kb_id=None,
+                    kb_type=None,
+                    confidence=0.0,
+                    properties={}
+                )
+                linked_entities.append(linked)
+        
+        return linked_entities
+    
+    async def _find_in_knowledge_graph(self, entity: Entity, domain: str) -> Optional[LinkedEntity]:
+        """Find entity in knowledge graph"""
+        if not self.neo4j_agent:
+            return None
+        
+        # Build query based on entity type
+        if entity.label in ["PERSON", "PER"]:
+            query = """
+            MATCH (p:Person)
+            WHERE toLower(p.name) CONTAINS toLower($name)
+            RETURN p.id as kb_id, 'Person' as kb_type, p as properties
+            LIMIT 1
+            """
+        elif entity.label in ["ORG", "ORGANIZATION"]:
+            query = """
+            MATCH (o:Organization)
+            WHERE toLower(o.name) CONTAINS toLower($name)
+            RETURN o.id as kb_id, 'Organization' as kb_type, o as properties
+            LIMIT 1
+            """
+        elif entity.label in ["LOC", "LOCATION", "GPE"]:
+            query = """
+            MATCH (l:Location)
+            WHERE toLower(l.name) CONTAINS toLower($name)
+            RETURN l.id as kb_id, 'Location' as kb_type, l as properties
+            LIMIT 1
+            """
+        else:
+            # Generic concept search
+            query = """
+            MATCH (c:Concept)
+            WHERE toLower(c.name) CONTAINS toLower($name)
+            RETURN c.id as kb_id, 'Concept' as kb_type, c as properties
+            LIMIT 1
+            """
+        
+        try:
+            result = await self.neo4j_agent.query(query, {"name": entity.text})
+            if result and len(result) > 0:
+                return LinkedEntity(
+                    text=entity.text,
+                    label=entity.label,
+                    kb_id=result[0]["kb_id"],
+                    kb_type=result[0]["kb_type"],
+                    confidence=0.8,  # Base confidence
+                    properties=dict(result[0]["properties"])
+                )
+        except Exception as e:
+            logger.error(f"Error linking entity {entity.text}: {e}")
+        
+        return None
+
+
+class MultilingualProcessor:
+    """Enhanced multilingual text processing"""
+    
+    def __init__(self):
+        self.supported_languages = {
+            'en': 'English',
+            'es': 'Spanish', 
+            'fr': 'French',
+            'de': 'German',
+            'it': 'Italian',
+            'pt': 'Portuguese',
+            'nl': 'Dutch',
+            'pl': 'Polish',
+            'ru': 'Russian',
+            'zh': 'Chinese',
+            'ja': 'Japanese',
+            'ar': 'Arabic'
+        }
+        
+        # Load spaCy models for supported languages
+        self.nlp_models = {}
+        self._load_spacy_models()
+        
+        # Initialize transformers with GPU support if available
+        self.device = 0 if torch.cuda.is_available() else -1
+        
+        # Load transformer pipelines
+        self._init_transformers()
+        
+    def _load_spacy_models(self):
+        """Load available spaCy models"""
+        model_mapping = {
+            'en': 'en_core_web_lg',
+            'es': 'es_core_news_lg',
+            'fr': 'fr_core_news_lg',
+            'de': 'de_core_news_lg',
+            'it': 'it_core_news_lg',
+            'pt': 'pt_core_news_lg',
+            'nl': 'nl_core_news_lg',
+            'pl': 'pl_core_news_lg',
+            'ru': 'ru_core_news_lg',
+            'zh': 'zh_core_web_lg',
+            'ja': 'ja_core_news_lg'
+        }
+        
+        for lang_code, model_name in model_mapping.items():
+            try:
+                self.nlp_models[lang_code] = spacy.load(model_name)
+                logger.info(f"Loaded spaCy model for {lang_code}: {model_name}")
+            except OSError:
+                logger.warning(f"spaCy model {model_name} not available for {lang_code}")
+                # Use English as fallback
+                if lang_code != 'en' and 'en' in self.nlp_models:
+                    self.nlp_models[lang_code] = self.nlp_models['en']
+    
+    def _init_transformers(self):
+        """Initialize transformer pipelines"""
+        try:
+            # Multilingual summarization
+            self.summarizers = {
+                'en': pipeline("summarization", model="facebook/bart-large-cnn", device=self.device),
+                'multilingual': pipeline("summarization", model="csebuetnlp/mT5_multilingual_XLSum", device=self.device)
+            }
+            
+            # Sentiment analysis
+            self.sentiment_analyzers = {
+                'en': pipeline("sentiment-analysis", device=self.device),
+                'multilingual': pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment", device=self.device)
+            }
+            
+            # Named Entity Recognition with aggregation
+            self.ner_models = {
+                'en': pipeline("ner", aggregation_strategy="simple", device=self.device),
+                'multilingual': pipeline("ner", model="Davlan/bert-base-multilingual-cased-ner-hrl", aggregation_strategy="simple", device=self.device)
+            }
+            
+            logger.info("Loaded transformer models successfully")
+            
+        except Exception as e:
+            logger.error(f"Error loading transformer models: {e}")
+            # Initialize with None for graceful degradation
+            self.summarizers = {}
+            self.sentiment_analyzers = {}
+            self.ner_models = {}
+    
+    def detect_language(self, text: str) -> Tuple[str, float]:
+        """Detect language with confidence score"""
+        try:
+            # Use langdetect for initial detection
+            detections = detect_langs(text)
+            if detections:
+                lang = detections[0]
+                lang_code = lang.lang
+                confidence = lang.prob
+                
+                # Map to our supported languages
+                if lang_code in self.supported_languages:
+                    return lang_code, confidence
+                else:
+                    # Try to find closest match
+                    for supported_code in self.supported_languages:
+                        if lang_code.startswith(supported_code) or supported_code.startswith(lang_code):
+                            return supported_code, confidence * 0.9  # Slightly lower confidence
+                    
+                    # Default to English if unsupported
+                    return 'en', confidence * 0.5
+            
+        except LangDetectException:
+            logger.warning("Language detection failed, defaulting to English")
+        
+        return 'en', 0.5
+    
+    def get_nlp_model(self, language: str) -> spacy.Language:
+        """Get spaCy model for language"""
+        return self.nlp_models.get(language, self.nlp_models.get('en'))
+    
+    def get_summarizer(self, language: str):
+        """Get appropriate summarizer for language"""
+        if language == 'en' and 'en' in self.summarizers:
+            return self.summarizers['en']
+        elif 'multilingual' in self.summarizers:
+            return self.summarizers['multilingual']
+        return None
+    
+    def get_sentiment_analyzer(self, language: str):
+        """Get appropriate sentiment analyzer for language"""
+        if language == 'en' and 'en' in self.sentiment_analyzers:
+            return self.sentiment_analyzers['en']
+        elif 'multilingual' in self.sentiment_analyzers:
+            return self.sentiment_analyzers['multilingual']
+        return None
+    
+    def get_ner_model(self, language: str):
+        """Get appropriate NER model for language"""
+        if language == 'en' and 'en' in self.ner_models:
+            return self.ner_models['en']
+        elif 'multilingual' in self.ner_models:
+            return self.ner_models['multilingual']
+        return None
 
 
 class EnhancedTextProcessor:
@@ -39,7 +297,7 @@ class EnhancedTextProcessor:
     
     def __init__(self, config_path: str = "agents/text_processor/enhanced_config.yaml"):
         """Initialize enhanced text processor"""
-        self.config = load_config(config_path)
+        self.config = self._load_config(config_path)
         
         # Initialize components
         self.multilingual_processor = MultilingualProcessor()
@@ -53,6 +311,25 @@ class EnhancedTextProcessor:
         # Cache for processed texts
         self.cache = {}
         self.max_cache_size = self.config.get('max_cache_size', 1000)
+        
+    def _load_config(self, config_path: str) -> Dict:
+        """Load configuration"""
+        try:
+            with open(config_path, 'r') as f:
+                import yaml
+                return yaml.safe_load(f)
+        except FileNotFoundError:
+            # Default configuration
+            return {
+                'chunk_size': 1000,
+                'chunk_overlap': 200,
+                'max_summary_length': 150,
+                'min_summary_length': 50,
+                'enable_caching': True,
+                'max_cache_size': 1000,
+                'batch_size': 16,
+                'enable_gpu': torch.cuda.is_available()
+            }
     
     async def process_text(
         self, 

@@ -1,0 +1,235 @@
+# Enhanced Vector Indexer Configuration
+# Dynamic model selection, quality checking, and performance optimization
+
+# Database connections
+qdrant:
+  host: localhost
+  port: 6333
+  api_key: null
+  timeout: 60
+  
+redis:
+  url: redis://localhost:6379
+  prefix: mcp_enhanced_vector:
+  connection_pool_size: 50
+
+# Enhanced features configuration
+enhanced_features:
+  dynamic_model_selection: true
+  quality_checking: true
+  performance_monitoring: true
+  adaptive_thresholds: true
+  model_benchmarking: true
+  vector_space_visualization: true
+
+# Model selection criteria
+model_selection:
+  criteria_weights:
+    language_support: 3.0
+    domain_expertise: 2.0
+    quality_score: 1.5
+    processing_speed: 1.0
+    memory_efficiency: 0.5
+  
+  # Model configurations
+  models:
+    general:
+      name: all-MiniLM-L6-v2
+      strengths: [speed, general_purpose, efficiency]
+      languages: [en, es, fr, de, it]
+      vector_size: 384
+      memory_requirement: low
+      preferred_domains: [general, history, literature]
+      
+    multilingual:
+      name: paraphrase-multilingual-MiniLM-L12-v2
+      strengths: [multilingual, semantic_quality, cross_lingual]
+      languages: [en, zh, es, fr, de, it, pt, nl, pl, ru, ja, ar]
+      vector_size: 384
+      memory_requirement: medium
+      preferred_domains: [all]
+      
+    semantic:
+      name: all-mpnet-base-v2
+      strengths: [semantic_quality, academic, detailed_analysis]
+      languages: [en]
+      vector_size: 768
+      memory_requirement: high
+      preferred_domains: [philosophy, literature, science]
+      
+    academic:
+      name: allenai/scibert_scivocab_uncased
+      strengths: [academic, scientific, technical]
+      languages: [en]
+      vector_size: 768
+      memory_requirement: high
+      preferred_domains: [science, mathematics, technology]
+      
+    fast:
+      name: all-MiniLM-L12-v2
+      strengths: [speed, efficiency, real_time]
+      languages: [en]
+      vector_size: 384
+      memory_requirement: low
+      preferred_domains: [general]
+
+# Quality assessment thresholds
+quality_thresholds:
+  minimum_quality_score: 0.6
+  reindex_threshold: 0.4
+  consistency_threshold: 0.7
+  semantic_density_threshold: 0.4
+  outlier_threshold: 2.0
+  
+  # Quality scoring weights
+  scoring_weights:
+    vector_norm_quality: 0.25
+    consistency_score: 0.30
+    semantic_density: 0.25
+    model_confidence: 0.20
+
+# Performance optimization
+performance:
+  # Processing configuration
+  batch_size: 50
+  max_workers: 4
+  cache_ttl: 7200  # 2 hours
+  benchmark_frequency: 3600  # 1 hour
+  
+  # Memory management
+  max_reference_embeddings: 200
+  reference_cleanup_frequency: 1800  # 30 minutes
+  
+  # Monitoring
+  enable_performance_logging: true
+  log_slow_operations: true
+  slow_operation_threshold: 5.0  # seconds
+  
+  # Adaptive thresholds
+  adaptive_quality_adjustment: true
+  quality_adjustment_factor: 0.1
+  performance_history_length: 100
+
+# Collections configuration
+collections:
+  vector_size: 384  # Default - will be overridden by model selection
+  distance: Cosine
+  
+  # HNSW index parameters
+  hnsw_config:
+    m: 16
+    ef_construct: 100
+    full_scan_threshold: 10000
+    max_indexing_threads: 0
+  
+  # Quantization for memory efficiency
+  quantization_config:
+    scalar:
+      type: int8
+      quantile: 0.99
+      always_ram: true
+
+# Search configuration
+search:
+  default_limit: 10
+  max_limit: 100
+  score_threshold: 0.7
+  enable_caching: true
+  cache_search_results: true
+  
+  # Quality-based search
+  quality_filtering: true
+  auto_model_selection: true
+  fallback_to_general: true
+  
+  # Advanced search features
+  enable_reranking: true
+  rerank_threshold: 0.5
+  diversification_factor: 0.2
+
+# Domain-specific configurations
+domains:
+  mathematics:
+    preferred_models: [academic, semantic]
+    quality_threshold: 0.7
+    consistency_requirement: high
+    
+  science:
+    preferred_models: [academic, semantic]
+    quality_threshold: 0.7
+    consistency_requirement: high
+    
+  philosophy:
+    preferred_models: [semantic, multilingual]
+    quality_threshold: 0.65
+    consistency_requirement: medium
+    
+  literature:
+    preferred_models: [semantic, multilingual]
+    quality_threshold: 0.6
+    consistency_requirement: medium
+    
+  history:
+    preferred_models: [general, multilingual]
+    quality_threshold: 0.6
+    consistency_requirement: medium
+    
+  art:
+    preferred_models: [semantic, general]
+    quality_threshold: 0.55
+    consistency_requirement: low
+
+# Monitoring and logging
+monitoring:
+  enable_metrics: true
+  metrics_collection_interval: 300  # 5 minutes
+  
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    port: 8001
+    metrics_prefix: mcp_vector_indexer
+    
+  # Quality monitoring
+  quality_monitoring:
+    track_quality_trends: true
+    alert_on_quality_drop: true
+    quality_drop_threshold: 0.1
+    
+  # Performance monitoring
+  performance_monitoring:
+    track_processing_times: true
+    track_memory_usage: true
+    alert_on_slow_operations: true
+
+# Experimental features
+experimental:
+  enable_ensemble_models: false
+  enable_auto_model_tuning: false
+  enable_federated_search: false
+  
+  # Advanced quality assessment
+  advanced_quality_metrics: false
+  content_aware_optimization: false
+  dynamic_threshold_adjustment: true
+
+# Error handling and recovery
+error_handling:
+  max_retries: 3
+  retry_delay: 1.0  # seconds
+  fallback_to_basic_indexer: true
+  continue_on_quality_failure: true
+  
+  # Model fallback chain
+  model_fallback_chain:
+    - semantic
+    - general
+    - multilingual
+    - fast
+
+# Backup and maintenance
+maintenance:
+  enable_auto_cleanup: true
+  cleanup_frequency: 86400  # 24 hours
+  backup_reference_embeddings: true
+  vacuum_frequency: 604800  # 1 week

@@ -38,15 +38,25 @@
       ]
     },
     
-    "step_4_duplicate_prevention": {
-      "title": "Duplicate Prevention - MANDATORY",
-      "critical": "ALWAYS check before creating ANY file",
+    "step_4_duplicate_prevention_and_modular_design": {
+      "title": "Duplicate Prevention & Anti-Monolithic Design - MANDATORY",
+      "critical": "ALWAYS check before creating ANY file AND ensure modular design",
       "actions": [
         "1. Check updates/08_repository_structure.md for existing files",
         "2. Grep pattern='[feature_name]' glob='**/*.py'",
         "3. LS path='[target_directory]'",
         "4. If similar functionality exists: enhance existing file",
-        "5. Archive old files to /archive/ directory if replacing"
+        "5. Archive old files to /archive/ directory if replacing",
+        "6. CHECK FILE SIZE TARGET: Maximum 500 lines per file (ENFORCED July 23+)",
+        "7. If >200 lines expected, plan modular structure BEFORE coding",
+        "8. Read updates/refactoring/prompt.md for complete modular guidelines",
+        "9. Design structure based on code type (flexible approach):",
+        "   AI Agents: models.py + [component]_manager.py + utils.py + __init__.py",
+        "   APIs: models.py + routes.py + handlers.py + utils.py",
+        "   Data Processing: models.py + processors.py + validators.py + utils.py",
+        "10. Each module: single responsibility, <500 lines, clear purpose",
+        "11. Archive original files to /archive/ when refactoring",
+        "12. Update __init__.py for clean package interface"
       ]
     },
     
@@ -143,6 +153,17 @@
       "Search for existing functionality before creating files",
       "Enhance existing files rather than creating new ones"
     ],
+    "anti_monolithic_files": [
+      "🚨 MAXIMUM 500 lines per file - ENFORCED since July 23, 2025",
+      "Plan modular structure if >200 lines expected, implement if >500",
+      "Must read updates/refactoring/prompt.md before large implementations",
+      "Structure adapts to code type: AI agents ≠ APIs ≠ data processing",
+      "Archive original files to /archive/ when refactoring (with .bak extension)",
+      "Success example: enhanced_vector_indexer (875 lines) → 5 modular files:",
+      "  models.py (121 lines), utils.py (205 lines), model_manager.py (338 lines)",
+      "  quality_checker.py (337 lines), enhanced_indexer.py (534 lines)",
+      "Always update __init__.py for clean package exports"
+    ],
     "known_duplicates": [
       "analytics/ exists in both root and agents/",
       "Use agents/analytics/ for new analytics agents"
@@ -151,7 +172,8 @@
       "Reading complete phase specifications",
       "Verifying claimed completions against actual code",
       "Testing imports and functionality",
-      "Updating progress tracking"
+      "Updating progress tracking",
+      "Checking file size before implementation"
     ]
   },
   
