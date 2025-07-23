@@ -58,6 +58,15 @@ except ImportError as e:
     logger.warning(f"⚠️ Performance monitoring not available: {e}")
     performance_router = None
 
+try:
+    from api.middleware.metrics_middleware import MetricsMiddleware
+    from monitoring.metrics import metrics_collector
+    logger.info("✅ Metrics middleware imported successfully")
+except ImportError as e:
+    logger.warning(f"⚠️ Metrics middleware not available: {e}")
+    MetricsMiddleware = None
+    metrics_collector = None
+
 # Import our agents with error handling
 try:
     from agents.scraper.scraper_agent import ScraperAgent as WebScraper
@@ -227,11 +236,18 @@ def create_app(config_path: str = "config/server.yaml") -> FastAPI:
     else:
         logger.warning("⚠️ Security middleware not available")
     
-    # 2. Performance middleware
+    # 2. Metrics middleware (if available)
+    if MetricsMiddleware:
+        app.add_middleware(MetricsMiddleware)
+        logger.info("✅ Metrics middleware integrated")
+    else:
+        logger.warning("⚠️ Metrics middleware not available")
+    
+    # 3. Performance middleware
     app.add_middleware(PerformanceMiddleware)
     logger.info("✅ Performance middleware added")
     
-    # 3. CORS middleware
+    # 4. CORS middleware
     app.add_middleware(
         CORSMiddleware,
         allow_origins=config['cors']['allow_origins'],
@@ -240,7 +256,7 @@ def create_app(config_path: str = "config/server.yaml") -> FastAPI:
         allow_headers=config['cors']['allow_headers'],
     )
     
-    # 4. Compression middleware
+    # 5. Compression middleware
     app.add_middleware(GZipMiddleware, minimum_size=1000)
     
     # Initialize cache on startup
@@ -467,16 +483,30 @@ async def system_status():
         raise HTTPException(status_code=500, detail="Failed to get system status")
 
 
+# Metrics endpoint
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint"""
+    if metrics_collector:
+        return await metrics_collector.get_metrics()
+    else:
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "Metrics collector not available"}
+        )
+
+
 # Root endpoint
 @app.get("/")
 async def root():
     """Root endpoint with API information"""
     return {
         "message": "MCP Knowledge Graph Server",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "docs": "/docs",
         "status": "/status",
-        "health": "/health"
+        "health": "/health",
+        "metrics": "/metrics"
     }
 
 
