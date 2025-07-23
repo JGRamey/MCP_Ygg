@@ -16,7 +16,8 @@
       "Bash(cp:*)",
       "Bash(touch:*)",
       "Bash(curl:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
