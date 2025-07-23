@@ -70,19 +70,32 @@
       ]
     },
     
-    "step_6_progress_update": {
-      "title": "Progress Update - CRITICAL",
+    "step_6_progress_update_and_file_management": {
+      "title": "Progress Update & File Size Management - CRITICAL",
       "actions": [
         "Update updates/09_implementation_status.md with completed tasks",
-        "Update updates/[current_phase].md to mark completed items",
+        "SHRINK UPDATE FILES: Replace detailed code with concise completion summaries",
+        "Update updates/[current_phase].md to mark completed items with ✅ COMPLETE status",
+        "REDUCE FILE SIZE: Remove implementation code blocks, keep only essential info",
+        "Add completion dates and archive references where applicable",
         "Update claude.md 'Current Focus' section with checkmarks",
         "Update claude.md 'Next Steps' & 'Project Status' sections",
         "Move completed items to p_completed.md",
         "Document any blockers or issues"
       ],
+      "file_size_reduction_protocol": {
+        "when_tasks_complete": [
+          "Replace detailed implementation code with concise completion summaries",
+          "Add '✅ COMPLETE' status with completion date",
+          "Reference archive location for full details if moved",
+          "Keep only essential info (file names, line counts, key features)",
+          "Maintain task structure but drastically reduce content size"
+        ],
+        "goal": "Save tokens and prevent context window depletion"
+      },
       "files_to_update": {
         "09_implementation_status.md": "Overall progress percentages and recent updates",
-        "02_performance_optimization.md": "Phase 2 specific completions",
+        "[current_phase].md": "Shrink completed tasks to summaries",
         "claude.md": "Current focus items and project status summary"
       }
     }
