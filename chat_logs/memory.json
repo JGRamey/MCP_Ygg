@@ -1,184 +1,173 @@
 {
-  "mcp_yggdrasil_project_progress": {
-    "session_date": "2025-07-06",
-    "project": "MCP Yggdrasil",
-    "session_type": "Performance Targets Implementation",
+  "mcp_yggdrasil_mandatory_workflow": {
+    "description": "CRITICAL: Follow these steps in EVERY session to maintain project integrity",
     
-    "completed_tasks": {
-      "1_repository_cleanup": {
-        "status": "COMPLETED",
-        "details": [
-          "Removed ~70MB cache files (__pycache__, *.pyc)",
-          "Consolidated requirements: clean requirements.txt + requirements-dev.txt", 
-          "Standardized configs: all use .yaml extension"
-        ]
-      },
-      "2_enhanced_content_analysis_agent": {
-        "status": "COMPLETED",
-        "details": [
-          "Created agents/content_analyzer/content_analysis_agent.py (785 lines)",
-          "Domain taxonomy mapping using 6-domain CSV structure (art, language, mathematics, philosophy, science, technology)",
-          "Advanced entity extraction with domain knowledge",
-          "Claim extraction and semantic analysis",
-          "Quality assessment indicators",
-          "Config file: agents/content_analyzer/config.yaml"
-        ]
-      },
-      "3_enhanced_fact_verification_agent": {
-        "status": "COMPLETED",
-        "details": [
-          "Created agents/fact_verifier/enhanced_verification_agent.py",
-          "Cross-referencing against authoritative sources by domain",
-          "Citation validation framework",
-          "Expert consensus checking",
-          "Contradiction detection system",
-          "__init__.py file created"
-        ]
-      },
-      "4_updated_documentation": {
-        "status": "COMPLETED",
-        "details": [
-          "plan.md updated with completed progress",
-          "Todo list tracked with 5 high-priority tasks completed"
-        ]
-      },
-      "5_youtube_processing_enhancement": {
-        "status": "COMPLETED",
-        "session_date": "2025-07-06",
-        "details": [
-          "Implemented 4-hour YouTube video processing (14,400 seconds)",
-          "Increased transcript character limit from 50k to 200k (~3.7 hours speech)",
-          "Fixed import issues with youtube-transcript-api",
-          "Added comprehensive testing with test_youtube_4hour.py",
-          "Optimized processing with yt-dlp + YouTube Transcript API",
-          "Multi-language support (10 languages) with auto-translation",
-          "Rate limiting: 100 requests/minute with proper backoff"
-        ]
-      },
-      "6_file_processing_enhancement": {
-        "status": "COMPLETED", 
-        "session_date": "2025-07-06",
-        "details": [
-          "Implemented type-specific file size limits up to 500MB",
-          "Archives (ZIP/TAR): 500MB for large document collections",
-          "PDFs: 200MB for academic collections and scanned documents",
-          "Documents (DOCX/DOC): 100MB for complex documents with media",
-          "Images (JPG/PNG): 75MB for high-resolution scans",
-          "Data files (CSV): 100MB for research datasets",
-          "Added support for 20+ file formats including LaTeX, BIB, EPUB",
-          "Updated config/content_scraping.yaml with comprehensive limits",
-          "Enhanced FastAPI endpoint with smart validation",
-          "Updated Streamlit UI with clear size limit display"
-        ]
-      }
+    "step_0_read_memory": {
+      "title": "READ THIS MEMORY FILE FIRST",
+      "critical": "ALWAYS start by reading memory.json to understand the complete workflow",
+      "priority": "HIGHEST"
     },
     
-    "performance_targets_progress": {
-      "completed": [
-        {
-          "target": "Scraping Performance",
-          "requirement": "<10 seconds for standard web pages",
-          "achieved": "0.74s max (Grade A performance)",
-          "status": "COMPLETED"
-        },
-        {
-          "target": "YouTube Processing", 
-          "requirement": "Handle videos up to 4 hours long",
-          "achieved": "14,400 seconds (4 hours) with 200k character transcripts",
-          "status": "COMPLETED"
-        },
-        {
-          "target": "File Processing",
-          "requirement": "Support files up to 100MB",
-          "achieved": "500MB archives, type-specific limits, 20+ formats",
-          "status": "COMPLETED"
-        }
-      ],
-      "remaining": [
-        {
-          "target": "Concurrent Operations",
-          "requirement": "100+ simultaneous scraping requests",
-          "status": "PENDING",
-          "priority": "HIGH"
-        },
-        {
-          "target": "Database Sync",
-          "requirement": "Cross-database operations within 5 seconds", 
-          "status": "PENDING",
-          "priority": "HIGH"
-        },
-        {
-          "target": "Analysis Pipeline",
-          "requirement": "Complete processing within 2 minutes for standard content",
-          "status": "PENDING",
-          "priority": "HIGH"
-        }
+    "step_1_project_analysis": {
+      "title": "Project Analysis & Verification",
+      "actions": [
+        "1. Read claude.md - Current context (this file)",
+        "2. Read plan.md - Overview of all phases", 
+        "3. Read updates/09_implementation_status.md - Current progress",
+        "4. Read updates/[current_phase].md - Full implementation details",
+        "5. Verify implementation status against actual code",
+        "6. Update percentages based on reality"
       ]
     },
     
-    "remaining_high_priority_tasks": [
-      {
-        "task": "Concurrent Operations Implementation",
-        "description": "Scale to 100+ simultaneous scraping requests",
-        "priority": "NEXT",
-        "order": 1,
-        "plan_line": 782
-      },
-      {
-        "task": "Database Sync Performance",
-        "description": "Cross-database operations within 5 seconds",
-        "priority": "HIGH",
-        "order": 2,
-        "plan_line": 783
-      },
-      {
-        "task": "Analysis Pipeline Optimization",
-        "description": "Complete processing within 2 minutes for standard content",
-        "priority": "HIGH",
-        "order": 3,
-        "plan_line": 784
-      },
-      {
-        "task": "Database Sync Agents Completion",
-        "description": "Complete Neo4j ↔ Qdrant sync system (30% → 100%)",
-        "priority": "HIGH",
-        "order": 4
-      },
-      {
-        "task": "Project Cleanup",
-        "description": "Remove venv, cache, backup files (~70MB savings)",
-        "priority": "MEDIUM",
-        "order": 5
-      }
-    ],
-    
-    "project_context": {
-      "description": "MCP Yggdrasil hybrid knowledge server",
-      "architecture": "Neo4j + Qdrant + Redis + RabbitMQ",
-      "domains": "6 primary domains with CSV taxonomy structure",
-      "validation": "Multi-agent validation pipeline for academic rigor",
-      "interface": "Streamlit IDE workspace with enhanced Content Scraper",
-      "next_focus": "Concurrent Operations - 100+ simultaneous requests"
+    "step_2_task_planning": {
+      "title": "Task Planning",
+      "actions": [
+        "Create TODO list using TodoWrite tool",
+        "Include all session objectives from claude.md",
+        "Set appropriate priorities (critical/high/medium)"
+      ]
     },
     
-    "session_notes": {
-      "progress_summary": "2/6 Performance Targets completed (YouTube + File Processing)",
-      "key_achievements": [
-        "4-hour YouTube processing with 200k character transcripts",
-        "500MB file processing with type-specific limits",
-        "20+ file format support including archives",
-        "Comprehensive chat logging and todo tracking"
-      ],
-      "next_priority": "Concurrent Operations - Line 782 in plan.md",
-      "continuity_status": "Ready for performance optimization phase",
-      "files_modified": [
-        "agents/youtube_transcript/config.yaml",
-        "config/content_scraping.yaml", 
-        "api/routes/content_scraping.py",
-        "streamlit_workspace/pages/07_📥_Content_Scraper.py",
-        "plan.md",
-        "chat_logs/2025-07-06_12-00_project-updates-continuation.md"
+    "step_3_documentation": {
+      "title": "Session Documentation",
+      "actions": [
+        "Create session log in /chat_logs/",
+        "Format: YYYY-MM-DD_HH-MM_phase-X-task-description.md",
+        "Update throughout session with completed tasks"
       ]
+    },
+    
+    "step_4_duplicate_prevention": {
+      "title": "Duplicate Prevention - MANDATORY",
+      "critical": "ALWAYS check before creating ANY file",
+      "actions": [
+        "1. Check updates/08_repository_structure.md for existing files",
+        "2. Grep pattern='[feature_name]' glob='**/*.py'",
+        "3. LS path='[target_directory]'",
+        "4. If similar functionality exists: enhance existing file",
+        "5. Archive old files to /archive/ directory if replacing"
+      ]
+    },
+    
+    "step_5_implementation": {
+      "title": "Implementation",
+      "actions": [
+        "Follow phase-specific checklist from updates/ files",
+        "Update TODO status as you progress",
+        "Test each component before marking complete",
+        "Read entire phase files - don't skip anything"
+      ]
+    },
+    
+    "step_6_progress_update": {
+      "title": "Progress Update - CRITICAL",
+      "actions": [
+        "Update updates/09_implementation_status.md with completed tasks",
+        "Update updates/[current_phase].md to mark completed items",
+        "Update claude.md 'Current Focus' section with checkmarks",
+        "Update claude.md 'Next Steps' & 'Project Status' sections",
+        "Move completed items to p_completed.md",
+        "Document any blockers or issues"
+      ],
+      "files_to_update": {
+        "09_implementation_status.md": "Overall progress percentages and recent updates",
+        "02_performance_optimization.md": "Phase 2 specific completions",
+        "claude.md": "Current focus items and project status summary"
+      }
     }
+  },
+  
+  "important_file_locations": {
+    "project_root": "/Users/grant/Documents/GitHub/MCP_Ygg/",
+    "windows_path": "C:\\Users\\zochr\\Desktop\\GitHub\\Yggdrasil\\MCP_Ygg\\",
+    
+    "core_documentation": {
+      "claude_md": "claude.md - Project context and current status",
+      "plan_md": "plan.md - Master development plan",
+      "p_completed_md": "p_completed.md - Completed work archive"
+    },
+    
+    "update_files": {
+      "directory": "updates/",
+      "files": {
+        "01_foundation_fixes.md": "Week 1-2: Technical debt",
+        "02_performance_optimization.md": "Week 3-4: Performance & Enhanced AI Agents",
+        "03_scraper_enhancement.md": "Week 5-6: Scraping",
+        "04_data_validation.md": "Week 7-8: Validation",
+        "05_ui_workspace.md": "Week 9-10: UI fixes",
+        "06_technical_specs.md": "Architecture reference",
+        "07_metrics_timeline.md": "KPIs & timeline",
+        "08_repository_structure.md": "CRITICAL: File system map - CHECK BEFORE CREATING FILES",
+        "09_implementation_status.md": "Progress tracking"
+      }
+    },
+    
+    "key_directories": {
+      "agents": "20+ AI agents - check before creating new",
+      "api": "FastAPI backend",
+      "cache": "Redis caching",
+      "CSV": "371+ concepts across 6 domains",
+      "streamlit_workspace": "UI with 8 pages",
+      "tests": "Test suite",
+      "archive": "Archived/deprecated files",
+      "chat_logs": "Session documentation"
+    }
+  },
+  
+  "mcp_servers_config": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "/Users/grant/Documents/GitHub/MCP_Ygg/chat_logs/memory.json"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "context7": {
+      "serverUrl": "https://mcp.context7.com/sse",
+      "note": "USE CONTEXT7 FOR ALL CODING TASKS"
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
+    }
+  },
+  
+  "critical_warnings": {
+    "duplicate_prevention": [
+      "ALWAYS check updates/08_repository_structure.md FIRST",
+      "Search for existing functionality before creating files",
+      "Enhance existing files rather than creating new ones"
+    ],
+    "known_duplicates": [
+      "analytics/ exists in both root and agents/",
+      "Use agents/analytics/ for new analytics agents"
+    ],
+    "do_not_skip": [
+      "Reading complete phase specifications",
+      "Verifying claimed completions against actual code",
+      "Testing imports and functionality",
+      "Updating progress tracking"
+    ]
+  },
+  
+  "project_context": {
+    "name": "MCP Yggdrasil",
+    "description": "Enterprise-grade knowledge management system",
+    "tech_stack": "Python, Rust (Qdrant), Cypher (Neo4j), TypeScript (Streamlit)",
+    "architecture": {
+      "Neo4j": "Knowledge graph for complex relationships (371+ concepts)",
+      "Qdrant": "Vector search for semantic queries (7 collections)",
+      "Redis": "High-performance caching and session management",
+      "FastAPI": "Async REST API with performance optimization",
+      "Streamlit": "Interactive database management UI (8 pages)"
+    },
+    "domains": ["Art", "Language", "Mathematics", "Philosophy", "Science", "Technology"],
+    "current_phase": "Phase 2: Performance Optimization & Enhanced AI Agents",
+    "overall_progress": "41% of 12-week roadmap"
   }
 }

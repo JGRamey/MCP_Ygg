@@ -1,0 +1,57 @@
+# Enhanced Text Processor Configuration
+
+# Text processing settings
+chunk_size: 1000
+chunk_overlap: 200
+min_text_length: 50
+max_text_length: 1000000
+
+# Summary settings
+max_summary_length: 200
+min_summary_length: 50
+summary_model: "facebook/bart-large-cnn"
+multilingual_summary_model: "csebuetnlp/mT5_multilingual_XLSum"
+
+# Language support
+supported_languages:
+  - en  # English
+  - es  # Spanish
+  - fr  # French
+  - de  # German
+  - it  # Italian
+  - pt  # Portuguese
+  - nl  # Dutch
+  - pl  # Polish
+  - ru  # Russian
+  - zh  # Chinese
+  - ja  # Japanese
+  - ar  # Arabic
+
+# Model settings
+embedding_model: "all-MiniLM-L6-v2"
+multilingual_embedding_model: "paraphrase-multilingual-MiniLM-L12-v2"
+
+# Performance settings
+batch_size: 16
+max_workers: 4
+enable_gpu: true
+enable_caching: true
+max_cache_size: 1000
+
+# Entity linking
+enable_entity_linking: true
+entity_confidence_threshold: 0.7
+
+# Transformer models
+transformer_models:
+  sentiment:
+    english: "distilbert-base-uncased-finetuned-sst-2-english"
+    multilingual: "nlptown/bert-base-multilingual-uncased-sentiment"
+  ner:
+    english: "dslim/bert-base-NER"
+    multilingual: "Davlan/bert-base-multilingual-cased-ner-hrl"
+
+# Output settings
+output_dir: "data/processed_texts"
+save_embeddings_separately: true
+compression: "gzip"
