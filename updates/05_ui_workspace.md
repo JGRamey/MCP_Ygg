@@ -1,22 +1,22 @@
-# Phase 5: UI Workspace Development ✅ COMPLETE
+# Phase 5: UI Workspace Development 🔄 IN PROGRESS
 ## 💻 STREAMLIT INTERFACE (Weeks 9-10) - 85% COMPLETE
 
 ### Overview
-✅ **PHASE 5 SUBSTANTIALLY COMPLETE** - Major UI enhancements completed with architectural fixes and agent integration. Transform the basic dashboard into a comprehensive workspace for MCP Yggdrasil project management, focusing on database material management (NOT an IDE), fixing existing issues, and enhancing the scraper interface.
+**PHASE 5 API INTEGRATION UPDATE** - Transitioning to API-first architecture. Transform the Streamlit workspace into a thin presentation layer that exclusively uses FastAPI endpoints, eliminating all direct agent imports and business logic from the UI layer.
 
-### 🎉 COMPLETION SUMMARY (2025-07-24)
+### 🚨 CRITICAL UPDATE (2025-07-24)
 
-#### ✅ COMPLETED TASKS:
-1. **Agent Integration Architecture** - Content Scraper (783→452 lines) now integrates existing scraper agents
-2. **Anti-Monolithic Compliance** - File Manager (639→19 lines) modularized into 7 components
-3. **Cross-Cultural Visualization** - Graph Editor enhanced with cross-domain analysis features
-4. **Architectural Consistency** - All UI components now delegate to existing agents instead of duplicating code
+#### 🔄 ARCHITECTURE PIVOT TO API-FIRST:
+1. **NEW APPROACH**: All UI operations must use `/api/*` endpoints via unified API client
+2. **NO DIRECT IMPORTS**: Remove all agent imports from UI code
+3. **THIN UI LAYER**: Streamlit becomes purely presentational
+4. **CENTRALIZED CLIENT**: Single `api_client.py` handles all backend communication
 
-#### 📊 METRICS ACHIEVED:
-- **File Size Compliance**: All files now under 500-line limit ✅
-- **Code Duplication Eliminated**: UI layers delegate to existing agents ✅  
-- **Agent Integration**: Leverages UnifiedWebScraper, Neo4jAgent, QdrantAgent ✅
-- **Phase 5 Progress**: 85% complete (3/4 major tasks) ✅
+#### 📊 REVISED METRICS:
+- **File Size Compliance**: All files under 500-line limit ✅
+- **API Integration**: 0% → Must refactor all pages to use API client ❌
+- **Direct Agent Imports**: Must be eliminated ❌
+- **Phase 5 Progress**: 85% → 60% (architecture change required)
 
 ### User Requirements Summary
 - **NOT an IDE-like interface** - Only file management of stored data
@@ -2021,7 +2021,18 @@ with tabs[4]:
 - ✅ Drag-and-drop graph editing functional
 - ✅ Cross-cultural concept connections visible
 
+### 🔗 IMPORTANT: API Integration Required
+**See `05.5_ui_api_update.md` for complete API-first implementation strategy**
+
+The original approach of direct agent integration has been superseded by a cleaner API-first architecture. All UI components must be refactored to use the centralized API client pattern defined in Phase 5.5.
+
+### Implementation Order
+1. **First**: Implement unified API client (`05.5_ui_api_update.md` - Phase 5.5a)
+2. **Second**: Refactor all UI pages to use API endpoints
+3. **Third**: Remove all direct agent imports
+4. **Fourth**: Comprehensive testing of API integration
+
 ### Next Steps
-After completing Phase 5, proceed to:
+After completing Phase 5 & 5.5 API integration:
 - **Phase 6**: Technical Specifications (`updates/06_technical_specs.md`)
 - **Phase 7**: Metrics and Timeline (`updates/07_metrics_timeline.md`)

@@ -83,12 +83,14 @@ MCP_Ygg/
 - Knowledge integration pipeline
 
 #### **PHASE 5: UI WORKSPACE DEVELOPMENT** (Weeks 9-10) 💻
-**File: `updates/05_ui_workspace.md`**
-- Content scraper page fixes
-- Graph editor Neo4j integration
-- Operations console psutil fix
-- Database-focused file manager
-- Concept relationship visualization
+**Files: `updates/05_ui_workspace.md` & `updates/05.5_ui_api_update.md`**
+- 🚨 **CRITICAL UPDATE**: API-first architecture implementation
+- Unified API client for all UI operations
+- Content scraper page using API endpoints only
+- Graph editor with API-based Neo4j data
+- Operations console with API health checks
+- Database-focused file manager via API
+- Complete removal of direct agent imports
 
 #### **PHASE 6: ADVANCED FEATURES** (Weeks 11-12) 🚀
 **Files: `updates/02_performance_optimization.md` & `updates/06_technical_specs.md`**

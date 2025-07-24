@@ -219,12 +219,14 @@ This document tracks the current implementation status of MCP Yggdrasil, includi
 - [ ] **JSON Staging Workflow** - Complete implementation
 - [ ] **Provenance Tracking** - Full audit trail
 
-#### Phase 5: UI Workspace (Week 9-10)
-- [ ] **Fix Operations Console** - psutil import error
-- [ ] **Fix Graph Editor** - Show real Neo4j data
-- [ ] **Enhance Content Scraper** - Multi-source support
-- [ ] **Focus File Manager** - Database files only
-- [ ] **Cross-Cultural Connections** - Visualization
+#### Phase 5: UI Workspace (Week 9-10) 🔄 60% Complete (API Pivot)
+- [ ] **API Client Implementation** - Unified client for all UI operations
+- [ ] **Content Scraper API Integration** - Remove agent imports, use API only
+- [ ] **File Manager Modularization** - Break into <500 line modules with API
+- [ ] **Graph Editor API Integration** - Fetch data via API endpoints
+- [ ] **Database Manager API CRUD** - All operations through API
+- [ ] **Operations Console API Health** - System status via API
+- [ ] **Remove All Agent Imports** - Complete UI/backend separation
 
 #### Phase 6: Advanced Features (Week 11-12)
 - [ ] **Multi-LLM Integration** - Claude, Gemini, local models
@@ -296,6 +298,25 @@ This document tracks the current implementation status of MCP Yggdrasil, includi
 3. ✅ **Scraper enhancements** - Trafilatura, anti-detection, profiles complete
 
 ### 📈 Recent Updates & Changes
+
+#### July 24, 2025 - Phase 5 API-First Architecture Decision 🔄
+- **Phase 5 Progress**: 85% → 60% adjusted due to architecture pivot
+- **CRITICAL DECISION**: Moving from direct agent imports to API-first approach
+  - ✅ **Phase 5.5 Created** - Comprehensive API integration strategy documented
+  - ✅ **Architecture Decision** - All UI components will use FastAPI endpoints
+  - 🔄 **Refactoring Required** - All existing UI pages need API client integration
+- **IMPLEMENTATION PLAN**:
+  - Phase 5.5a: Unified API client creation
+  - Phase 5.5b: Content Scraper refactoring
+  - Phase 5.5c: File Manager modularization
+  - Phase 5.5d: Integration patterns standardization
+  - Phase 5.5e: Testing strategy
+- **Key Benefits**:
+  - Clean separation of concerns
+  - Zero business logic in UI layer
+  - Consistent error handling
+  - Easier testing and mocking
+- **Session Log**: chat_logs/2025-07-24_19-17_phase5-api-integration-decision.md
 
 #### July 23, 2025 - Phase 4 START: Data Validation Pipeline Implementation 🚀
 - **Phase 4 Progress**: 0% → 40% complete 🔄 **PHASE 4 IN PROGRESS**

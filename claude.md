@@ -92,6 +92,7 @@
 │   ├── 03_scraper_enhancement.md # Week 5-6: Scraping
 │   ├── 04_data_validation.md     # Week 7-8: Validation
 │   ├── 05_ui_workspace.md        # Week 9-10: UI fixes
+│   ├── 05.5_ui_api_update.md     # 🚨 CRITICAL: API-first UI implementation
 │   ├── 06_technical_specs.md     # Architecture reference
 │   ├── 07_metrics_timeline.md    # KPIs & timeline
 │   ├── 08_repository_structure.md # File system map
@@ -356,19 +357,19 @@ python scripts/csv_cleanup_script.py
 - ✅ Knowledge integration pipeline (Neo4j + Qdrant)
 - ✅ End-to-end testing framework (comprehensive validation)
 
-### **Current Progress: Phase 5 UI Workspace Enhancement** 🔄 75% COMPLETE
-**Latest Session** (2025-07-24): Major UI enhancements with architectural fixes
-- ✅ **Graph Editor Enhancement** - Neo4j connection status, fallback handling, modularized (995→81 lines)
-- ✅ **Content Scraper Multi-Source** - 13 specialized source types (ancient texts, academic papers)
-- ✅ **File Manager Database Focus** - CSV management with domain organization
-- 🚨 **CRITICAL ARCHITECTURAL ISSUE IDENTIFIED**: Content Scraper duplicates existing agents at `/agents/scraper`
-- 🚨 **URGENT MODULARIZATION NEEDED**: Content Scraper (783 lines), File Manager (639 lines) still exceed 500-line limit
+### **Current Progress: Phase 5 UI Workspace Enhancement** 🔄 60% ADJUSTED
+**Latest Session** (2025-07-24): API-First Architecture Decision
+- 🔄 **MAJOR PIVOT**: Transitioning from direct agent imports to API-first architecture
+- 📝 **Phase 5.5 Created**: Comprehensive API integration strategy in `05.5_ui_api_update.md`
+- ✅ **Architecture Decision**: All UI components will use FastAPI endpoints exclusively
+- ❌ **Refactoring Required**: All existing UI pages need API client integration
+- 🚨 **API Client Needed**: Must implement `streamlit_workspace/utils/api_client.py`
 
 ### **Next Session Priority** 🚨
-1. **Agent Integration**: Replace duplicate Content Scraper UI with thin layer integrating existing scraper agents
-2. **Complete Modularization**: File Manager (639 lines) needs modular architecture  
-3. **Cross-Cultural Visualization**: Implement remaining Phase 5 feature
-4. **Update Progress Documentation**: Sync all update files with current status
+1. **Implement API Client**: Create unified API client per Phase 5.5a specification
+2. **Refactor Content Scraper**: Convert to API-only implementation (remove agent imports)
+3. **Modularize File Manager**: Break into <500 line modules with API integration
+4. **Update All UI Pages**: Remove all direct agent imports, use API endpoints only
 
 ### **Remaining Incomplete Items**
 - [ ] **Agent Integration Architecture** (Content Scraper duplication fix)
@@ -378,4 +379,6 @@ python scripts/csv_cleanup_script.py
 
 ---
 
-**🚀 Project Status**: Week 10 of 12-week roadmap. **Phase 1 Foundation COMPLETE** (95%), **Phase 2 Performance & Optimization COMPLETE** (100%), **Phase 3 Scraper Enhancement COMPLETE** (100%), **Phase 4 Data Validation Pipeline COMPLETE** (100%), and **Phase 5 UI Workspace Enhancement COMPLETE** (85%) ✅. Overall completion: **80%**. Major architectural fixes completed: eliminated code duplication, achieved anti-monolithic compliance, integrated existing agents throughout UI layer. Ready for **Phase 6: Advanced Features**.
+**🚀 Project Status**: Week 10 of 12-week roadmap. **Phase 1 Foundation COMPLETE** (95%), **Phase 2 Performance & Optimization COMPLETE** (100%), **Phase 3 Scraper Enhancement COMPLETE** (100%), **Phase 4 Data Validation Pipeline COMPLETE** (100%), and **Phase 5 UI Workspace Enhancement IN PROGRESS** (60% - API pivot) 🔄. Overall completion: **75%**. 
+
+**Critical Note**: Phase 5.5 (`05.5_ui_api_update.md`) MUST be followed exactly for API-first UI implementation.
