@@ -11,6 +11,7 @@
     "step_1_project_analysis": {
       "title": "Project Analysis & Verification",
       "🚨_CRITICAL_WARNING": "NEVER CLAIM COMPLETION WITHOUT READING ENTIRE FILES",
+      "🔴_ABSOLUTE_MANDATE": "This has caused major project setbacks - ZERO TOLERANCE for partial file reads",
       "actions": [
         "1. Read claude.md - Current context (this file)",
         "2. Read plan.md - Overview of all phases", 
@@ -19,19 +20,43 @@
         "5. 🚨 ALWAYS READ COMPLETE FILES when verifying implementation",
         "6. 🚨 NEVER rely on partial reads (first 50-100 lines) for completion claims",
         "7. 🚨 ALWAYS compare implementation against FULL Phase specifications",
-        "8. Verify implementation status against actual code",
-        "9. Update percentages based on reality"
+        "8. 🚨 Read file with NO limit parameter to get ENTIRE content",
+        "9. 🚨 Verify EVERY requirement in phase specification against actual code",
+        "10. Verify implementation status against actual code",
+        "11. Update percentages based on reality"
       ],
       "file_reading_protocol": {
+        "🔴_ZERO_TOLERANCE_POLICY": [
+          "This issue has caused significant project delays and frustration",
+          "User explicitly stated: 'READ THE ENTIRE FILES EVERYTIME PLEASE. I'm tired of asking'",
+          "Previous false completions have undermined project progress tracking",
+          "MANDATORY: Use Read tool WITHOUT limit parameter for verification tasks",
+          "MANDATORY: Scroll through ENTIRE file content before claiming completion",
+          "MANDATORY: Cross-reference EVERY specification item against actual code"
+        ],
         "MANDATORY": [
           "Read ENTIRE files when checking implementation status",
           "Compare actual code against complete Phase specifications",
-          "User feedback: 'READ THE ENTIRE FILES EVERYTIME PLEASE. I'm tired of asking'"
+          "Use Read tool without limit/offset parameters for full content",
+          "Verify each bullet point in phase specifications individually",
+          "Check imports, class definitions, method implementations, not just existence",
+          "Confirm functionality works as specified, not just that files exist"
         ],
         "NEVER": [
           "Claim completion based on partial file reads",
           "Skip verification of claimed completions",
-          "Assume implementation matches documentation without checking"
+          "Assume implementation matches documentation without checking",
+          "Use limit parameter when verifying completions",
+          "Mark phases complete without reading specifications entirely",
+          "Trust previous completion claims without re-verification"
+        ],
+        "VERIFICATION_CHECKLIST": [
+          "[ ] Read ENTIRE phase specification file (no limit parameter)",
+          "[ ] Read ENTIRE implementation files mentioned (no limit parameter)", 
+          "[ ] Verify EACH specification requirement exists in actual code",
+          "[ ] Test imports and basic functionality where possible",
+          "[ ] Check file sizes match expectations (not truncated)",
+          "[ ] Confirm all mentioned files actually exist at specified paths"
         ]
       }
     },
