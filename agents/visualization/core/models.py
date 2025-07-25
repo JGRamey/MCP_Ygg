@@ -4,11 +4,12 @@ Data models for visualization components.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
 class VisualizationType(Enum):
     """Types of visualizations that can be generated."""
+
     YGGDRASIL_TREE = "yggdrasil_tree"
     NETWORK_GRAPH = "network_graph"
     TIMELINE = "timeline"
@@ -20,6 +21,7 @@ class VisualizationType(Enum):
 
 class NodeType(Enum):
     """Node types with corresponding colors."""
+
     DOCUMENT = "document"
     CONCEPT = "concept"
     PERSON = "person"
@@ -32,6 +34,7 @@ class NodeType(Enum):
 @dataclass
 class VisualizationNode:
     """Represents a node in the visualization."""
+
     id: str
     label: str
     title: str
@@ -49,6 +52,7 @@ class VisualizationNode:
 @dataclass
 class VisualizationEdge:
     """Represents an edge in the visualization."""
+
     id: str
     source: str
     target: str
@@ -61,6 +65,7 @@ class VisualizationEdge:
 @dataclass
 class VisualizationData:
     """Complete visualization data structure."""
+
     nodes: List[VisualizationNode]
     edges: List[VisualizationEdge]
     metadata: Dict[str, Any]

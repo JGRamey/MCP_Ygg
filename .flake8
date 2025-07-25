@@ -24,20 +24,20 @@ exclude =
 
 # Ignore specific error codes
 ignore = 
-    E203,  # whitespace before ':' (conflicts with black)
-    E501,  # line too long (handled by black)
-    W503,  # line break before binary operator (conflicts with black)
-    E402,  # module level import not at top of file (sometimes needed for path manipulation)
-    F401,  # imported but unused (handled by isort and manual review)
-    E722,  # do not use bare 'except' (sometimes needed for broad exception handling)
+    E203,
+    E501,
+    W503,
+    E402,
+    F401,
+    E722
 
 # Select specific error codes to check
 select = 
-    E,     # pycodestyle errors
-    W,     # pycodestyle warnings
-    F,     # pyflakes
-    C,     # mccabe complexity
-    N,     # pep8-naming
+    E,
+    W,
+    F,
+    C,
+    N
 
 # Maximum complexity allowed
 max-complexity = 10
@@ -53,8 +53,8 @@ per-file-ignores =
     tests/*.py: E501, F401, F403, F811
     # Scripts might need more flexibility
     scripts/*.py: E501, F401
-    # Dashboard files might have longer lines for UI elements
-    dashboard/*.py: E501
+    # Streamlit workspace files might have longer lines for UI elements
+    streamlit_workspace/*.py: E501
 
 # Inline comments configuration
 inline-quotes = double
@@ -62,7 +62,7 @@ multiline-quotes = double
 
 # Import order configuration (for flake8-import-order)
 import-order-style = google
-application-import-names = agents,api,dashboard,config,scripts,tests
+application-import-names = agents,api,streamlit_workspace,config,scripts,tests,cache,monitoring,tasks,dependencies
 
 # Docstring configuration (for flake8-docstrings)
 docstring-convention = google

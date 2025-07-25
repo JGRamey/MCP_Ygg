@@ -4,14 +4,15 @@ Dependency Validation Script
 Validates Python dependencies and checks for conflicts
 """
 
+import importlib
+import json
+import logging
 import subprocess
 import sys
-import importlib
+from typing import Dict, List, Optional, Tuple
+
 import pkg_resources
-from typing import List, Dict, Optional, Tuple
-import logging
 from packaging import version
-import json
 
 # Configure logging
 logging.basicConfig(

@@ -1,82 +1,167 @@
 """
-Content Scraper - MCP Yggdrasil IDE Workspace
-Multi-source content submission and scraping interface
-
-REFACTORED: Now uses modular architecture with shared components
-for improved maintainability and code reuse.
-
-Original file: 1,508 lines → Modular structure:
-- main.py: Main interface (300 lines)
-- scraping_engine.py: Core scraping logic (400 lines)  
-- content_processors.py: Content processing (400 lines)
-- submission_manager.py: Submission handling (400 lines)
-
-Total reduction: 1,508 lines → 187 lines (orchestrator) + 4 focused modules
+Content Scraper - Thin UI layer for scraping operations
+Delegates all processing to FastAPI backend
 """
 
+import json
+from typing import Dict, List
+
 import streamlit as st
-import sys
-from pathlib import Path
+from streamlit_workspace.utils.api_client import api_client, run_async
 
-# Add project root to path for imports
-project_root = Path(__file__).parent.parent.parent
-sys.path.append(str(project_root))
-
-# Import the refactored modular content scraper
-try:
-    from .content_scraper.main import main as content_scraper_main
-except ImportError:
-    # Fallback if module structure has issues
-    st.error("Content Scraper modules not found. Please check the module structure.")
-    content_scraper_main = None
+st.set_page_config(page_title="Content Scraper", page_icon="📥", layout="wide")
 
 
-def main():
-    """
-    Main entry point for Content Scraper page.
-    
-    Delegates to the refactored modular content scraper implementation
-    which provides improved maintainability and code organization.
-    
-    Features:
-    - Multi-source content acquisition (web, YouTube, file upload, manual text)
-    - Content processing pipeline with staging and approval workflow
-    - Advanced scraping with anti-blocking measures
-    - Intelligent content analysis and concept extraction
-    - Real-time submission queue management and monitoring
-    """
-    if content_scraper_main:
-        try:
-            content_scraper_main()
-        except Exception as e:
-            st.error(f"Error loading Content Scraper: {e}")
-            st.info("""
-            The Content Scraper has been refactored into a modular architecture. 
-            If you see this error, please check:
-            
-            1. Module imports in `content_scraper/` directory
-            2. Shared components in `shared/` directory
-            3. Agent dependencies and imports
-            """)
-            
-            # Show fallback interface
-            st.markdown("## 📥 Content Scraper (Fallback)")
-            st.warning("Modular interface unavailable. Basic interface shown.")
-            
-            st.markdown("""
-            **Available Features:**
-            - 🌐 Web scraping
-            - 📺 YouTube processing  
-            - 📁 File upload
-            - ✍️ Manual text entry
-            - 📋 Submission queue management
-            
-            Please contact support to resolve module loading issues.
-            """)
-    else:
-        st.error("Content Scraper main module not available.")
-        st.info("Please check the content_scraper module installation.")
+class ContentScraperUI:
+    """UI-only content scraper interface"""
+
+    def __init__(self):
+        self.source_configs = self._load_source_configs()
+
+    def _load_source_configs(self) -> Dict:
+        """Load source type configurations"""
+        return {
+            "webpage": {
+                "icon": "🌐",
+                "fields": ["url", "extract_images", "extract_links"],
+            },
+            "academic_paper": {
+                "icon": "📚",
+                "fields": ["url", "doi", "extract_citations", "extract_figures"],
+            },
+            "ancient_text": {
+                "icon": "📜",
+                "fields": ["url", "language", "include_annotations", "translations"],
+            },
+            "youtube": {
+                "icon": "📺",
+                "fields": ["url", "include_transcript", "include_metadata"],
+            },
+        }
+
+    def render(self):
+        """Main render method"""
+        st.title("📥 Content Scraper")
+        st.markdown("Multi-source content acquisition interface")
+
+        # Source type selection
+        col1, col2 = st.columns([2, 1])
+
+        with col1:
+            source_type = st.selectbox(
+                "Select Content Source",
+                options=list(self.source_configs.keys()),
+                format_func=lambda x: f"{self.source_configs[x]['icon']} {x.replace('_', ' ').title()}",
+            )
+
+        with col2:
+            priority = st.select_slider(
+                "Priority",
+                options=[1, 2, 3, 4, 5],
+                value=3,
+                help="Higher priority items are processed first",
+            )
+
+        # Dynamic form based on source type
+        self._render_source_form(source_type, priority)
+
+        # Batch upload section
+        with st.expander("📦 Batch Processing"):
+            self._render_batch_upload()
+
+        # Recent jobs status
+        self._render_job_status()
+
+    def _render_source_form(self, source_type: str, priority: int):
+        """Render form based on source type"""
+        config = self.source_configs[source_type]
+
+        with st.form(f"{source_type}_form"):
+            st.subheader(
+                f"{config['icon']} {source_type.replace('_', ' ').title()} Scraping"
+            )
+
+            # Common fields
+            url = st.text_input("URL", key=f"{source_type}_url")
+            domain = st.selectbox(
+                "Domain",
+                [
+                    "mathematics",
+                    "science",
+                    "philosophy",
+                    "religion",
+                    "history",
+                    "literature",
+                ],
+            )
+
+            # Source-specific fields
+            options = {}
+            if "doi" in config["fields"]:
+                options["doi"] = st.text_input("DOI (optional)")
+
+            if "extract_citations" in config["fields"]:
+                options["extract_citations"] = st.checkbox(
+                    "Extract Citations", value=True
+                )
+
+            if "language" in config["fields"]:
+                options["language"] = st.selectbox(
+                    "Original Language",
+                    ["Latin", "Greek", "Hebrew", "Sanskrit", "Arabic", "Other"],
+                )
+
+            if "include_transcript" in config["fields"]:
+                options["include_transcript"] = st.checkbox(
+                    "Include Transcript", value=True
+                )
+
+            # Submit button
+            submitted = st.form_submit_button("🚀 Start Scraping")
+
+            if submitted and url:
+                self._process_scraping(url, domain, source_type, priority, options)
+
+    @run_async
+    async def _process_scraping(
+        self, url: str, domain: str, source_type: str, priority: int, options: Dict
+    ):
+        """Process scraping request via API"""
+        with st.spinner("🔄 Processing..."):
+            result = await api_client.scrape_content(
+                urls=[url],
+                domain=domain,
+                source_type=source_type,
+                options={**options, "priority": priority},
+            )
+
+            if result and result.get("job_id"):
+                st.success(f"✅ Scraping job started: {result['job_id']}")
+                st.info("Check the job status below for progress updates")
+            else:
+                st.error("❌ Failed to start scraping job")
+
+    def _render_batch_upload(self):
+        """Render batch upload interface"""
+        uploaded_file = st.file_uploader(
+            "Upload CSV/JSON file with URLs", type=["csv", "json"]
+        )
+
+        if uploaded_file:
+            # Parse and display preview
+            st.info(f"📄 File: {uploaded_file.name}")
+            # Implementation for file parsing and batch submission
+
+    def _render_job_status(self):
+        """Display recent job status"""
+        st.subheader("📊 Recent Jobs")
+
+        # This would fetch from API
+        # For now, showing placeholder
+        status_placeholder = st.empty()
+        status_placeholder.info("Job status will appear here...")
 
 
-if __name__ == "__main__":
-    main()
+# Initialize and render
+scraper_ui = ContentScraperUI()
+scraper_ui.render()

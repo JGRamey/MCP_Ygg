@@ -18,16 +18,19 @@ Features:
 - Real-time submission queue management and monitoring
 """
 
+from .content_processors import ConceptExtractor, ContentProcessor
 from .main import ContentScraperInterface
 from .scraping_engine import ScrapingEngine, URLProcessor
-from .content_processors import ContentProcessor, ConceptExtractor
-from .submission_manager import SubmissionManager, QueueManager
+from .submission_manager import QueueManager, SubmissionManager
 
 __all__ = [
-    'ContentScraperInterface',
-    'ScrapingEngine', 'URLProcessor',
-    'ContentProcessor', 'ConceptExtractor',
-    'SubmissionManager', 'QueueManager'
+    "ContentScraperInterface",
+    "ScrapingEngine",
+    "URLProcessor",
+    "ContentProcessor",
+    "ConceptExtractor",
+    "SubmissionManager",
+    "QueueManager",
 ]
 
 __version__ = "2.0.0"

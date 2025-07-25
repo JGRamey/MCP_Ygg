@@ -1,0 +1,88 @@
+================================================================================
+MCP YGGDRASIL PROJECT - CODE QUALITY REPORT
+================================================================================
+Generated: 2025-07-24 21:32:02
+Project Root: /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg
+Python Files Analyzed: 255
+
+📊 SUMMARY
+----------------------------------------
+Tools Run: 3
+✅ Passed: 0
+❌ Failed: 3
+🚨 Total Errors: 6754
+⚠️  Total Warnings: 0
+
+🔍 DETAILED RESULTS
+----------------------------------------
+BLACK:
+  Status: ❌ FAIL
+  Errors: 0
+  Warnings: 0
+  Execution Time: 5.19s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:23:46.646498+00:00
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:31:56.433335+00:00
+@@ -3,11 +3,11 @@
+ 
+ API-FIRST IMPLEMENTATION: Uses FastAPI backend via API client
+ Eliminates direct database calls for true separation of concerns.
+ 
+ Features:
+-- Interactive knowledge graph visualization with multiple modes ... (truncated)
+
+FLAKE8:
+  Status: ❌ FAIL
+  Errors: 6754
+  Warnings: 0
+  Execution Time: 1.59s
+  Files Checked: 255
+
+  Sample Output:
+  agents/analytics/base.py:144:17: E133 closing bracket is missing indentation
+agents/analytics/base.py:201:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:219:13: E133 closing bracket is missing indentation
+agents/analytics/base.py:222:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:237:5: E133 closing bracket is missing indentation
+agents/analytics/base.py:258:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:268:31: F821 unde... (truncated)
+
+ISORT:
+  Status: ❌ FAIL
+  Errors: 0
+  Warnings: 0
+  Execution Time: 10.80s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/01_🗄️_Database_Manager.py:before	2025-07-24 21:25:30.562808
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/01_🗄️_Database_Manager.py:after	2025-07-24 21:31:59.741461
+@@ -14,9 +14,9 @@
+ 
+ import sys
+ from pathlib import Path
+-from typing import Dict, Any, List, Optional
++from typing import Any, Dict, List, Optional
++
+ import asyncio
+-
+ import pandas as pd
+ import plotly.express as ... (truncated)
+
+💡 RECOMMENDATIONS
+----------------------------------------
+1. Fix failing linting tools first (red ❌ items above)
+2. Address errors before warnings
+3. Consider running tools individually for detailed output
+4. Consider running 'black' and 'isort' to auto-fix formatting
+
+🚀 NEXT STEPS
+----------------------------------------
+• Run individual tools for detailed output: flake8, black, mypy, etc.
+• Use auto-fixing tools: black, isort, autopep8
+• Set up pre-commit hooks to prevent quality regressions
+• Integrate linting into CI/CD pipeline
+
+================================================================================

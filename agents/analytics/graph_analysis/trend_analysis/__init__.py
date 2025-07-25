@@ -5,7 +5,7 @@ Modular trend analysis system for temporal pattern detection and prediction.
 This module provides:
 - Core trend analysis orchestration
 - Time series data collection and processing
-- Trend direction and strength detection  
+- Trend direction and strength detection
 - Prediction and forecasting capabilities
 - Statistical analysis and seasonality detection
 - Comprehensive trend visualization
@@ -21,54 +21,54 @@ Architecture:
 
 Usage:
     from trend_analysis import TrendAnalyzer, analyze_trends
-    
+
     analyzer = TrendAnalyzer(config)
     result = await analyzer.analyze_trends(TrendType.DOCUMENT_GROWTH)
 """
 
+# Import shared models from parent
+from ..models import TrendAnalysis, TrendConfig, TrendDirection, TrendPoint, TrendType
 from .core_analyzer import TrendAnalyzer, analyze_trends
 from .data_collectors import (
-    TimeSeriesDataCollector,
-    DocumentGrowthCollector,
-    ConceptEmergenceCollector,
-    PatternFrequencyCollector,
-    DomainActivityCollector,
+    AuthorProductivityCollector,
     CitationNetworksCollector,
-    AuthorProductivityCollector
+    ConceptEmergenceCollector,
+    DocumentGrowthCollector,
+    DomainActivityCollector,
+    PatternFrequencyCollector,
+    TimeSeriesDataCollector,
 )
-from .trend_detector import TrendDetector, detect_trend_direction
 from .predictor import TrendPredictor, generate_predictions
-from .statistics_engine import StatisticsEngine, create_statistics_engine
 from .seasonality_detector import SeasonalityDetector, create_seasonality_detector
-from .trend_visualization import TrendVisualizationEngine, create_trend_visualization_engine
-
-# Import shared models from parent
-from ..models import TrendAnalysis, TrendPoint, TrendType, TrendDirection, TrendConfig
+from .statistics_engine import StatisticsEngine, create_statistics_engine
+from .trend_detector import TrendDetector, detect_trend_direction
+from .trend_visualization import (
+    TrendVisualizationEngine,
+    create_trend_visualization_engine,
+)
 
 __all__ = [
     # Main classes
-    'TrendAnalyzer',
-    'TimeSeriesDataCollector',
-    'TrendDetector', 
-    'TrendPredictor',
-    'StatisticsEngine',
-    'SeasonalityDetector',
-    'TrendVisualizationEngine',
-    
+    "TrendAnalyzer",
+    "TimeSeriesDataCollector",
+    "TrendDetector",
+    "TrendPredictor",
+    "StatisticsEngine",
+    "SeasonalityDetector",
+    "TrendVisualizationEngine",
     # Models and enums
-    'TrendAnalysis',
-    'TrendPoint',
-    'TrendType', 
-    'TrendDirection',
-    'TrendConfig',
-    
+    "TrendAnalysis",
+    "TrendPoint",
+    "TrendType",
+    "TrendDirection",
+    "TrendConfig",
     # Convenience functions
-    'analyze_trends',
-    'detect_trend_direction',
-    'generate_predictions',
-    'create_statistics_engine',
-    'create_seasonality_detector',
-    'create_trend_visualization_engine'
+    "analyze_trends",
+    "detect_trend_direction",
+    "generate_predictions",
+    "create_statistics_engine",
+    "create_seasonality_detector",
+    "create_trend_visualization_engine",
 ]
 
 # Module version

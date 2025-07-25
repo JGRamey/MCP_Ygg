@@ -1,19 +1,19 @@
 """Core visualization components."""
 
-from .models import (
-    VisualizationType,
-    NodeType,
-    VisualizationNode,
-    VisualizationEdge,
-    VisualizationData
-)
 from .config import VisualizationConfig
+from .models import (
+    NodeType,
+    VisualizationData,
+    VisualizationEdge,
+    VisualizationNode,
+    VisualizationType,
+)
 
 __all__ = [
     "VisualizationType",
-    "NodeType", 
+    "NodeType",
     "VisualizationNode",
     "VisualizationEdge",
     "VisualizationData",
-    "VisualizationConfig"
+    "VisualizationConfig",
 ]

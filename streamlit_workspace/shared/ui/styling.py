@@ -1,45 +1,46 @@
 """
 Styling and CSS utilities for Streamlit workspace
 
-Provides consistent theming, custom CSS, and styling utilities extracted 
+Provides consistent theming, custom CSS, and styling utilities extracted
 from existing pages to ensure visual consistency across the application.
 """
 
+from typing import Any, Dict, Optional
+
 import streamlit as st
-from typing import Dict, Any, Optional
 
 
 def get_theme_colors() -> Dict[str, str]:
     """
     Get the standard color theme for the MCP Yggdrasil application.
-    
+
     Returns:
         Dictionary containing color codes for consistent theming
     """
     return {
-        'primary': '#2E8B57',      # Sea Green
-        'secondary': '#667eea',    # Blue gradient start
-        'accent': '#764ba2',       # Purple gradient end
-        'success': '#90EE90',      # Light Green
-        'warning': '#FFD700',      # Gold
-        'error': '#FFB6C1',        # Light Pink
-        'neutral': '#DDD',         # Light Gray
-        'text_dark': '#333',       # Dark text
-        'text_light': '#666',      # Light text
-        'background': '#f8f9fa',   # Light background
-        'border': '#ddd'           # Border color
+        "primary": "#2E8B57",  # Sea Green
+        "secondary": "#667eea",  # Blue gradient start
+        "accent": "#764ba2",  # Purple gradient end
+        "success": "#90EE90",  # Light Green
+        "warning": "#FFD700",  # Gold
+        "error": "#FFB6C1",  # Light Pink
+        "neutral": "#DDD",  # Light Gray
+        "text_dark": "#333",  # Dark text
+        "text_light": "#666",  # Light text
+        "background": "#f8f9fa",  # Light background
+        "border": "#ddd",  # Border color
     }
 
 
 def apply_custom_css() -> None:
     """
     Apply comprehensive custom CSS styling to the Streamlit application.
-    
+
     Includes styling for cards, headers, metrics, forms, and interactive elements
     extracted and unified from existing pages.
     """
     colors = get_theme_colors()
-    
+
     custom_css = f"""
     <style>
     /* Main Application Styling */
@@ -306,21 +307,21 @@ def apply_custom_css() -> None:
     }}
     </style>
     """
-    
+
     st.markdown(custom_css, unsafe_allow_html=True)
 
 
 def apply_page_specific_css(page_type: str) -> None:
     """
     Apply page-specific CSS styling.
-    
+
     Args:
         page_type: Type of page ('analytics', 'database', 'scraper', etc.)
     """
     colors = get_theme_colors()
-    
+
     page_styles = {
-        'analytics': f"""
+        "analytics": f"""
         <style>
         .metric-dashboard {{
             display: grid;
@@ -338,8 +339,7 @@ def apply_page_specific_css(page_type: str) -> None:
         }}
         </style>
         """,
-        
-        'database': f"""
+        "database": f"""
         <style>
         .crud-section {{
             background: {colors['background']};
@@ -357,8 +357,7 @@ def apply_page_specific_css(page_type: str) -> None:
         }}
         </style>
         """,
-        
-        'scraper': f"""
+        "scraper": f"""
         <style>
         .scraper-section {{
             background: white;
@@ -376,18 +375,19 @@ def apply_page_specific_css(page_type: str) -> None:
             margin: 0.5rem 0;
         }}
         </style>
-        """
+        """,
     }
-    
+
     if page_type in page_styles:
         st.markdown(page_styles[page_type], unsafe_allow_html=True)
 
 
-def create_custom_metric(label: str, value: str, delta: Optional[str] = None, 
-                        delta_color: str = "normal") -> None:
+def create_custom_metric(
+    label: str, value: str, delta: Optional[str] = None, delta_color: str = "normal"
+) -> None:
     """
     Create a custom metric display with enhanced styling.
-    
+
     Args:
         label: Metric label
         value: Metric value
@@ -395,13 +395,13 @@ def create_custom_metric(label: str, value: str, delta: Optional[str] = None,
         delta_color: Color for delta ('positive', 'negative', 'normal')
     """
     delta_class = {
-        'positive': 'metric-positive',
-        'negative': 'metric-negative', 
-        'normal': 'metric-neutral'
-    }.get(delta_color, 'metric-neutral')
-    
-    delta_html = f'<div class="{delta_class}">{delta}</div>' if delta else ''
-    
+        "positive": "metric-positive",
+        "negative": "metric-negative",
+        "normal": "metric-neutral",
+    }.get(delta_color, "metric-neutral")
+
+    delta_html = f'<div class="{delta_class}">{delta}</div>' if delta else ""
+
     metric_html = f"""
     <div class="metric-card">
         <div class="metric-value">{value}</div>
@@ -409,14 +409,14 @@ def create_custom_metric(label: str, value: str, delta: Optional[str] = None,
         {delta_html}
     </div>
     """
-    
+
     st.markdown(metric_html, unsafe_allow_html=True)
 
 
 def get_knowledge_tools_css() -> str:
     """
     Get Knowledge Tools specific CSS styling.
-    
+
     Returns CSS for knowledge tools components including wizards,
     quality metrics, recommendations, and validation results.
     """

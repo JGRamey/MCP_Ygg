@@ -2,27 +2,28 @@
 Template management for visualization HTML generation.
 """
 
-from pathlib import Path
-from jinja2 import Template
-from typing import Dict, Any
 import json
+from pathlib import Path
+from typing import Any, Dict
 
-from ..core.models import VisualizationData
+from jinja2 import Template
+
 from ..core.config import VisualizationConfig
+from ..core.models import VisualizationData
 
 
 class TemplateManager:
     """Manages HTML templates for visualization generation."""
-    
+
     def __init__(self, config: VisualizationConfig):
         self.config = config
         self.template_dir = Path(config.template_dir)
         self.template_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Initialize templates
         self.visjs_template = self._create_visjs_template()
         self._save_template_to_file()
-    
+
     def _create_visjs_template(self) -> Template:
         """Create the vis.js template for interactive graphs."""
         self.template_content = """<!DOCTYPE html>
@@ -257,67 +258,71 @@ class TemplateManager:
     </script>
 </body>
 </html>"""
-        
+
         return Template(self.template_content)
-    
+
     def _save_template_to_file(self) -> None:
         """Save template to file for external use."""
         template_file = self.template_dir / "visjs_template.html"
-        with open(template_file, 'w') as f:
+        with open(template_file, "w") as f:
             f.write(self.template_content)
-    
-    def render_template(self, viz_data: VisualizationData, title: str, layout_params: Dict[str, Any]) -> str:
+
+    def render_template(
+        self, viz_data: VisualizationData, title: str, layout_params: Dict[str, Any]
+    ) -> str:
         """Render the visualization template with data."""
-        
+
         # Convert nodes to vis.js format
         vis_nodes = []
         for node in viz_data.nodes:
             vis_node = {
-                'id': node.id,
-                'label': node.label,
-                'title': node.title,
-                'node_type': node.node_type.value,
-                'domain': node.domain,
-                'date': node.date,
-                'color': node.color,
-                'size': node.size,
-                'x': node.x,
-                'y': node.y,
-                'metadata': node.metadata
+                "id": node.id,
+                "label": node.label,
+                "title": node.title,
+                "node_type": node.node_type.value,
+                "domain": node.domain,
+                "date": node.date,
+                "color": node.color,
+                "size": node.size,
+                "x": node.x,
+                "y": node.y,
+                "metadata": node.metadata,
             }
             vis_nodes.append(vis_node)
-        
+
         # Convert edges to vis.js format
         vis_edges = []
         for edge in viz_data.edges:
             vis_edge = {
-                'id': edge.id,
-                'from': edge.source,
-                'to': edge.target,
-                'label': edge.relationship_type,
-                'color': edge.color,
-                'width': edge.weight,
-                'arrows': 'to'
+                "id": edge.id,
+                "from": edge.source,
+                "to": edge.target,
+                "label": edge.relationship_type,
+                "color": edge.color,
+                "width": edge.weight,
+                "arrows": "to",
             }
             vis_edges.append(vis_edge)
-        
+
         # Prepare template data
         template_data = {
-            'title': title,
-            'nodes_json': json.dumps(vis_nodes),
-            'edges_json': json.dumps(vis_edges),
-            'domains': viz_data.metadata.get('domains', []),
-            'node_types': viz_data.metadata.get('node_types', []),
-            'node_colors': {nt.value: color for nt, color in self.config.node_colors.items()},
-            'layout_type': viz_data.layout_type,
-            'physics_enabled': self.config.enable_physics,
-            'enable_zoom': self.config.enable_zoom,
-            'enable_pan': self.config.enable_pan,
-            'min_node_size': self.config.node_sizes["min_size"],
-            'max_node_size': self.config.node_sizes["max_size"]
+            "title": title,
+            "nodes_json": json.dumps(vis_nodes),
+            "edges_json": json.dumps(vis_edges),
+            "domains": viz_data.metadata.get("domains", []),
+            "node_types": viz_data.metadata.get("node_types", []),
+            "node_colors": {
+                nt.value: color for nt, color in self.config.node_colors.items()
+            },
+            "layout_type": viz_data.layout_type,
+            "physics_enabled": self.config.enable_physics,
+            "enable_zoom": self.config.enable_zoom,
+            "enable_pan": self.config.enable_pan,
+            "min_node_size": self.config.node_sizes["min_size"],
+            "max_node_size": self.config.node_sizes["max_size"],
         }
-        
+
         # Add layout-specific parameters
         template_data.update(layout_params)
-        
+
         return self.visjs_template.render(**template_data)

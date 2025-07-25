@@ -4,21 +4,21 @@ Deep NLP analysis with domain taxonomy mapping
 """
 
 from .content_analysis_agent import (
+    ClaimExtraction,
+    ContentAnalysis,
     ContentAnalysisAgent,
     DomainMapping,
     EntityExtraction,
-    ClaimExtraction,
-    SemanticAnalysis,
     QualityIndicators,
-    ContentAnalysis
+    SemanticAnalysis,
 )
 
 __all__ = [
-    'ContentAnalysisAgent',
-    'DomainMapping',
-    'EntityExtraction',
-    'ClaimExtraction', 
-    'SemanticAnalysis',
-    'QualityIndicators',
-    'ContentAnalysis'
+    "ContentAnalysisAgent",
+    "DomainMapping",
+    "EntityExtraction",
+    "ClaimExtraction",
+    "SemanticAnalysis",
+    "QualityIndicators",
+    "ContentAnalysis",
 ]

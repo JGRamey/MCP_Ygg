@@ -15,6 +15,7 @@ except ImportError:
             async def extract_transcript(self, url, extract_metadata=True):
                 return {"transcript": "YouTube agent not available", "success": False}
 
+
 # Optional imports for advanced functionality
 try:
     from .transcript_processor import TranscriptProcessor

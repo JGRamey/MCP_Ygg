@@ -2,17 +2,18 @@
 """Data models for Claim Analyzer Agent"""
 
 import hashlib
-import numpy as np
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional, Union
+
+import numpy as np
 
 
 @dataclass
 class Claim:
     """
     Represents a claim to be fact-checked.
-    
+
     Attributes:
         claim_id: Unique identifier for the claim
         text: The actual claim text
@@ -23,6 +24,7 @@ class Claim:
         context: Surrounding context text
         entities: Named entities found in the claim
     """
+
     claim_id: str
     text: str
     source: str
@@ -31,10 +33,12 @@ class Claim:
     confidence: float = 0.0
     context: str = ""
     entities: List[str] = field(default_factory=list)
-    
+
     def __post_init__(self) -> None:
         if not self.claim_id:
-            self.claim_id = hashlib.md5(f"{self.text}{self.source}".encode()).hexdigest()
+            self.claim_id = hashlib.md5(
+                f"{self.text}{self.source}".encode()
+            ).hexdigest()
         if self.entities is None:
             self.entities = []
 
@@ -43,7 +47,7 @@ class Claim:
 class Evidence:
     """
     Represents evidence for or against a claim.
-    
+
     Attributes:
         evidence_id: Unique identifier for the evidence
         text: The evidence text/content
@@ -54,6 +58,7 @@ class Evidence:
         timestamp: When evidence was collected
         vector_embedding: Optional vector representation
     """
+
     evidence_id: str
     text: str
     source_url: str
@@ -68,7 +73,7 @@ class Evidence:
 class FactCheckResult:
     """
     Represents the result of a fact-check operation.
-    
+
     Attributes:
         claim: The original claim that was fact-checked
         verdict: Final verdict ("True", "False", "Partially True", "Unverified", "Opinion")
@@ -80,6 +85,7 @@ class FactCheckResult:
         timestamp: When the fact-check was performed
         graph_node_id: Optional Neo4j node ID for the result
     """
+
     claim: Claim
     verdict: str  # "True", "False", "Partially True", "Unverified", "Opinion"
     confidence: float

@@ -1,0 +1,64 @@
+================================================================================
+MCP YGGDRASIL PROJECT - CODE QUALITY REPORT
+================================================================================
+Generated: 2025-07-24 21:37:44
+Project Root: /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg
+Python Files Analyzed: 255
+
+📊 SUMMARY
+----------------------------------------
+Tools Run: 2
+✅ Passed: 0
+❌ Failed: 2
+🚨 Total Errors: 165
+⚠️  Total Warnings: 12
+
+🔍 DETAILED RESULTS
+----------------------------------------
+BLACK:
+  Status: ❌ FAIL
+  Errors: 0
+  Warnings: 0
+  Execution Time: 4.67s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/agents/scraper/__init__.py	2025-07-25 01:37:28+00:00
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/agents/scraper/__init__.py	2025-07-25 01:37:43.803133+00:00
+@@ -1,15 +1,20 @@
+ """
+ MCP Yggdrasil Scraper Module - Organized Structure
+ Phase 3: Advanced web scraping with organized modular architecture.
+ 
+ Directory Structure:
+- core/           # Core scraping functionality (3 files, 1,726 lines)
+- extractors/     # Content extrac... (truncated)
+
+MYPY:
+  Status: ❌ FAIL
+  Errors: 165
+  Warnings: 12
+  Execution Time: 2.33s
+  Files Checked: 255
+
+  Sample Output:
+  agents/analytics/concept_explorer/concept_discovery_service.py:16: error: Cannot find implementation or library stub for module named "connection_analyzer"  [import-not-found]
+agents/analytics/concept_explorer/concept_discovery_service.py:17: error: Cannot find implementation or library stub for module named "thought_path_tracer"  [import-not-found]
+agents/analytics/concept_explorer/concept_discovery_service.py:19: error: Cannot find implementation or library stub for module named "concept_explo... (truncated)
+
+💡 RECOMMENDATIONS
+----------------------------------------
+1. Fix failing linting tools first (red ❌ items above)
+2. Address errors before warnings
+3. Consider running tools individually for detailed output
+4. Consider running 'black' and 'isort' to auto-fix formatting
+5. Add type hints to improve mypy compliance
+
+🚀 NEXT STEPS
+----------------------------------------
+• Run individual tools for detailed output: flake8, black, mypy, etc.
+• Use auto-fixing tools: black, isort, autopep8
+• Set up pre-commit hooks to prevent quality regressions
+• Integrate linting into CI/CD pipeline
+
+================================================================================

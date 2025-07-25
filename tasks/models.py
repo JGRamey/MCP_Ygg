@@ -5,12 +5,14 @@ Pydantic models for task management and progress tracking
 
 from datetime import datetime
 from enum import Enum
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel, Field
 
 
 class TaskStatus(str, Enum):
     """Task status enumeration"""
+
     PENDING = "pending"
     STARTED = "started"
     PROGRESS = "progress"
@@ -22,6 +24,7 @@ class TaskStatus(str, Enum):
 
 class TaskPriority(str, Enum):
     """Task priority levels"""
+
     LOW = "low"
     NORMAL = "normal"
     HIGH = "high"
@@ -30,6 +33,7 @@ class TaskPriority(str, Enum):
 
 class TaskResult(BaseModel):
     """Task result model"""
+
     task_id: str
     status: TaskStatus
     result: Optional[Dict[str, Any]] = None
@@ -44,6 +48,7 @@ class TaskResult(BaseModel):
 
 class DocumentProcessingTask(BaseModel):
     """Document processing task configuration"""
+
     documents: List[Dict[str, Any]]
     processing_options: Dict[str, Any] = Field(default_factory=dict)
     priority: TaskPriority = TaskPriority.NORMAL
@@ -53,6 +58,7 @@ class DocumentProcessingTask(BaseModel):
 
 class AnalysisTask(BaseModel):
     """Content analysis task configuration"""
+
     content_id: str
     analysis_types: List[str] = Field(default=["text_processor", "claim_analyzer"])
     options: Dict[str, Any] = Field(default_factory=dict)
@@ -61,6 +67,7 @@ class AnalysisTask(BaseModel):
 
 class ScrapingTask(BaseModel):
     """Web scraping task configuration"""
+
     urls: List[str]
     scraping_profile: str = "comprehensive"
     domain: str = "general"

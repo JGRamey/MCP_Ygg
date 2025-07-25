@@ -1,0 +1,47 @@
+================================================================================
+MCP YGGDRASIL PROJECT - CODE QUALITY REPORT
+================================================================================
+Generated: 2025-07-24 21:26:43
+Project Root: /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg
+Python Files Analyzed: 255
+
+📊 SUMMARY
+----------------------------------------
+Tools Run: 1
+✅ Passed: 0
+❌ Failed: 1
+🚨 Total Errors: 0
+⚠️  Total Warnings: 0
+
+🔍 DETAILED RESULTS
+----------------------------------------
+BLACK:
+  Status: ❌ FAIL
+  Errors: 0
+  Warnings: 0
+  Execution Time: 4.55s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:23:46.646498+00:00
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:26:43.168752+00:00
+@@ -3,11 +3,11 @@
+ 
+ API-FIRST IMPLEMENTATION: Uses FastAPI backend via API client
+ Eliminates direct database calls for true separation of concerns.
+ 
+ Features:
+-- Interactive knowledge graph visualization with multiple modes ... (truncated)
+
+💡 RECOMMENDATIONS
+----------------------------------------
+🎉 Excellent! Your code meets all quality standards.
+
+🚀 NEXT STEPS
+----------------------------------------
+• Run individual tools for detailed output: flake8, black, mypy, etc.
+• Use auto-fixing tools: black, isort, autopep8
+• Set up pre-commit hooks to prevent quality regressions
+• Integrate linting into CI/CD pipeline
+
+================================================================================

@@ -10,14 +10,30 @@
     
     "step_1_project_analysis": {
       "title": "Project Analysis & Verification",
+      "🚨_CRITICAL_WARNING": "NEVER CLAIM COMPLETION WITHOUT READING ENTIRE FILES",
       "actions": [
         "1. Read claude.md - Current context (this file)",
         "2. Read plan.md - Overview of all phases", 
         "3. Read updates/09_implementation_status.md - Current progress",
         "4. Read updates/[current_phase].md - Full implementation details",
-        "5. Verify implementation status against actual code",
-        "6. Update percentages based on reality"
-      ]
+        "5. 🚨 ALWAYS READ COMPLETE FILES when verifying implementation",
+        "6. 🚨 NEVER rely on partial reads (first 50-100 lines) for completion claims",
+        "7. 🚨 ALWAYS compare implementation against FULL Phase specifications",
+        "8. Verify implementation status against actual code",
+        "9. Update percentages based on reality"
+      ],
+      "file_reading_protocol": {
+        "MANDATORY": [
+          "Read ENTIRE files when checking implementation status",
+          "Compare actual code against complete Phase specifications",
+          "User feedback: 'READ THE ENTIRE FILES EVERYTIME PLEASE. I'm tired of asking'"
+        ],
+        "NEVER": [
+          "Claim completion based on partial file reads",
+          "Skip verification of claimed completions",
+          "Assume implementation matches documentation without checking"
+        ]
+      }
     },
     
     "step_2_task_planning": {
@@ -202,7 +218,7 @@
       "Streamlit": "Interactive database management UI (8 pages)"
     },
     "domains": ["Art", "Language", "Mathematics", "Philosophy", "Science", "Technology"],
-    "current_phase": "Phase 2: Performance Optimization & Enhanced AI Agents",
-    "overall_progress": "41% of 12-week roadmap"
+    "current_phase": "Phase 5: UI Workspace Enhancement (API-First Architecture)",
+    "overall_progress": "83% of 12-week roadmap"
   }
 }

@@ -1,0 +1,66 @@
+================================================================================
+MCP YGGDRASIL PROJECT - CODE QUALITY REPORT
+================================================================================
+Generated: 2025-07-24 21:23:37
+Project Root: /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg
+Python Files Analyzed: 255
+
+📊 SUMMARY
+----------------------------------------
+Tools Run: 2
+✅ Passed: 0
+❌ Failed: 2
+🚨 Total Errors: 6522
+⚠️  Total Warnings: 0
+
+🔍 DETAILED RESULTS
+----------------------------------------
+BLACK:
+  Status: ❌ FAIL
+  Errors: 0
+  Warnings: 0
+  Execution Time: 5.08s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:23:46.646498+00:00
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/streamlit_workspace/pages/02_📊_Graph_Editor.py	2025-07-25 01:23:37.283720+00:00
+@@ -3,11 +3,11 @@
+ 
+ API-FIRST IMPLEMENTATION: Uses FastAPI backend via API client
+ Eliminates direct database calls for true separation of concerns.
+ 
+ Features:
+-- Interactive knowledge graph visualization with multiple modes ... (truncated)
+
+FLAKE8:
+  Status: ❌ FAIL
+  Errors: 6522
+  Warnings: 0
+  Execution Time: 1.66s
+  Files Checked: 255
+
+  Sample Output:
+  agents/analytics/base.py:144:17: E133 closing bracket is missing indentation
+agents/analytics/base.py:201:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:219:13: E133 closing bracket is missing indentation
+agents/analytics/base.py:222:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:237:5: E133 closing bracket is missing indentation
+agents/analytics/base.py:258:9: E133 closing bracket is missing indentation
+agents/analytics/base.py:268:31: F821 unde... (truncated)
+
+💡 RECOMMENDATIONS
+----------------------------------------
+1. Fix failing linting tools first (red ❌ items above)
+2. Address errors before warnings
+3. Consider running tools individually for detailed output
+4. Consider running 'black' and 'isort' to auto-fix formatting
+
+🚀 NEXT STEPS
+----------------------------------------
+• Run individual tools for detailed output: flake8, black, mypy, etc.
+• Use auto-fixing tools: black, isort, autopep8
+• Set up pre-commit hooks to prevent quality regressions
+• Integrate linting into CI/CD pipeline
+
+================================================================================

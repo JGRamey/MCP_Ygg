@@ -5,6 +5,4 @@ Specialized parsers for academic sites, social media, and major content platform
 
 from .site_specific_parsers import *
 
-__all__ = [
-    'site_specific_parsers'
-]
+__all__ = ["site_specific_parsers"]

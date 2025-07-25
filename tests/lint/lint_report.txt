@@ -1,0 +1,67 @@
+================================================================================
+MCP YGGDRASIL PROJECT - CODE QUALITY REPORT
+================================================================================
+Generated: 2025-07-24 21:20:55
+Project Root: /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg
+Python Files Analyzed: 255
+
+📊 SUMMARY
+----------------------------------------
+Tools Run: 2
+✅ Passed: 0
+❌ Failed: 2
+🚨 Total Errors: 17339
+⚠️  Total Warnings: 0
+
+🔍 DETAILED RESULTS
+----------------------------------------
+BLACK:
+  Status: ❌ FAIL
+  Errors: 4
+  Warnings: 0
+  Execution Time: 7.86s
+  Files Checked: 255
+
+  Sample Output:
+  --- /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/agents/analytics/concept_explorer/__init__.py	2025-07-10 22:38:00.789486+00:00
++++ /mnt/c/Users/zochr/Desktop/GitHub/Yggdrasil/MCP_Ygg/agents/analytics/concept_explorer/__init__.py	2025-07-25 01:20:51.675431+00:00
+@@ -5,6 +5,6 @@
+ 
+ from .concept_explorer import ConceptExplorer
+ from .connection_analyzer import ConnectionAnalyzer
+ from .thought_path_tracer import ThoughtPathTracer
+ 
+-__all__ = ['ConceptExplorer', 'ConnectionAnalyzer', 'Thou... (truncated)
+
+FLAKE8:
+  Status: ❌ FAIL
+  Errors: 17335
+  Warnings: 0
+  Execution Time: 1.67s
+  Files Checked: 255
+
+  Sample Output:
+  agents/analytics/base.py:73:1: W293 blank line contains whitespace
+agents/analytics/base.py:79:1: W293 blank line contains whitespace
+agents/analytics/base.py:84:1: W293 blank line contains whitespace
+agents/analytics/base.py:91:1: W293 blank line contains whitespace
+agents/analytics/base.py:98:1: W293 blank line contains whitespace
+agents/analytics/base.py:102:1: W293 blank line contains whitespace
+agents/analytics/base.py:109:1: W293 blank line contains whitespace
+agents/analytics/base.py:111:... (truncated)
+
+💡 RECOMMENDATIONS
+----------------------------------------
+1. Fix failing linting tools first (red ❌ items above)
+2. Address errors before warnings
+3. Consider running tools individually for detailed output
+4. Consider running 'black' and 'isort' to auto-fix formatting
+
+🚀 NEXT STEPS
+----------------------------------------
+• Run individual tools for detailed output: flake8, black, mypy, etc.
+• Use auto-fixing tools: black, isort, autopep8
+• Set up pre-commit hooks to prevent quality regressions
+• Integrate linting into CI/CD pipeline
+
+================================================================================

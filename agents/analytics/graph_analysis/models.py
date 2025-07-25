@@ -1,11 +1,14 @@
 """Data models for network analysis."""
-from dataclasses import dataclass, asdict
-from enum import Enum
-from typing import Dict, List, Optional, Any
+
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
 
 class AnalysisType(Enum):
     """Types of network analysis that can be performed."""
+
     CENTRALITY = "centrality"
     COMMUNITY_DETECTION = "community_detection"
     INFLUENCE_PROPAGATION = "influence_propagation"
@@ -18,6 +21,7 @@ class AnalysisType(Enum):
 
 class CentralityMeasure(Enum):
     """Types of centrality measures."""
+
     PAGERANK = "pagerank"
     BETWEENNESS = "betweenness"
     CLOSENESS = "closeness"
@@ -29,6 +33,7 @@ class CentralityMeasure(Enum):
 
 class CommunityAlgorithm(Enum):
     """Community detection algorithms."""
+
     GIRVAN_NEWMAN = "girvan_newman"
     GREEDY_MODULARITY = "greedy_modularity"
     LOUVAIN = "louvain"
@@ -40,6 +45,7 @@ class CommunityAlgorithm(Enum):
 @dataclass
 class NodeMetrics:
     """Metrics for a single node."""
+
     node_id: str
     centrality_scores: Dict[str, float]
     community_id: Optional[int]
@@ -51,6 +57,7 @@ class NodeMetrics:
 @dataclass
 class CommunityInfo:
     """Information about a detected community."""
+
     community_id: int
     nodes: List[str]
     size: int
@@ -64,6 +71,7 @@ class CommunityInfo:
 @dataclass
 class NetworkAnalysisResult:
     """Complete network analysis result."""
+
     analysis_type: AnalysisType
     graph_metrics: Dict[str, float]
     node_metrics: List[NodeMetrics]

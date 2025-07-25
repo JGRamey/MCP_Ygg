@@ -5,6 +5,4 @@ Helper functions and common utilities used across scraper modules.
 
 from .scraper_utils import *
 
-__all__ = [
-    'scraper_utils'
-]
+__all__ = ["scraper_utils"]

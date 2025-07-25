@@ -4,14 +4,16 @@ Enhanced Text Processor Data Models
 Data classes and schemas for text processing with multilingual support
 """
 
-from typing import List, Dict, Optional
 from dataclasses import dataclass
+from typing import Dict, List, Optional
+
 import numpy as np
 
 
 @dataclass
 class ProcessedText:
     """Enhanced processed text with additional fields"""
+
     original_text: str
     language: str
     language_confidence: float
@@ -28,6 +30,7 @@ class ProcessedText:
 @dataclass
 class LinkedEntity:
     """Entity linked to knowledge graph"""
+
     text: str
     label: str
     kb_id: Optional[str]
